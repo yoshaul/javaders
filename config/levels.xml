@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE gameLevels SYSTEM "levels.dtd">
+
+<gameLevels>
+
+	<lastLevel levelNum="50"/>
+
+	<level levelNum = "1">
+		<backgroundImage>bg2_1024.jpg</backgroundImage>
+		<enemyShips>
+			<shipType>1</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>
+	</level>
+
+	<level levelNum = "2">
+		<enemyShips>
+			<shipType>1</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "3">
+		<enemyShips>
+			<shipType>1</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>2</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "4">
+		<enemyShips>
+			<shipType>1</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>2</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "5">
+		<enemyShips>
+			<shipType>1</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>2</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>3</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "6">
+		<enemyShips>
+			<shipType>2</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>3</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "7">
+		<enemyShips>
+			<shipType>1</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>2</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>3</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>4</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>		
+	</level>	
+
+	<level levelNum = "8">
+		<enemyShips>
+			<shipType>1</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>3</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>4</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "9">
+		<enemyShips>
+			<shipType>1</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>2</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>3</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>4</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "10">
+		<enemyShips>
+			<shipType>201</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "11">
+		<backgroundImage>bg3_1024.jpg</backgroundImage>
+		<enemyShips>
+			<shipType>21</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "12">
+		<enemyShips>
+			<shipType>21</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "13">
+		<enemyShips>
+			<shipType>21</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>22</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "14">
+		<enemyShips>
+			<shipType>23</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "15">
+		<enemyShips>
+			<shipType>23</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>26</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "16">
+		<enemyShips>
+			<shipType>21</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>23</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>24</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>25</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "17">
+		<enemyShips>
+			<shipType>26</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "18">
+		<enemyShips>
+			<shipType>21</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>22</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>23</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>24</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "19">
+		<enemyShips>
+			<shipType>27</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "20">
+		<enemyShips>
+			<shipType>202</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "21">
+		<backgroundImage>bg1_1024.jpg</backgroundImage>
+		<enemyShips>
+			<shipType>21</shipType>
+			<numberOfShips>7</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "22">
+		<enemyShips>
+			<shipType>22</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>23</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>26</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "23">
+		<enemyShips>
+			<shipType>23</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>24</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>25</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>26</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "24">
+		<enemyShips>
+			<shipType>23</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>25</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>26</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "25">
+		<enemyShips>
+			<shipType>24</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>27</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "26">
+		<enemyShips>
+			<shipType>24</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>25</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>27</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "27">
+		<enemyShips>
+			<shipType>21</shipType>
+			<numberOfShips>6</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>23</shipType>
+			<numberOfShips>6</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>26</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "28">
+		<enemyShips>
+			<shipType>22</shipType>
+			<numberOfShips>7</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>23</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>25</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>26</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "29">
+		<enemyShips>
+			<shipType>21</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>22</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>23</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>24</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>25</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>26</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>27</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>						
+	</level>
+	
+	<level levelNum = "30">
+		<enemyShips>
+			<shipType>203</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "31">
+		<backgroundImage>bg4.jpg</backgroundImage>
+		<enemyShips>
+			<shipType>41</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>		
+	</level>
+
+	<level levelNum = "32">
+		<enemyShips>
+			<shipType>41</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>43</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "33">
+		<enemyShips>
+			<shipType>42</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>43</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+
+	<level levelNum = "34">
+		<enemyShips>
+			<shipType>41</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>45</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "35">
+		<enemyShips>
+			<shipType>43</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>44</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>45</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+	</level>
+
+	<level levelNum = "36">
+		<enemyShips>
+			<shipType>41</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>42</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>44</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "37">
+		<enemyShips>
+			<shipType>42</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>44</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>45</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "38">
+		<enemyShips>
+			<shipType>42</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>43</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>44</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>45</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "39">
+		<enemyShips>
+			<shipType>41</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>42</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>	
+		<enemyShips>
+			<shipType>43</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>				
+		<enemyShips>
+			<shipType>44</shipType>
+			<numberOfShips>5</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>45</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "40">
+		<enemyShips>
+			<shipType>204</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>43</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>44</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+	</level>
+	
+	<level levelNum = "41">
+		<enemyShips>
+			<shipType>61</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "42">
+		<enemyShips>
+			<shipType>61</shipType>
+			<numberOfShips>6</numberOfShips>
+		</enemyShips>	
+	</level>
+
+	<level levelNum = "43">
+		<enemyShips>
+			<shipType>61</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>	
+		<enemyShips>
+			<shipType>62</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>			
+	</level>
+	
+	<level levelNum = "44">
+		<enemyShips>
+			<shipType>61</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>62</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>			
+		<enemyShips>
+			<shipType>63</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "45">
+		<enemyShips>
+			<shipType>61</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>62</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>			
+		<enemyShips>
+			<shipType>63</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "46">
+		<enemyShips>
+			<shipType>64</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "47">
+		<enemyShips>
+			<shipType>61</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>62</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>			
+		<enemyShips>
+			<shipType>64</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>		
+	</level>
+	
+	<level levelNum = "48">
+		<enemyShips>
+			<shipType>61</shipType>
+			<numberOfShips>4</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>62</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>			
+		<enemyShips>
+			<shipType>63</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>	
+		<enemyShips>
+			<shipType>64</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>			
+	</level>
+	
+	<level levelNum = "49">
+		<enemyShips>
+			<shipType>61</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>62</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>			
+		<enemyShips>
+			<shipType>63</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>	
+		<enemyShips>
+			<shipType>64</shipType>
+			<numberOfShips>3</numberOfShips>
+		</enemyShips>			
+	</level>
+	
+	<level levelNum = "50">
+		<enemyShips>
+			<shipType>61</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>		
+		<enemyShips>
+			<shipType>62</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>			
+		<enemyShips>
+			<shipType>63</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>	
+		<enemyShips>
+			<shipType>64</shipType>
+			<numberOfShips>2</numberOfShips>
+		</enemyShips>
+		<enemyShips>
+			<shipType>205</shipType>
+			<numberOfShips>1</numberOfShips>
+		</enemyShips>
+	</level>					
+		
+</gameLevels>

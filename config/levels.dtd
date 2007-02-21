@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT gameLevels (lastLevel, level+)>
+<!ELEMENT lastLevel EMPTY>
+<!ATTLIST lastLevel levelNum CDATA #REQUIRED>
+<!ELEMENT level (backgroundImage?, enemyShips+)>
+<!ATTLIST level levelNum CDATA #REQUIRED>
+<!ELEMENT backgroundImage (#PCDATA)>
+<!ELEMENT enemyShips (shipType, numberOfShips)>
+<!ELEMENT shipType (#PCDATA)>
+<!ELEMENT numberOfShips (#PCDATA)>
