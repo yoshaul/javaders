@@ -1,10 +1,23 @@
+
 package game.highscore;
+
+import game.util.ResourceManager;
 
 import java.awt.*;
 
+/**
+ * The <code>HighScoresRenderer</code> class is used to render the high
+ * scores given a <code>Graphics</code> object with bounding rectangle.
+ */
 public class HighScoresRenderer {
 
-    public static void render(Graphics g, HighScore[] highScores) {
+    /**
+     * Render the input high scores using the gtaphic device.
+     * @param g	Graphics object
+     * @param highScores	High scores array
+     */
+    public static void render(Graphics g, Rectangle bounds, 
+            HighScore[] highScores) {
         
         if (highScores == null) {
             // Create empty high scores array
@@ -18,50 +31,70 @@ public class HighScoresRenderer {
         } else {
             int i;
             for (i = 0; i < highScores.length && highScores[i] != null; i++) {
-                //
+                // iterate
             }
             numberOfHighScores = i;
         }
-
-        // Set the desired font if different from default font
-        String family = "Serif";
-        int style = Font.PLAIN;
-        int size = 12;
-        Font font = new Font(family, style, size);
-        g.setFont(font);
     
-        FontMetrics fontMetrics = g.getFontMetrics();
-
-        int fontHeight = fontMetrics.getHeight();
+        final int numColumns = 4;
+        final int leftMargins = 10;	// 10 pixels from the left
+        final int topMargins = 20;	// 20 pixels from the top
         
-        Rectangle bounds = g.getClipBounds();
+        int columnWidth = bounds.width / numColumns;
+
+        // Each column takes different percentage of the screen width
+        // Rank column is the narrowest and name is the widest
+        int rankWidth = (int)Math.round(bounds.width * 0.15f);
+        int nameWidth = (int)Math.round(bounds.width * 0.35f);
+        int scoreWidth = (int)Math.round(bounds.width * 0.30f);
+        
+        // Calculate the columns places
+        int rankPlace = leftMargins;
+        int namePlace = rankPlace + rankWidth;
+        int scorePlace = namePlace + nameWidth;
+        int levelPlace = scorePlace + scoreWidth;
+        
+        FontMetrics fm = g.getFontMetrics();
+        int fontHeight = fm.getHeight();
+        int horizontalSpace = fontHeight + 5;
         
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, bounds.width, bounds.height);
         
         g.setColor(Color.BLUE);
         
+        g.setFont(ResourceManager.getFont(Font.BOLD, 16));
         // Draw headline
-        g.drawString("Rank", 	10,  20);
-        g.drawString("Player", 	60,  20);
-        g.drawString("Score", 	160, 20);
-        g.drawString("Level", 	260, 20);
+        g.drawString("Rank", 	rankPlace,  topMargins);
+        g.drawString("Player", 	namePlace,  topMargins);
+        g.drawString("Score", 	scorePlace, topMargins);
+        g.drawString("Level", 	levelPlace, topMargins);
         
+        g.setFont(ResourceManager.getFont(Font.PLAIN, 14));
         for (int i = 0; i < numberOfHighScores; i++) {
             
             // Draw the high score rank
-            g.drawString((i+1)+"", 10, 20 + 20*(i+1));
+            g.drawString((i+1)+"", rankPlace, 
+                    topMargins + horizontalSpace*(i+1));
             
             // Draw player name
-            g.drawString(highScores[i].getPlayerName(), 60, 20 + 20*(i+1));
+            String playerName = highScores[i].getPlayerName();
+            if (fm.stringWidth(playerName) > columnWidth) {
+                // If string too long take only the first 7 chars
+                // and add three dots
+                playerName = playerName.substring(0, 7) + "...";
+            }
+            g.drawString(playerName, namePlace, 
+                    topMargins + horizontalSpace*(i+1));
             
             // Draw score
-            g.drawString(highScores[i].getScore()+"", 160, 20 + 20*(i+1));
+            g.drawString(highScores[i].getScore()+"", scorePlace, 
+                    topMargins + horizontalSpace*(i+1));
             
             // Draw level
-            g.drawString(highScores[i].getLevel()+"", 260, 20 + 20*(i+1));
+            g.drawString(highScores[i].getLevel()+"", levelPlace, 
+                    topMargins + horizontalSpace*(i+1));
         }
-        
         
     }
     

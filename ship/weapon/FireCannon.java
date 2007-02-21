@@ -1,25 +1,31 @@
+
 package game.ship.weapon;
 
-import game.ship.Ship;
 import game.sound.SoundFactory;
 
-public class FireCannon implements Weapon {
+/**
+ * The <code>FireCannon</code> weapon mainly fires fire bullets.
+ */
+public class FireCannon extends AbstractWeapon {
 
-    private final int weaponType = 
-        WeaponFactory.TYPE_FIRE_CANNON;
-    
-    private Ship owner;
-    private int direction;
+    private static final long BASE_FIRING_RATE = 1100;
     private long lastFiringTime;
-    private final long firingRate = 1200;
-    private int weaponLevel;
     
+    /**
+     * Construct a new weapon.
+     * @param direction		Base horizontal direction of the weapon. 
+     * @param weaponLevel	Level of the weapon.
+     */
     public FireCannon(int direction, int weaponLevel) {
-        this.direction = direction;
-        this.weaponLevel = weaponLevel;
+        super(direction, weaponLevel, 
+                WeaponFactory.TYPE_FIRE_CANNON, BASE_FIRING_RATE);
         this.lastFiringTime = 0;
+        updateFiringRate();
     }
     
+    /**
+     * Fire a new bullet(s).
+     */
     public void fire(float x, float y) {
 
         long now = System.currentTimeMillis();
@@ -28,55 +34,119 @@ public class FireCannon implements Weapon {
         if (elapsedTime >= firingRate) {
             lastFiringTime = now;
             
-            if (weaponLevel >= 1) {
-	            // Fire one laser up
+            if (weaponLevel == 1) {
 	            Bullet shoot = new FireBullet(getOwner(), x, y, 0.0f, 
 	                    direction*0.2f);
 	            
 	            if (owner.getShipContainer().isNetworkGame()) {
 	                // Create and send packet
-	                shoot.createPacket();
+	                shoot.createPacket(
+	                        owner.getShipContainer().getNetworkManager());
 	            }
 	            
-	            getOwner().getShipContainer().addShoot(shoot);
+	            getOwner().getShipContainer().addShot(shoot);
 
-	            SoundFactory.playAppletClip("laser1.wav");
+	            SoundFactory.playSound("fire_shot.wav");
             }
+            else if (weaponLevel == 2) {
+	            Bullet shoot1 = new FireBullet(getOwner(), x-6, y, 0.0f, 
+	                    direction*0.2f);
+	            
+	            Bullet shoot2 = new FireBullet(getOwner(), x+6, y, 0.0f, 
+	                    direction*0.2f);
+	            
+	            if (owner.getShipContainer().isNetworkGame()) {
+	                // Create and send packets
+	                shoot1.createPacket(
+	                        owner.getShipContainer().getNetworkManager());
+	                shoot2.createPacket(
+	                        owner.getShipContainer().getNetworkManager());
+	            }
+	            
+	            getOwner().getShipContainer().addShot(shoot1);
+	            getOwner().getShipContainer().addShot(shoot2);
 
+	            SoundFactory.playSound("fire_shot.wav");
+            }
+            else if (weaponLevel == 3) {
+	            Bullet shoot1 = new FireBullet(getOwner(), x-6, y+10, 0.0f, 
+	                    direction*0.2f);
+	            
+	            Bullet shoot2 = new FireBullet(getOwner(), x+6, y+10, 0.0f, 
+	                    direction*0.2f);
+	            
+	            Bullet shoot3 = new FireBullet(getOwner(), x, y, 0.0f, 
+	                    direction*0.2f);
+	            
+	            if (owner.getShipContainer().isNetworkGame()) {
+	                // Create and send packets
+	                shoot1.createPacket(
+	                        owner.getShipContainer().getNetworkManager());
+	                shoot2.createPacket(
+	                        owner.getShipContainer().getNetworkManager());
+	                shoot3.createPacket(
+	                        owner.getShipContainer().getNetworkManager());
+	            }
+	            
+	            getOwner().getShipContainer().addShot(shoot1);
+	            getOwner().getShipContainer().addShot(shoot2);
+	            getOwner().getShipContainer().addShot(shoot3);
+
+	            SoundFactory.playSound("fire_shot.wav");
+            }
+            else if (weaponLevel >= 4) {
+	            Bullet shoot1 = new FireBullet(getOwner(), x-6, y+10, 0.0f, 
+	                    direction*0.2f);
+	            
+	            Bullet shoot2 = new FireBullet(getOwner(), x+6, y+10, 0.0f, 
+	                    direction*0.2f);
+	            
+	            Bullet shoot3 = new FireBullet(getOwner(), x, y, 0.0f, 
+	                    direction*0.2f);
+	            
+	            Bullet shoot4 = new FireBullet(getOwner(), x, y+20, 0.0f, 
+	                    direction*0.2f);
+	            
+	            if (owner.getShipContainer().isNetworkGame()) {
+	                // Create and send packets
+	                shoot1.createPacket(
+	                        owner.getShipContainer().getNetworkManager());
+	                shoot2.createPacket(
+	                        owner.getShipContainer().getNetworkManager());
+	                shoot3.createPacket(
+	                        owner.getShipContainer().getNetworkManager());
+	                shoot4.createPacket(
+	                        owner.getShipContainer().getNetworkManager());
+	            }
+	            
+	            getOwner().getShipContainer().addShot(shoot1);
+	            getOwner().getShipContainer().addShot(shoot2);
+	            getOwner().getShipContainer().addShot(shoot3);
+	            getOwner().getShipContainer().addShot(shoot4);
+
+	            SoundFactory.playSound("fire_shot.wav");
+            }
         }
-
-    }
-    
-    
-    /**
-     * Sets the ship owning the weapon.
-     */
-    public void setOwner(Ship owner) {
-        this.owner = owner;
-    }
-    
-    /**
-     * Get the ship owning the weapon.
-     */
-    public Ship getOwner() {
-        return this.owner;
-    }
+    }	// end method fire
     
     /**
      * Add one to the weapon level.
      */
     public void upgradeWeapon() {
-        this.weaponLevel++;
-    }
-    
-    public int getWeaponType() {
-        return this.weaponType;
-    }
-    
-    public int getWeaponLevel() {
-        return this.weaponLevel;
-    }
+        super.upgradeWeapon();
+        updateFiringRate();
 
+    }
     
+    /**
+     * Updates the firing rate of the weapon. Makes
+     * the weapon faster as the level increases.
+     */
+    private void updateFiringRate() {
+        if (weaponLevel > 1) {
+            // Increase the firing rate
+            firingRate = BASE_FIRING_RATE - weaponLevel * 7; 
+        }
+    }
     
 }

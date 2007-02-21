@@ -1,40 +1,75 @@
 package game.ship.bonus;
 
 import game.GameConstants;
+import game.graphic.GraphicsHelper;
+import game.network.client.GameNetworkManager;
+import game.network.packet.Packet;
+import game.network.packet.PowerUpPacket;
+import game.util.ResourceManager;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 
-import javax.swing.ImageIcon;
 
+/**
+ * The <code>PowerUp</code> class is a <code>Bonus</code> which
+ * gives the player more armor.
+ */
 public class PowerUp extends Bonus {
 
-    private final String imageName = "bonus.png";
-    private long powerUp;
+    private static final String imageName = "red_ball.png";
+    private int powerUp;	// How much armor to add
     
-    
-    public PowerUp(float x, float y, float dx, float dy, 
-            long powerUp) {
+    /**
+     * Construct a new power up.
+     * @param x		Vertical location
+     * @param y		Horizontal location
+     * @param powerUp	Power to add to the ship
+     */
+    public PowerUp(float x, float y, int powerUp) {
+
+        super(x, y);
+      
+        // Load the image for the button and draw the power
+        // up on the image
+        Image srcImage = ResourceManager.loadImage(
+                GameConstants.IMAGES_DIR + imageName);
         
-        super(x, y, dx, dy);
-        Image image = new ImageIcon(GameConstants.IMAGES_DIR + imageName).getImage();
-        setSpriteImage(image);
+		Image image = GraphicsHelper.getCompatibleImage(
+		        srcImage.getWidth(null), srcImage.getHeight(null), 
+		        Transparency.TRANSLUCENT);
+		
+		Graphics2D g = (Graphics2D)image.getGraphics();
+        g.drawImage(srcImage, 0, 0, null);
+        g.setFont(ResourceManager.getFont(16));
+        g.setColor(Color.GREEN);
+        GraphicsHelper.drawInMiddle(g, image, powerUp+"");
+        g.dispose();
+
+        this.setSpriteImage(image);
+        
         this.powerUp = powerUp;
         
     }
     
-    public void render(Graphics g) {
-        
-        super.render(g);
-        
-        g.draw3DRect((int)Math.round(x), (int)Math.round(y), 5, 5, true);
-        g.drawString(String.valueOf(powerUp), getCenterX(), getCenterY());
-        
-        
+    /**
+     * Returns the power this bonus gives.
+     * @return	The power this bonus gives.
+     */
+    public int getPowerUp() {
+        return this.powerUp;
     }
     
-    public long getPowerUp() {
-        return this.powerUp;
+    /**
+     * Create a <code>PowerUpPacket</code> to send over the net.
+     */
+    public void createPacket(GameNetworkManager netManager) {
+        
+        // Prepare the PowerUpPacket
+        Packet packet = new PowerUpPacket(netManager.getSenderId(), 
+                netManager.getReceiverId(), GameConstants.ENEMY_MANAGER_ID,
+                x, y, powerUp);
+        
+        netManager.sendPacket(packet);
     }
     
 }

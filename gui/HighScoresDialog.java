@@ -1,6 +1,8 @@
 package game.gui;
 
 import game.highscore.*;
+import game.network.client.NetworkException;
+import game.util.Logger;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +10,11 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+/**
+ * The <code>HighScoresDialog<code> displays the game high scores.
+ * It can display the local high scores or the high scores from
+ * the server. We can also clear the local high scores.
+ */
 public class HighScoresDialog extends GameDialog {
 
     private HighScoresManager highScoresManager;
@@ -16,6 +23,12 @@ public class HighScoresDialog extends GameDialog {
     	localScoresButton, networkScoresButton;
     private JPanel renderPanel;
     
+    /**
+     * Construct the dialog.
+     * @param owner	Dialog owner frame.
+     * @param modal	True if it is a modal dialog
+     * @param highScoresManager	The high scores manager..
+     */
     public HighScoresDialog(JFrame owner, boolean modal, 
             HighScoresManager highScoresManager) {
         
@@ -28,60 +41,66 @@ public class HighScoresDialog extends GameDialog {
         
     }
     
+    /**
+     * Create the dialog UI.
+     */
     protected void createGUI() {
         
         setVisible(false);
-        
-//        setUndecorated(true);
         setResizable(false);
         
         Container container = getContentPane();
         container.setLayout(new BorderLayout());
         
-        renderPanel = new JPanel();
+        renderPanel = createPanel(null);
+        container.add(renderPanel, BorderLayout.CENTER);
         
-        JPanel buttonsPanel = new JPanel(new GridLayout(2,2));
+        JPanel buttonsPanel = createPanel(new GridLayout(2,2));
         
-        closeButton = new JButton("Close");
-        closeButton.addActionListener(this);
+        closeButton = createButton("Close", "", BTN_SMALL_IMAGE);
         buttonsPanel.add(closeButton);
         
-        clearButton = new JButton("Clear High Scores");
-        clearButton.addActionListener(this);
+        clearButton = createButton("Clear", 
+                "Clears the local high scores", BTN_SMALL_IMAGE);
         buttonsPanel.add(clearButton);
         
-        localScoresButton = new JButton("Local High Scores");
-        localScoresButton.addActionListener(this);
+        localScoresButton = createButton("Local HS", 
+                "Display the local high scores", BTN_SMALL_IMAGE);
         buttonsPanel.add(localScoresButton);
         
-        networkScoresButton = new JButton("Network High Scores");
+        networkScoresButton = createButton("Network HS",
+                "Display the high scores from the server", BTN_SMALL_IMAGE);
         networkScoresButton.addActionListener(this);
         buttonsPanel.add(networkScoresButton);
         
-        container.add(renderPanel, BorderLayout.CENTER);
         container.add(buttonsPanel, BorderLayout.SOUTH);
         
         setSize(350, 400);
         
-        // Center the dialog on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension dialogSize = this.getSize();
-        this.setLocation(
-                Math.max(0,(screenSize.width - dialogSize.width) / 2), 
-                Math.max(0,(screenSize.height - dialogSize.height) / 2));
+        centralizeOnScreen();
         
     }
     
+    /**
+     * Override the paint method to paint the high scores on
+     * the render panel.
+     */
     public void paint(Graphics g) {
         super.paint(g);
         
         Graphics rg = renderPanel.getGraphics();
-        rg.setClip(0, 0, renderPanel.getWidth(), renderPanel.getHeight());
+        
+        Rectangle bounds = new Rectangle(0, 0, 
+                renderPanel.getWidth(), renderPanel.getHeight());
+
         // Paint high scores on the render panel
-        HighScoresRenderer.render(rg, highScores);
+        HighScoresRenderer.render(rg, bounds, highScores);
         
     }
     
+    /**
+     * React to user input.
+     */
     public void actionPerformed(ActionEvent event) {
         
         if (event.getSource() == closeButton) {
@@ -101,10 +120,22 @@ public class HighScoresDialog extends GameDialog {
             repaint();
         }
         else if (event.getSource() == networkScoresButton) {
+            getNetworkHighScores();
+        }
+    }
+
+    /**
+     * Gets the high scores from the server and displays them.
+     */
+    private void getNetworkHighScores() {
+        try {
             highScores = highScoresManager.getNetworkHighScores(1, 10);
-            repaint();
+        }
+        catch (NetworkException ne) {
+            Logger.showErrorDialog(getOwner(), ne.getMessage());
         }
         
+        repaint();
     }
     
 }

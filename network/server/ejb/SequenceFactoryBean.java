@@ -1,36 +1,35 @@
+
 package game.network.server.ejb;
 
-import game.GameConstants;
+import game.network.server.DBHelper;
 
 import java.rmi.RemoteException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.EntityBean;
-import javax.ejb.EntityContext;
-import javax.ejb.FinderException;
-import javax.ejb.RemoveException;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import javax.ejb.*;
 
+/**
+ * The <code>SequenceFactory</code> is used to generate unique
+ * sequence id for each table name (or any name).
+ */
 public class SequenceFactoryBean implements EntityBean {
 
     private EntityContext entityContext;
-    private Connection connection;
 
     private String tableName;	// Primary key
     private Long nextID;
     
+    /**
+     * Create new sequence generator.
+     * @param tableName	Primary key.
+     */
     public String ejbCreate(String tableName) throws CreateException {
         this.tableName = tableName;
-        this.nextID = new Long(1);
+        this.nextID = new Long(1);	// Start from id 1
         
+        Connection connection = null;
         try {
+            connection = DBHelper.getConnection();
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO sequence_factory " +
                     "(table_name, next_id) " +
@@ -49,25 +48,42 @@ public class SequenceFactoryBean implements EntityBean {
         catch (SQLException sqlException){
             throw new CreateException(sqlException.getMessage());
         }
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
         
     }
     
+    /**
+     * For the ejbCreate(String) 
+     */
     public void ejbPostCreate(String tableName) {
         
     }
     
+    /**
+     * Set the primary key.
+     */
     public void ejbActivate() throws EJBException, RemoteException {
         this.tableName = (String) entityContext.getPrimaryKey();
     }
     
+    /**
+     * Unset the primary key.
+     */
     public void ejbPassivate() throws EJBException, RemoteException {
         this.tableName = null;
     }
     
+    /**
+     * Load the details from the database.
+     */
     public void ejbLoad() throws EJBException, RemoteException {
+        Connection connection = null;
         try {
             String tableName = (String) entityContext.getPrimaryKey();
             
+            connection = DBHelper.getConnection();
             PreparedStatement ps = connection.prepareStatement(
                     "SELECT table_name, next_id " +
                     "FROM sequence_factory " +
@@ -92,15 +108,23 @@ public class SequenceFactoryBean implements EntityBean {
         catch (SQLException sqlException) {
             throw new EJBException(sqlException);
         }
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
 
     }
 
+    /**
+     * Remove from the database.
+     */
     public void ejbRemove() throws RemoveException, EJBException,
             RemoteException {
 
+        Connection connection = null;
         try {
             String tableName = (String) entityContext.getPrimaryKey();
             
+            connection = DBHelper.getConnection();
             PreparedStatement ps = connection.prepareStatement(
                     "DELETE FROM sequence_factory " +
                     "WHERE table_name = ?");
@@ -115,11 +139,19 @@ public class SequenceFactoryBean implements EntityBean {
 					tableName + " from sequence_factory.\n" + 
 					sqlException.getMessage());
         }
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
 
     }
+    
+    /**
+     * Store details to the database.
+     */
     public void ejbStore() throws EJBException, RemoteException {
+        Connection connection = null;
         try {
-            
+            connection = DBHelper.getConnection();
             PreparedStatement ps = connection.prepareStatement(
                     "UPDATE sequence_factory " +
                     "SET next_id = ? " +
@@ -136,50 +168,32 @@ public class SequenceFactoryBean implements EntityBean {
         catch (SQLException sqlException) {
             throw new EJBException(sqlException);
         }
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
 
     }
     
-    public void setEntityContext(EntityContext entityContext) throws EJBException,
-            RemoteException {
+    public void setEntityContext(EntityContext entityContext) 
+    		throws EJBException, RemoteException {
         this.entityContext = entityContext;
-        
-		// Get connection to the game database
-		try {
-		    InitialContext context = new InitialContext();
-		    
-		    DataSource dataSource = (DataSource)
-		    	context.lookup(GameConstants.DBName);
-		    
-		    connection = dataSource.getConnection();
-		}
-		catch (NamingException ne) {
-		    throw new EJBException(ne);
-		}
-		catch (SQLException sqlException) {
-		    throw new EJBException(sqlException);
-		}
     }
     
     public void unsetEntityContext() throws EJBException, RemoteException {
         this.entityContext = null;
         
-		// Close the DataSource connection
-		try {
-		    connection.close();
-		}
-		catch (SQLException sqlException) {
-		    throw new EJBException(sqlException);
-		}
-		finally {
-		    connection = null;
-		}
     }
     
+    /**
+     * Find the bean by the primary key.
+     * @param tableName	Primary key
+     */
     public String ejbFindByPrimaryKey(String tableName) throws FinderException {
         boolean found = false;
         
+        Connection connection = null;
         try {
-            
+            connection = DBHelper.getConnection();    
 			PreparedStatement ps = connection.prepareStatement(
 					"SELECT table_name " +
 					"FROM sequence_factory " +
@@ -205,8 +219,17 @@ public class SequenceFactoryBean implements EntityBean {
 		catch (SQLException sqlException) {
 			throw new EJBException(sqlException);
 		}
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
     }
     
+    
+    /* Implement business methods */
+
+    /**
+     * @see SequenceFactory#getNextID()
+     */
     public Long getNextID() { 
         
         Long id = new Long(nextID.longValue());

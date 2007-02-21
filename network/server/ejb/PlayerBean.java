@@ -1,19 +1,19 @@
 package game.network.server.ejb;
 
-import game.GameConstants;
+import game.network.server.DBHelper;
 
 import java.rmi.RemoteException;
 import java.sql.*;
 
 import javax.ejb.*;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 
+/**
+ * The <code>Player</code> EJB holds the data of a registered player.
+ */
 public class PlayerBean implements EntityBean {
 
     private EntityContext entityContext;
-    private Connection connection;
+//    private Connection connection;
     
     private String userName;
     private String password;
@@ -23,7 +23,9 @@ public class PlayerBean implements EntityBean {
         // Must implement empty constructor
     }
 
-
+    /**
+     * @see PlayerHome#create(String, String)
+     */
     public String ejbCreate(String userName, String password) 
     		throws CreateException {
 
@@ -31,11 +33,17 @@ public class PlayerBean implements EntityBean {
         
     }
     
+    /**
+     * For the ejbCreate(String, String)
+     */
     public void ejbPostCreate(String userName, String password) 
 		throws CreateException {
-
+        // do nothing
     }
 
+    /**
+     * @see PlayerHome#create(String, String, String)
+     */
     public String ejbCreate(String userName, String password, String email) 
 			throws CreateException {
 
@@ -43,8 +51,9 @@ public class PlayerBean implements EntityBean {
         this.password = password;
         this.email = email;
         
+        Connection connection = null;
         try {
-            
+            connection = DBHelper.getConnection();
 			PreparedStatement ps = connection.prepareStatement(
 					"INSERT INTO player " +
 					"(user_name, password, email) " +
@@ -64,28 +73,45 @@ public class PlayerBean implements EntityBean {
 		catch (SQLException sqlException) {
 			throw new CreateException(sqlException.getMessage());
 		}
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
         
     }
     
-    public void ejbPostCreate(String userName, String password, String email) 
-		throws CreateException {
-
+    /**
+     * For the ejbCreate(String, String, String)
+     */
+    public void ejbPostCreate(String userName, String password, 
+            String email) throws CreateException {
+        // do nothing
     }
     
+    /**
+     * Set the primary key.
+     */
     public void ejbActivate() throws EJBException, RemoteException {
         userName = (String) entityContext.getPrimaryKey();
     }
     
+    /**
+     * Unset the primary key.
+     */
     public void ejbPassivate() throws EJBException, RemoteException {
         userName = null;
     }
     
+    /**
+     * Load the details from the database.
+     */
     public void ejbLoad() throws EJBException, RemoteException {
 
+        Connection connection = null;
         try {
             // Get the primary key
             String userName = (String) entityContext.getPrimaryKey();
             
+            connection = DBHelper.getConnection();
 			PreparedStatement ps = connection.prepareStatement(
 					"SELECT user_name, password, email " +
 					"FROM player " +
@@ -111,16 +137,24 @@ public class PlayerBean implements EntityBean {
 		catch (SQLException sqlException) {
 			throw new EJBException(sqlException);
 		}
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
 
     }
-        
+      
+    /**
+     * Remove the player from the database.
+     */
     public void ejbRemove() throws RemoveException, EJBException,
             RemoteException {
 
+        Connection connection = null;
         try {
             // Get the primary key
             String userName = (String) entityContext.getPrimaryKey();
             
+            connection = DBHelper.getConnection();
 			PreparedStatement ps = connection.prepareStatement(
 					"DELETE FROM player " +
 					"WHERE user_name = ?");
@@ -136,16 +170,23 @@ public class PlayerBean implements EntityBean {
 			throw new RemoveException("Error while trying to remove player " +
 			        userName + "\n" + sqlException.getMessage());
 		}
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
 
     }
     
+    /**
+     * Store the details to the database.
+     */
     public void ejbStore() throws EJBException, RemoteException {
         
+        Connection connection = null;
         try {
-        
             // Get the primary key
             String userName = (String) entityContext.getPrimaryKey();
             
+            connection = DBHelper.getConnection();
 			PreparedStatement ps = connection.prepareStatement(
 					"UPDATE player " +
 					"SET password = ?, email = ? " +
@@ -163,6 +204,9 @@ public class PlayerBean implements EntityBean {
 		catch (SQLException sqlException) {
 			throw new EJBException(sqlException);
 		}
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
 		
     }
     
@@ -170,49 +214,25 @@ public class PlayerBean implements EntityBean {
     		throws EJBException, RemoteException {
 
         this.entityContext = entityContext;
-        
-        // Get connection to the game database
-        try {
-            InitialContext context = new InitialContext();
-            
-            DataSource dataSource = (DataSource)
-            	context.lookup(GameConstants.DBName);
-            
-            connection = dataSource.getConnection();
-        }
-        catch (NamingException ne) {
-            throw new EJBException(ne);
-        }
-        catch (SQLException sqlException) {
-            throw new EJBException(sqlException);
-        }
-
     }
     
     public void unsetEntityContext() throws EJBException, RemoteException {
 
         entityContext = null;
-        
-        // Close the DataSource connection
-        try {
-            connection.close();
-        }
-        catch (SQLException sqlException) {
-            throw new EJBException(sqlException);
-        }
-        finally {
-            connection = null;
-        }
-        
+
     }
     
+    /**
+     * Find by primary key (user name).
+     */
     public String ejbFindByPrimaryKey(String userName) 
     		throws FinderException {
         
         boolean found = false;
         
+        Connection connection = null;
         try {
-            
+            connection = DBHelper.getConnection();
 			PreparedStatement ps = connection.prepareStatement(
 					"SELECT user_name " +
 					"FROM player " +
@@ -238,8 +258,12 @@ public class PlayerBean implements EntityBean {
 		catch (SQLException sqlException) {
 			throw new EJBException(sqlException);
 		}
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
     }
     
+    /* Implement business methods */
     
     public String getUserName() {
         return userName;
@@ -261,6 +285,4 @@ public class PlayerBean implements EntityBean {
         this.email = email;
     }
     
-    
-
 }

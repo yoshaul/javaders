@@ -1,73 +1,78 @@
 package game.gui;
 
+import game.ScreenManager;
 import game.input.InputManager;
+import game.util.ResourceManager;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 
-
-public class QuitDialog extends GameDialog {
+/**
+ * The <code>QuitDialog</code> appears when the user clicks
+ * on the quit button to verify she realy wants to quit. 
+ */
+public class QuitDialog extends InGameDialog {
 
     private InputManager inputManager;
     
     private JButton yesButton, noButton;
     
-    public QuitDialog(JFrame owner, boolean modal, InputManager inputManager) {
+    /**
+     * Construct the dialog.
+     * @param screenManager	Reference to the screen manager.
+     * @param inputManager	Input manager.
+     */
+    public QuitDialog(ScreenManager screenManager, 
+            InputManager inputManager) {
         
-        super(owner, modal);
+        super(screenManager, DEFAULT_BG_IMAGE);
         this.inputManager = inputManager;
+        createGUI();
         
     }
     
-
+    /**
+     * Set up the dialog GUI.
+     */
     protected void createGUI() {
-        Container contentPane = this.getContentPane();
-		contentPane.setLayout(new BorderLayout());
-        
-		this.setUndecorated(true);
 		
-        JLabel label = new JLabel("Leaving so soon?");
+        JLabel label = new JLabel("Leaving so soon?", SwingConstants.CENTER);
+        label.setFont(ResourceManager.getFont(Font.BOLD, 16));
         
-        contentPane.add(label, BorderLayout.NORTH);
+        this.add(label, BorderLayout.CENTER);
         
 		JPanel buttonsPanel = new JPanel(new GridLayout(1, 2));
+		buttonsPanel.setOpaque(false);
 		
-		yesButton = new JButton("Yes");
-		yesButton.addActionListener(this);
-
-		noButton = new JButton("No");
-		noButton.addActionListener(this);
-		
-		
+		yesButton = createButton("Yes", DEFAULT_BTN_IMAGE);
+		noButton = createButton("No", DEFAULT_BTN_IMAGE);
+	
 		buttonsPanel.add(yesButton);
 		buttonsPanel.add(noButton);
 
-		contentPane.add(buttonsPanel, BorderLayout.SOUTH);
-
-		this.pack();
+		this.add(buttonsPanel, BorderLayout.SOUTH);
 		
-        // Center the dialog on the screen
-//        Dimension screenSize = 
-//            gameLoop.getScreenManager().getScreenDimension();
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension dialogSize = this.getSize();
-        this.setLocation(
-                Math.max(0,(screenSize.width - dialogSize.width) / 2), 
-                Math.max(0,(screenSize.height - dialogSize.height) / 2));
-
+        this.setSize(300, 100);
+		
+        centralizeOnScreen();
+        
     }
 
-
+    /**
+     * Handle the user input.
+     */
     public void actionPerformed(ActionEvent e) {
         
         if (e.getSource() == noButton) {
             this.show(false);
+            screenManager.showCursor(false);
             inputManager.setQuit(false);
         }
         else if (e.getSource() == yesButton) {
             this.show(false);
+            screenManager.showCursor(false);
             inputManager.setQuit(true);
         }
 

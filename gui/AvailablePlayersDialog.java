@@ -1,37 +1,52 @@
 package game.gui;
 
-import game.Game;
+import game.GameMenu;
+import game.network.client.NetworkException;
 import game.network.server.ejb.OnlinePlayerModel;
+import game.util.Logger;
+import game.util.ResourceManager;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
+import javax.swing.table.*;
 
+/**
+ * The <code>AvailablePlayersDialog</code> is a dialog which displays
+ * the available online players and enables the player to invite
+ * available player from the list.
+ */
 public class AvailablePlayersDialog extends GameDialog {
     
-    private Game game;
+    private GameMenu gameMenu;
     
-    private JButton inviteButton, refreshButton;
+    private JButton inviteButton, refreshButton, closeButton;
+    private JLabel statusLabel;
     private JTable playersTable;
     private DefaultTableModel tableModel;
     
     private java.util.List availablePlayers;
+    private boolean invitationSent;
     
-    public AvailablePlayersDialog(Game game) {
+    /**
+     * Construct the dialog.
+     * @param game	Reference to the game menu.
+     */
+    public AvailablePlayersDialog(GameMenu game) {
         
         super(game, true);
         
-        this.game = game;
+        this.gameMenu = game;
         
         this.setTitle("Online Players");
         
     }
     
+    /**
+     * Create the dialog UI.
+     */
     protected void createGUI() {
 		
         Container contentPane = this.getContentPane();
@@ -43,8 +58,13 @@ public class AvailablePlayersDialog extends GameDialog {
 		playersTable = new JTable(tableModel);
 
 		playersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		playersTable.setBackground(Color.BLACK);
+		playersTable.setForeground(Color.WHITE);
+		playersTable.setFont(ResourceManager.getFont(14));
+		playersTable.getTableHeader().setBackground(Color.BLACK);
+		playersTable.getTableHeader().setForeground(Color.WHITE);
+		playersTable.getTableHeader().setFont(ResourceManager.getFont(16));
 		
-		/** XXX: has no affect? */
 		// Resize the table columns
         TableCellRenderer headerRenderer =
             playersTable.getTableHeader().getDefaultRenderer();
@@ -66,77 +86,173 @@ public class AvailablePlayersDialog extends GameDialog {
             column.setPreferredWidth(Math.max(headerWidth, cellWidth));
         }
 		
-		
 		contentPane.add(new JScrollPane(playersTable), BorderLayout.CENTER);
 		
-        JPanel buttonsPanel = new JPanel(new GridLayout(1, 2));
+        JPanel buttonsPanel = createPanel(new GridLayout(1, 3));
         
-        inviteButton = new JButton("Invite");
-        inviteButton.addActionListener(this);
+        inviteButton = createButton("Invite", 
+                "Invite selected player to play", BTN_SMALL_IMAGE);
         buttonsPanel.add(inviteButton);
         
-        refreshButton = new JButton("Refresh");
-        refreshButton.addActionListener(this);
+        refreshButton = createButton("Refresh", 
+                "Refresh the players list", BTN_SMALL_IMAGE);
         buttonsPanel.add(refreshButton);
+        
+        closeButton = createButton("Close", 
+                "Close the dialog", BTN_SMALL_IMAGE);
+        buttonsPanel.add(closeButton);
 
-		contentPane.add(buttonsPanel, BorderLayout.SOUTH);
+        JPanel statusPanel = createPanel(new FlowLayout());
+        statusLabel = createLabel("Select player to play with");
+        statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        statusLabel.setForeground(new Color(50, 98, 200));
+        statusPanel.add(statusLabel);
+        
+        JPanel southPanel = createPanel(new GridLayout(2,1));
+        southPanel.add(buttonsPanel);
+        southPanel.add(statusPanel);
+        
+		contentPane.add(southPanel, BorderLayout.SOUTH);
 		
+		this.setSize(400, 300);
 		
-		this.pack();
-		
-        // Center the dialog on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension dialogSize = this.getSize();
-        this.setLocation(
-                Math.max(0,(screenSize.width - dialogSize.width) / 2), 
-                Math.max(0,(screenSize.height - dialogSize.height) / 2));
+		centralizeOnScreen();
 		
     }
     
-    public void refresh() {
-        // Clear previous data
-        tableModel.setRowCount(0);
-        
-        availablePlayers = 
-            game.getNetworkManager().getAvailablePlayers();
-        
-        Iterator itr = availablePlayers.iterator();
-        while (itr.hasNext()) {
-            OnlinePlayerModel playerModel = (OnlinePlayerModel) itr.next();
-
-            Date startDate = new Date(playerModel.getSessionStartTime());
-            
-            tableModel.addRow(new String[]{playerModel.getUserName(),
-                    startDate.toString()});
+    /**
+     * Refresh the online players list and show the dialog.
+     */
+    public void popDialog() {
+        this.refresh();
+        super.popDialog();
+    }
+    
+    /**
+     * Hide the dialog.
+     */
+    public void hideDialog() {
+        this.setVisible(false);
+    }
+    
+    /**
+     * Obtains and updates the list of online players.
+     */
+    private void refresh() {
+        try {
+	        // Clear previous data
+	        tableModel.setRowCount(0);
+	        
+	        // Get the available players from the server
+	        availablePlayers = 
+	            gameMenu.getNetworkManager().getAvailablePlayers();
+	        
+	        // Add the players to the table
+	        Iterator itr = availablePlayers.iterator();
+	        while (itr.hasNext()) {
+	            OnlinePlayerModel playerModel = (OnlinePlayerModel) itr.next();
+	
+	            Date startDate = new Date(playerModel.getSessionStartTime());
+	            
+	            tableModel.addRow(new String[]{playerModel.getUserName(),
+	                    startDate.toString()});
+	        }
+        }
+        catch (NetworkException ne) {
+            Logger.exception(ne);
+            Logger.showErrorDialog(this, ne.getMessage());
         }
         
     }
     
+    /**
+     * Invite the selected player for online game.
+     */
     private void invitePlayer() {
-        
-        int selectedRow = playersTable.getSelectedRow();
-        if (selectedRow > -1) {
-            OnlinePlayerModel selectedPlayer = (OnlinePlayerModel)
-            	availablePlayers.get(selectedRow);
-            
-            Long sessionId = selectedPlayer.getSessionId();
-            System.out.println("sending invitation to " + sessionId);
-            game.getNetworkManager().sendInvitation(sessionId);
-            
+        try {
+            // Get the selected row
+	        int selectedRow = playersTable.getSelectedRow();
+	        if (selectedRow > -1) {
+	            // Get the player's session id and send invitation
+	            OnlinePlayerModel selectedPlayer = (OnlinePlayerModel)
+	            	availablePlayers.get(selectedRow);
+	            
+	            Long sessionId = selectedPlayer.getSessionId();
+	            gameMenu.getNetworkManager().sendInvitation(sessionId);
+	            gameMenu.getNetworkManager().acceptInvitations(false);
+	            
+	            setStatusText("Invitation " +
+	            		"sent to " + selectedPlayer.getUserName() + 
+	            		". Waiting for reply...");
+	            
+	            invitationSent = true;
+	            // Change the invite button to cancel button
+	            customizeButton(inviteButton, "Cancel", BTN_SMALL_IMAGE);
+        	}
         }
-        
+        catch (NetworkException ne) {
+            Logger.exception(ne);
+            Logger.showErrorDialog(this, ne.getMessage());
+        }
+    }
+    
+    /**
+     * Cancel a previously sent invitation by changing the status
+     * and sending cancellation packet. 
+     */
+    public void cancelInvitation() {
+        try {
+            gameMenu.getNetworkManager().cancelInvitation();
+            reset();
+        }
+        catch (NetworkException ne) {
+            Logger.exception(ne);
+            Logger.showErrorDialog(this, ne.getMessage());
+        }
+    }
+    
+    /**
+     * Reset the invitation sent status and button.
+     */
+    public void reset() {
+        invitationSent = false;
+        customizeButton(inviteButton, "Invite", BTN_SMALL_IMAGE);
     }
 	
+    /**
+     * Sets the status of the invitation.
+     * @param text	Status text.
+     */
+    public void setStatusText(String text) {
+        statusLabel.setText(text);
+    }
+    
+    /**
+     * React to the user input.
+     */
 	public void actionPerformed(ActionEvent event) {
 	    
 	    if (event.getSource() == inviteButton) {
-	        invitePlayer();
-	    } else if (event.getSource() == refreshButton) {
+	        if (invitationSent) {
+	            cancelInvitation();
+	        }
+	        else {
+	            invitePlayer();    
+	        }
+	    } 
+	    else if (event.getSource() == refreshButton) {
 	        refresh();
+	    }
+	    else if (event.getSource() == closeButton) {
+	        hideDialog();
 	    }
 	    
 	}
 	
+	/**
+	 * This inner class is used only to set the editable state
+	 * of the players to false (the default is true).
+	 */
 	private class MyTableModel extends DefaultTableModel {
 	    
 	    public MyTableModel(String[] columnNames, int rowCount) {

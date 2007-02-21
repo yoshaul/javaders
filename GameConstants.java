@@ -1,7 +1,14 @@
+
 package game;
 
+/**
+ * The <code>GameConstants</code> interface holds some game-wide
+ * constants.
+ */
 public final class GameConstants {
 
+    public final static long FRAME_SLEEP_TIME = 20;
+    
     public final static String RESOURCES = "resources";
     
     public final static String IMAGES = "images";
@@ -26,5 +33,8 @@ public final class GameConstants {
     
     public final static int FIRST_ENEMY_SHIP_ID = 1001;
     
+    public final static String GAME_FONT = "gameFont.ttf";
+    
+    public final static String GAME_CURSOR = "targetCur.gif";
     
 }

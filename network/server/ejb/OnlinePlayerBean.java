@@ -1,4 +1,7 @@
+
 package game.network.server.ejb;
+
+import game.network.server.DBHelper;
 
 import java.rmi.RemoteException;
 import java.sql.*;
@@ -6,15 +9,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ejb.*;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import javax.sql.DataSource;
 
 public class OnlinePlayerBean implements EntityBean {
 
     private EntityContext entityContext;
-    private Connection connection;
     
     private Long sessionId;		// Primary key
     private String userName;	// Foreign key
@@ -25,36 +23,24 @@ public class OnlinePlayerBean implements EntityBean {
         // Must implement no arguments constructor
     }
     
+    /**
+     * Creates a new online player.
+     * @param userName	User name of the player.
+     * @return	Primary key (session id).
+     * @see OnlinePlayerHome#create(String)
+     */
     public Long ejbCreate(String userName) throws CreateException {
 
         this.userName = userName;
-        this.acceptInvitations = false; /** TODO: default is false? */
+        this.acceptInvitations = false;
         this.sessionStartTime = System.currentTimeMillis();
         
+        Connection connection = null;
         try {
-            makeConnection();
-            
-	        // Get a unique id from the SequenceFactory bean
-	
-			// create an initial naming context
-			InitialContext initialContext = new InitialContext();
-			
-			// obtain the environment maming context of the application client
-			Context env = (Context) initialContext.lookup("java:comp/env");
-			
-			// retrieve the object bound to the name ejb/SignInHome
-			Object objref = env.lookup("ejb/SequenceFactory");
-			
-			// narrow the context to a SequenceFactoryHome object
-			SequenceFactoryHome sequenceFactoryHome = (SequenceFactoryHome) 
-				PortableRemoteObject.narrow(objref, SequenceFactoryHome.class);
-			
-			// find the sequence factory for online player
-			SequenceFactory sequenceFactory = 
-			    sequenceFactoryHome.findByPrimaryKey("online_player");
-        
-			sessionId = sequenceFactory.getNextID();
+			sessionId = EJBHelper.getNextSeqId("online_player");
 
+			connection = DBHelper.getConnection();
+			
 	        PreparedStatement ps = connection.prepareStatement(
 	            "INSERT INTO online_player " +
 	        	"(session_id, user_name, session_start_time, accept_invitations) " +
@@ -76,13 +62,14 @@ public class OnlinePlayerBean implements EntityBean {
             throw new CreateException(exception.getMessage());
         }
         finally {
-            releaseConnection();
+            DBHelper.releaseConnection(connection);
         }
 
     }
     
+    // for the ejbCreate(String)
     public void ejbPostCreate(String userName) {
-        
+        // nothing to do
     }
     
     public void ejbActivate() throws EJBException, RemoteException {
@@ -93,11 +80,17 @@ public class OnlinePlayerBean implements EntityBean {
         sessionId = null;
     }
     
+    /**
+     * Load the online player's details from the database.
+     */
     public void ejbLoad() throws EJBException, RemoteException {
         
+        Connection connection = null;
         try {
-            makeConnection();
+
             Long sessionId = (Long) entityContext.getPrimaryKey();
+            
+			connection = DBHelper.getConnection();
             
             PreparedStatement ps = connection.prepareStatement(
                     "SELECT session_id, user_name, " +
@@ -127,17 +120,23 @@ public class OnlinePlayerBean implements EntityBean {
             throw new EJBException(sqlException);
         }
         finally {
-            releaseConnection();
+            DBHelper.releaseConnection(connection);
         }
         
     }
 
+    /**
+     * Removes the online player from the database.
+     * Should be called when the player logs out or quits the game.
+     */
     public void ejbRemove() throws 
     	RemoveException, EJBException, RemoteException {
 
+        Connection connection = null;
         try {
-            makeConnection();
             Long sessionId = (Long) entityContext.getPrimaryKey();
+            
+			connection = DBHelper.getConnection();
             
             PreparedStatement ps = connection.prepareStatement(
                     "DELETE FROM online_player " +
@@ -154,14 +153,20 @@ public class OnlinePlayerBean implements EntityBean {
 					sqlException.getMessage());
         }
         finally {
-            releaseConnection();
+            DBHelper.releaseConnection(connection);
         }
 
     }
+    
+    /**
+     * Store the details to the database.
+     */
     public void ejbStore() throws EJBException, RemoteException {
         
+        Connection connection = null;
         try {
-            makeConnection();
+			connection = DBHelper.getConnection();
+            
             PreparedStatement ps = connection.prepareStatement(
                     "UPDATE online_player " +
                     "SET user_name = ?, session_start_time = ?, " +
@@ -182,56 +187,36 @@ public class OnlinePlayerBean implements EntityBean {
             throw new EJBException(sqlException);
         }
         finally {
-            releaseConnection();
+            DBHelper.releaseConnection(connection);
         }
 
     }
+    
     public void setEntityContext(EntityContext entityContext) 
 			throws EJBException, RemoteException {
 
 		this.entityContext = entityContext;
-//		
-//		// Get connection to the game database
-//		try {
-//		    InitialContext context = new InitialContext();
-//		    
-//		    DataSource dataSource = (DataSource)
-//		    	context.lookup(GameConstants.DBName);
-//		    
-//		    connection = dataSource.getConnection();
-//		}
-//		catch (NamingException ne) {
-//		    throw new EJBException(ne);
-//		}
-//		catch (SQLException sqlException) {
-//		    throw new EJBException(sqlException);
-//		}
 
     }
 
 	public void unsetEntityContext() throws EJBException, RemoteException {
 	
 		entityContext = null;
-//		
-//		// Close the DataSource connection
-//		try {
-//		    connection.close();
-//		}
-//		catch (SQLException sqlException) {
-//		    throw new EJBException(sqlException);
-//		}
-//		finally {
-//		    connection = null;
-//		}
+
 	}
 	
+	/**
+	 * Find online player by primary key.
+	 */
     public Long ejbFindByPrimaryKey(Long sessionId) 
 			throws FinderException {
 
 		boolean found = false;
 		
+		Connection connection = null;
 		try {
-		    makeConnection();
+			connection = DBHelper.getConnection();
+			
 			PreparedStatement ps = connection.prepareStatement(
 					"SELECT session_id " +
 					"FROM online_player " +
@@ -258,19 +243,22 @@ public class OnlinePlayerBean implements EntityBean {
 			throw new EJBException(sqlException);
 		}
         finally {
-            releaseConnection();
+            DBHelper.releaseConnection(connection);
         }
     }
     
-
+    /**
+     * @see OnlinePlayerHome#findByAcceptInvitations()
+     */
     public Collection ejbFindByAcceptInvitations() 
 			throws FinderException {
 
 		Collection result = new ArrayList();
-		boolean found = false;
 		
+		Connection connection = null;
 		try {
-		    makeConnection();
+			connection = DBHelper.getConnection();
+			
 			PreparedStatement ps = connection.prepareStatement(
 					"SELECT session_id " +
 					"FROM online_player " +
@@ -295,7 +283,7 @@ public class OnlinePlayerBean implements EntityBean {
 			throw new EJBException(sqlException);
 		}
         finally {
-            releaseConnection();
+            DBHelper.releaseConnection(connection);
         }
 	}
     
@@ -303,55 +291,14 @@ public class OnlinePlayerBean implements EntityBean {
         return new OnlinePlayerModel(sessionId, userName, sessionStartTime);
     }
 	
-    public boolean isAcceptInvitations() {
-        return acceptInvitations;
-    }
+
+    /* Implement business methods */
+    
+    /**
+     * @see OnlinePlayer#setAcceptInvitations(boolean)
+     */
     public void setAcceptInvitations(boolean acceptInvitations) {
         this.acceptInvitations = acceptInvitations;
-    }
-    public long getSessionStartTime() {
-        return sessionStartTime;
-    }
-    public void setSessionStartTime(long sessionStartTime) {
-        this.sessionStartTime = sessionStartTime;
-    }
-    public String getUserName() {
-        return userName;
-    }
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-    public Long getSessionId() {
-        return sessionId;
-    }
-    
-    
-    private void makeConnection() {
-        try {
-            InitialContext ic = new InitialContext();
-            DataSource ds = (DataSource) ic.lookup(JNDINames.DBName);
-
-            connection = ds.getConnection();
-            
-        } catch (Exception exception) {
-            throw new EJBException("Unable to connect to database. " +
-                exception.getMessage());
-        }
-    }
-
-    private void releaseConnection() {
-        
-        if (connection != null) {
-            try {
-                connection.close();
-                connection = null;
-                
-            } catch (SQLException sqlException) {
-                throw new EJBException("Error in releaseConnection: " + 
-                        sqlException.getMessage());
-            }    
-        }
-        
     }
     
 }

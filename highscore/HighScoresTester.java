@@ -1,3 +1,4 @@
+
 package game.highscore;
 
 import java.awt.*;
@@ -6,6 +7,10 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+/**
+ * Simple class to test the HighScoresManager.
+ * This class is not part of the game. 
+ */
 public class HighScoresTester extends JFrame implements ActionListener {
     
     private JTextField name, score, level;

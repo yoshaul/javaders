@@ -1,39 +1,65 @@
+
 package game.network.packet;
 
 import java.io.Serializable;
 
-public class Packet implements Serializable {
+/**
+ * The <code>Packet</code> class is used as base class to deliver
+ * messages between two game clients.
+ */
+public abstract class Packet implements Serializable {
 
-    public static final int INVITATION = 1;
+    public Long senderId;		// Session id of the sender
+    public Long receiverId;		// Session id of the target
     
-//    public String senderName;
-    public Long senderID;
-    public Long receiverID;
-    public int handlerID = -1;
-    private boolean consumed = false;
+    // Id of the game object who should handle this packet
+    public int handlerId;	
+    private boolean consumed = false;	// Is this packet consumed
     
-    public Packet(Long senderID, Long receiverID, int objectID) {
-        this.senderID = senderID;
-        this.receiverID = receiverID;
-        this.handlerID = objectID;
+    /**
+     * Construct new packet with target handler id equals to
+     * default meaning: no special or not yet exists object.
+     * @param senderId		Session id of the sender
+     * @param receiverId	Session id of the target user
+     */
+    public Packet(Long senderId, Long receiverId) {
+        this(senderId, receiverId, -1);
+    }
+    
+    /**
+     * Construct new packet.
+     * @param senderId		Session id of the sender
+     * @param receiverId	Session id of the target user
+     * @param handlerId		Id of the object that should handle this packet
+     */
+    public Packet(Long senderId, Long receiverId, int handlerId) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.handlerId = handlerId;
+    }
+    
+    /**
+     * Returns true if this packet was marked as consumed 
+     * by some of the game objects.
+     */
+    public boolean isConsumed() {
+        return consumed;
     }
 
-    public Packet(Long senderID, Long receiverID) {
-        this.senderID = senderID;
-        this.receiverID = receiverID;
+    /**
+     * Mark the <i>consumed</i> state of this packet. Generally 
+     * an object that handled the packet can mark it as consumed
+     * so other objects won't have to check it. 
+     * @param consumed	Consumed state.
+     */
+    public void setConsumed(boolean consumed) {
+        this.consumed = consumed;
     }
     
     public String toString() {
         
-        return "Class: " + getClass() + "Sender ID: " + senderID +
-        	" ReceiverID: " + receiverID;
+        return "Class: " + getClass() + " SenderID: " + senderId +
+        	" ReceiverID: " + receiverId;
     }
     
-    public boolean isConsumed() {
-        return consumed;
-    }
-    
-    public void setConsumed(boolean consumed) {
-        this.consumed = consumed;
-    }
 }

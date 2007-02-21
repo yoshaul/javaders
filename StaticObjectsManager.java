@@ -1,39 +1,61 @@
 
 package game;
 
+import game.graphic.GraphicsHelper;
 import game.ship.PlayerShip;
-import game.ship.Renderable;
 
 import java.awt.*;
 
-import javax.swing.*;
-
-public class StaticObjectsManager implements Renderable {
+/**
+ * The <code>StaticObjectsManager</code> handles the static objects
+ * that needs to be rendered on the screen (except for the game menus
+ * which the <code>GUIManager</code> handles>
+ */
+public class StaticObjectsManager {
     
     private GameLoop gameLoop;
     
-    private Image bgImage;
-    private final static String bgFileName = "orion_mpg_big.jpg";
-
+    private Image bgImage;	// Background image
+    private final static String defBGImageName = "bg2_1024.jpg";
     
+    /**
+     * Construct new StaticObjectsManager and load the 
+     * default background image.
+     * @param gameLoop Reference to the game loop.
+     */
     public StaticObjectsManager(GameLoop gameLoop) {
         
         this.gameLoop = gameLoop;
         
-        // Load the background image
-        ImageIcon icon = new ImageIcon(GameConstants.IMAGES_DIR+bgFileName);
-        bgImage = icon.getImage();
+        // Load the default background image
+        setBackgroundImage(defBGImageName);
         
     }
     
+    /**
+     * Sets the background image.
+     * @param imageName	Name of the image to load (from the images
+     * directory).
+     */
+    public void setBackgroundImage(String imageName) {
+        bgImage = gameLoop.getScreenManager().getCompatibleImage(
+                imageName, Transparency.OPAQUE);
+    }
+    
+    /**
+     * Render static objects on the screen (background image,
+     * player score, etc.).
+     */
     public void render(Graphics g) {
 
         Dimension screenDimention = 
             gameLoop.getScreenManager().getScreenDimension();
         
+        // Draw background image
         g.drawImage(bgImage, 0, 0, 
                 screenDimention.width, screenDimention.height, null);
         
+        // Draw player statistics
         PlayerShip player1Ship =
             gameLoop.getPlayerManager().getPlayer1Ship();
         
@@ -43,6 +65,11 @@ public class StaticObjectsManager implements Renderable {
         
         g.setFont(new Font(null, Font.BOLD, 12));
         g.setColor(Color.GREEN);
+
+        GraphicsHelper.setAntialiasedText((Graphics2D)g);
+        
+        int level = gameLoop.getLevelsManager().getCurrentLevel();
+        g.drawString("Level " + level, 10, 15);
         
         if (player1Ship != null) {
             g.drawString("SCORE: " + player1Ship.getScore(), 10, screenDimention.height-35);
@@ -50,32 +77,16 @@ public class StaticObjectsManager implements Renderable {
         }
         
         if (player2Ship != null) {
-            g.drawString("SCORE: " + player2Ship.getScore(), 
-                    screenDimention.width - 50, screenDimention.height-35);
+            
+            String scoreText = "SCORE: " + player2Ship.getScore();
+            int textWidth = g.getFontMetrics().stringWidth(scoreText);
+            int rightAlignment = Math.max(90, textWidth + 10);
+
+            g.drawString(scoreText, 
+                    screenDimention.width - rightAlignment, screenDimention.height-35);
             g.drawString("POWER: " + player2Ship.getArmor(), 
-                    screenDimention.width - 50, screenDimention.height-20);
+                    screenDimention.width - rightAlignment, screenDimention.height-20);
         }
     }
     
-    public void renderLoading(Graphics g) {
-        this.render(g);
-        
-        Dimension screenDimention = 
-            gameLoop.getScreenManager().getScreenDimension();
-        
-        g.setFont(new Font(null, Font.BOLD, 30));
-        g.setColor(Color.BLUE);
-        
-        FontMetrics metrics = g.getFontMetrics();
-        
-        String loadingStr = "LOADING.... ";
-        
-        int width = metrics.stringWidth(loadingStr);
-        
-        int middleScreen = screenDimention.width / 2;
-        
-        g.drawString(loadingStr , middleScreen - width/2, screenDimention.height/2);
-        
-    }
-
 }

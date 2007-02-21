@@ -5,24 +5,43 @@ package game.ship;
 import java.awt.Graphics;
 import java.awt.Image;
 
-
+/**
+ * A <code>Sprite</code> class is the base class for all the movable and
+ * renderable game objects in the game (ships, bullets etc.).
+ * It contains implementation for general methods needed by all sprites
+ * and implements the <code>Renderable</code> and <code>Movable</code>
+ * interfaces.
+ * This basic sprite uses <code>Image</code> as its rendered object.
+ */
 public abstract class Sprite implements Movable, Renderable {
 
     protected float x;		// Vertical position in pixels
     protected float y;		// Horizontal position in pixels
-    protected float dx;		// Vertical velocity
-    protected float dy;		// Horizontal velocity
+    protected float dx;		// Vertical velocity (pixels/sec)
+    protected float dy;		// Horizontal velocity (pixels/sec)
     
     protected boolean active = true;
     
     private Image spriteImage;
     
-    
+    /**
+     * @param x		Vertical location of the ship (from left)
+     * @param y		Horizontal location of the ship (from top)
+     * @param dx	Max vertical velocity (pixels/sec)
+     * @param dy	Max horizontal velocity (pixels/sec)
+     * @param image Sprite's image
+     */
     public Sprite(float x, float y, float dx, float dy, Image image) {
         this(x, y, dx, dy);
         this.spriteImage = image;
     }
     
+    /**
+     * @param x		Vertical location of the ship (from left)
+     * @param y		Horizontal location of the ship (from top)
+     * @param dx	Max vertical velocity (pixels/sec)
+     * @param dy	Max horizontal velocity (pixels/sec)
+     */ 
     public Sprite(float x, float y, float dx, float dy) {
         this.x = x;
         this.y = y;
@@ -30,6 +49,10 @@ public abstract class Sprite implements Movable, Renderable {
         this.dy = dy;        
     }
     
+    /**
+     * Updates the sprites position according to the elapsed time.
+     * @param elapsedTime Time elapsed since last update in milliseconds
+     */
     public void updatePosition(long elapsedTime) {
         
         x += dx * elapsedTime;
@@ -37,6 +60,9 @@ public abstract class Sprite implements Movable, Renderable {
                 
     }
     
+    /**
+     * Render the image in the current position.
+     */
     public void render(Graphics g) {
         
         g.drawImage(spriteImage, (int)Math.round(x), 
@@ -104,11 +130,11 @@ public abstract class Sprite implements Movable, Renderable {
     public int getHeight() {
         return spriteImage.getHeight(null);
     }
-    public int getCenterX() {
-        return (int)Math.round(x + getWidth() / 2 );
+    public float getCenterX() {
+        return x + (float)(getWidth() / 2);
     }
-    public int getCenterY() {
-        return (int)Math.round(y + getHeight() /2 );
+    public float getCenterY() {
+        return y + (float)(getHeight() / 2) ;
     }
     /**
      * @param active

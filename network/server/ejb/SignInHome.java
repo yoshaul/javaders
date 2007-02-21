@@ -7,10 +7,13 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 
 /**
- * @author Yossi Shaul
+ * The signin bean is used for users validation, logout and signups.
  */
 public interface SignInHome extends EJBHome {
 
+    /**
+     * Create a bean instance.
+     */
 	public SignIn create() throws RemoteException, CreateException;
 	
 }

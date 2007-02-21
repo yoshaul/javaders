@@ -3,54 +3,135 @@ package game;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+import org.w3c.dom.*;
 
 import game.ship.*;
+import game.util.Logger;
 
-
-public class LevelsManager implements ErrorHandler {
+/**
+ * The <code>LevelsManager</code> class is used to load the levels
+ * from an XML file.
+ */
+public class LevelsManager {
 
     private GameLoop gameLoop;
     
     private Document xmlDocument;
     private int currentLevel = 0;
+    private int lastLevel;
     private boolean levelFinished = true;
     
-    private Sprite player;
-    
+    /**
+     * Construct a LevelManager and load the levels xml file.
+     * @param gameLoop	Reference to the game loop
+     */
     public LevelsManager(GameLoop gameLoop) {
         this.gameLoop = gameLoop;
         loadXMLFile();
     }
     
+    /**
+     * Returns the current level in the game.
+     * @return The current level in the game.
+     */
     public int getCurrentLevel() {
         return this.currentLevel;
     }
     
+    /**
+     * Returns true if the current level is the last one.
+     * @return	True if the current level is the last level.
+     */
+    public boolean isLastLevel() {
+        return lastLevel == currentLevel;
+    }
+    
+    /**
+     * This method is called to inform the level manager
+     * to update to current level. It is called whenever
+     * a packet with new level information arrives in a
+     * network game.
+     */
+    public void nextLevel() {
+        currentLevel++;
+    }
+    
+    /**
+     * Loads the next level from the xml file and returns the enemy
+     * ships map.
+     * @return	Map with the enemy ships for the level.
+     */
     public Map loadNextLevel() {
         currentLevel++;
         return loadLevel(currentLevel);
     }
     
+    /**
+     * Loads the level number <code>levelNumber</code> from the
+     * levels xml file.
+     * @param levelNumber	Number of the level to load.
+     * @return	Map of enemy ships
+     */
     public Map loadLevel(int levelNumber) {
-System.out.println("loadLevel num = " + levelNumber);        
+
         int curObjectID = GameConstants.FIRST_ENEMY_SHIP_ID;
-		levelFinished = false;
         Map enemyShips = new HashMap();
+
+        Element level = getLevelElement(levelNumber);
+        
+        if (level == null) {
+            throw new RuntimeException("Error loading the level" + levelNumber
+                    + "from file");
+        }
+        
+        // Load the background image of the current level
+        loadLevelBGImage(level);
+        
+        Dimension screenDimention = 
+            gameLoop.getScreenManager().getScreenDimension();
+        
+        // Get and create the ship types and ammount for the level
+        NodeList ships = level.getElementsByTagName("enemyShips");
+        for (int i = 0; i < ships.getLength(); i++) {
+            
+            Element enemyShipsNode = (Element) ships.item(i);
+            Node shipTypeNode = 
+                enemyShipsNode.getElementsByTagName("shipType").item(0);
+            Node numOfShipsNode = 
+                enemyShipsNode.getElementsByTagName("numberOfShips").item(0);
+            
+            String typeStr = shipTypeNode.getFirstChild().getNodeValue();            
+            String numShipsStr = numOfShipsNode.getFirstChild().getNodeValue();
+            
+            int shipType = Integer.parseInt(typeStr);
+            int numOfShips = Integer.parseInt(numShipsStr);
+
+            // Create the ship objects
+            for (int j = 0; j < numOfShips; j++, curObjectID++) {
+                enemyShips.put(new Integer(curObjectID),
+                  new EnemyShip(curObjectID, shipType,
+                          (float)(50+Math.random()*(screenDimention.width-50)), 
+                          (float)(50+Math.random()*screenDimention.height/2),
+                      ShipProperties.getShipProperties(shipType)));
+            }
+              
+        }
+
+        return enemyShips;
+   
+    }	// end method loadLevel
+    
+    /**
+     * Finds and returns the requested level node from the xml file.
+     * @param levelNumber	Level to load.
+     * @return	Element with the level details. Null if not found.
+     */
+    public Element getLevelElement(int levelNumber) {
         Element level = null;
         boolean levelFound = false;
         // Get all the level nodes 
@@ -67,130 +148,61 @@ System.out.println("loadLevel num = " + levelNumber);
             if (levelNum.getNodeValue().equals(String.valueOf(levelNumber))) {
                 levelFound = true;
             }
-            
         }
-
-        if (levelFound) {
-            Dimension screenDimention = 
-                gameLoop.getScreenManager().getScreenDimension();
-            
-            // Get and create the ship types and ammount for the level
-	        NodeList ships = level.getElementsByTagName("enemyShips");
-	        int length = ships.getLength();
-	        for (int i = 0; i < ships.getLength(); i++) {
-	            
-	            Element enemyShipsNode = (Element) ships.item(i);
-	            Node shipTypeNode = 
-	                enemyShipsNode.getElementsByTagName("shipType").item(0);
-	            Node numOfShipsNode = 
-	                enemyShipsNode.getElementsByTagName("numberOfShips").item(0);
-	            
-	            String typeStr = shipTypeNode.getFirstChild().getNodeValue();            
-	            String numShipsStr = numOfShipsNode.getFirstChild().getNodeValue();
-	            
-	            int shipType = Integer.parseInt(typeStr);
-	            int numOfShips = Integer.parseInt(numShipsStr);
-
-	            // Create the ship objects
-	            for (int j = 0; j < numOfShips; j++, curObjectID++) {
-	                enemyShips.put(new Integer(curObjectID),
-	                  new EnemyShip(curObjectID, shipType,
-	                          (float)(50+Math.random()*(screenDimention.width-50)), 
-	                          (float)(50+Math.random()*screenDimention.height/2),
-	                          (float)(Math.random()-0.5)/5, (float)(Math.random()-0.5)/5, 
-	                      ShipProperties.getShipProperties(shipType)));
-	            }
-	              
-	        }
-	        
-        } else {
-            
-            // No more levels. Show game completed screen
-            
-            
-        }
-
-        return enemyShips;
         
+        return level;
     }
     
-    public boolean isLevelFinished() {
-        return levelFinished;
+    /**
+     * Search for the backgroung image in the level element.
+     * If exists, set the game backgroung image.
+     * @param level	Elment with the level info
+     */
+    public void loadLevelBGImage(Element level) {
+        Node bgImage = level.getElementsByTagName("backgroundImage").item(0);
+        if (bgImage != null) {
+            String bgImageName = bgImage.getFirstChild().getNodeValue();
+            gameLoop.getStaticObjectsManager().
+            	setBackgroundImage(bgImageName);
+        }
     }
     
+    /**
+     * Loads data needed for the local not controller machine in a
+     * network game.
+     * @param levelNumber	Number of the level
+     */
+    public void loadLocalLevelData(int levelNumber) {
+        Element level = getLevelElement(levelNumber);
+        if (level != null) {
+            loadLevelBGImage(level);
+        }
+    }
+    
+
+    /**
+     * Loads and parses the levels XML file to the memory. If any error
+     * occurs exit with the exeption. 
+     * Also checks what is the last level in the game.
+     */
     private void loadXMLFile() {
-        DocumentBuilderFactory factory =
-            DocumentBuilderFactory.newInstance();
-        factory.setValidating(true);   
-//        factory.setNamespaceAware(true);
         try {
-           DocumentBuilder builder = factory.newDocumentBuilder();
-           builder.setErrorHandler(this);
-           this.xmlDocument = builder.parse(
+            DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+            factory.setValidating(true);  
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            this.xmlDocument = builder.parse(
                    new File(GameConstants.CONFIG_DIR+"levels.xml"));
  
-           Element root = xmlDocument.getDocumentElement();
+            Element root = xmlDocument.getDocumentElement();
            
-//           System.out.println("Root node name = " + root.getNodeName());
-           Node node = null;
-//           NodeList childNodes = root.getChildNodes();
-           NodeList childNodes = root.getElementsByTagName("level");
-//           System.out.println("Child size = " + childNodes.getLength());
-           for (int i = 0; i < childNodes.getLength(); i++) {
-               
-               node = childNodes.item(i);
-               
-//               System.out.println("child " + i + " name: " + node.getNodeName() +
-//                       " type: " + node.getNodeType() + " value: " + node.getNodeValue());
-
-               NamedNodeMap attrList = node.getAttributes();
-               
-               if (attrList != null) {
-//	               System.out.println("Attributes size = " + attrList.getLength());
-	               
-	               for (int j = 0; j < attrList.getLength(); j++) {
-	                   node = attrList.item(j);
-	                   
-//	                   System.out.println("Attr name: " + node.getNodeName() + " " +
-//	                   		"type: " + node.getNodeType() +
-//	                   		" value: " + node.getNodeValue());
-	               }
-               }
-           }
-           
-           
-        } catch (SAXException sxe) {
-           // Error generated during parsing
-           Exception  x = sxe;
-           if (sxe.getException() != null)
-               x = sxe.getException();
-           x.printStackTrace();
-
-        } catch (ParserConfigurationException pce) {
-            // Parser with specified options can't be built
-            pce.printStackTrace();
-
-        } catch (IOException ioe) {
-           // I/O error
-           ioe.printStackTrace();
+            Node lastLevelNode = root.getElementsByTagName("lastLevel").item(0);
+            lastLevel = Integer.parseInt(lastLevelNode.getAttributes().getNamedItem("levelNum").getNodeValue());
+        } 
+        catch (Exception e) {
+            // If any exception occures during the parsing exit the game
+            Logger.exception(e);
+            System.exit(-1);
         }
     }
-    
-    public void warning (SAXParseException saxpe) {
-        System.err.println("SAXParseException warning");
-        saxpe.printStackTrace();
-    }
-    
-    public void error (SAXParseException saxpe) {
-        System.err.println("SAXParseException error");
-        saxpe.printStackTrace();
-    }
-
-    public void fatalError (SAXParseException saxpe) {
-        System.err.println("SAXParseException fatalError");
-        saxpe.printStackTrace();
-    }
-
-    
-    
 }

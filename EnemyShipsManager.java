@@ -1,16 +1,20 @@
 
 package game;
 
-import game.network.GameNetworkManager;
+import game.network.client.GameNetworkManager;
 import game.network.packet.*;
 import game.ship.*;
-import game.ship.bonus.Bonus;
+import game.ship.bonus.*;
 import game.ship.weapon.*;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.*;
 
+/**
+ * The <code>EnemyShipsManager</code> manage the enemy ships and 
+ * their shots and bonuses. It also implements the <code>ShipContainer</code>
+ * interface to allow the ships to communicate with it.
+ */
 public class EnemyShipsManager implements Renderable, 
 		ShipContainer, PacketHandler {
     
@@ -18,48 +22,88 @@ public class EnemyShipsManager implements Renderable,
     
     private GameLoop gameLoop;
     
+    /** Map of the enemy ships. Object id as key, Ship object as value */
     private Map enemyShips;
+    
+    /** Collection of active shots fired by the ships */
     private Collection shots;
+    /** Collection of active bonuses dropped by the ships */
     private Collection bonuses;
+    /** Collection of targets for the enemy ships (i.e., player ship(s)) */
     private Collection targets;
     
+    
+    /**
+     * Construct the EnemyShipsManager, init the collections.
+     * @param gameLoop	Reference to the game loop
+     */
     public EnemyShipsManager(GameLoop gameLoop) {
         this.gameLoop = gameLoop;
         enemyShips = new HashMap();
         shots = new ArrayList();
         bonuses = new ArrayList();
         targets = new ArrayList();
-        
     }
     
+    /**
+     * Get ready for a new level. Clear reminders from previous
+     * level and set the enemy ships.
+     * @param enemyShips	Map of enemy ships for the current level
+     */
     public void newLevel(Map enemyShips) {
+        // Make sure no objects left from previous level
+        this.shots.clear();
+        this.bonuses.clear();
+        this.enemyShips.clear();
         setEnemyShips(enemyShips);
-        shots.clear();
-        bonuses.clear();
-//        targets.clear();
     }
     
+    /**
+     * Adds a new target to the targets collection.
+     * @param target	New target to add.
+     */
     public void addTarget(Target target) {
         targets.add(target);
     }
     
+    /**
+     * Adds a collection of targets.
+     * @param targets	Collection of Target objects.
+     */
     public void addTarget(Collection targets) {
         targets.addAll(targets);
     }
     
+    /**
+     * Adds ship to the manager and sets its manager to be this object.
+     * @param ship Ship to add.
+     */
     public void addShip(Ship ship) {
         ship.setShipContainer(this);
-        enemyShips.put(new Integer(ship.getObjectID()), ship);
+        enemyShips.put(new Integer(ship.getHandlerId()), ship);
     }
     
-    public void removeShip(Ship ship) {
-        enemyShips.remove(ship);
-    }
-    
+    /**
+     * Adds bonus to the bonuses collection.
+     * @param bonus Bonus to add.
+     */
     public void addBonus(Bonus bonus) {
         bonuses.add(bonus);
     }
+    
+    /**
+     * Adds shot to the shots collection.
+     * @param shot Shot to add. 
+     */
+    public void addShot(Bullet shot) {
+        shots.add(shot);
+    }
  
+    /**
+     * Sets the enemy ships managed by this object. Sets this object
+     * to be the ships container.
+     * @param enemyShips	New map of ships.
+     */
     private void setEnemyShips(Map enemyShips) {
         Iterator shipsItr = enemyShips.values().iterator();
         while (shipsItr.hasNext()) {
@@ -69,10 +113,18 @@ public class EnemyShipsManager implements Renderable,
         this.enemyShips = enemyShips;
     }
     
+    /**
+     * Updates the state of all the managed objects.
+     * @param elapsedTime	Time elapsed since last call to this method 
+     * in milliseconds.
+     */
     public void update(long elapsedTime){
         
-        Dimension screenDimention = 
+        Dimension screenDimension = 
             gameLoop.getScreenManager().getScreenDimension();
+        
+        Insets insets = 
+            gameLoop.getScreenManager().getScreenInsets();
         
         // Update ships
         Iterator shipsItr = enemyShips.values().iterator();
@@ -80,6 +132,7 @@ public class EnemyShipsManager implements Renderable,
             Ship ship = (Ship) shipsItr.next();
             
             if (ship.isDestroyed()) {
+                // Remove the destroyed ship
 				shipsItr.remove();
             }
             else {
@@ -88,18 +141,20 @@ public class EnemyShipsManager implements Renderable,
 	            
 	            // If the ship exits the screen and still in the wrong 
 	            // direction, change its velocity so it will get back
-	            if (ship.getX() < 0 && ship.getDx() < 0) {
+	            if (ship.getX() < insets.left && ship.getDx() < 0) {
 	                ship.setDx(-ship.getDx());
 	            }
 	            if (ship.getX()+ ship.getWidth() > 
-	                    screenDimention.width && ship.getDx() > 0) {
+	                    screenDimension.width - insets.right
+	                    && ship.getDx() > 0) {
 	                ship.setDx(-ship.getDx());
 	            }
-	            if (ship.getY() < 0 && ship.getDy() < 0) {
+	            if (ship.getY() < insets.top && ship.getDy() < 0) {
 	                ship.setDy(-ship.getDy());
 	            }
 	            if (ship.getY() + ship.getHeight() > 
-	                    screenDimention.height && ship.getDy() > 0) {
+	                    screenDimension.height - insets.bottom 
+	                    && ship.getDy() > 0) {
 	                ship.setDy(-ship.getDy());
 	            }
 	            
@@ -111,48 +166,33 @@ public class EnemyShipsManager implements Renderable,
         while (shotsItr.hasNext()) {
             Bullet shot = (Bullet) shotsItr.next();
             shot.updatePosition(elapsedTime);
-            
-            /** TODO: find better algorithm to handle non
-             * cubic sprites
-             */
-            if (shot.getX() + shot.getWidth() < 0 ||
-                    shot.getX() > screenDimention.width ||
-                    shot.getY() + shot.getHeight() < 0 ||
-                    shot.getY() > screenDimention.height) {
-                
+            if (isOutOfScreen(shot)) {
                 shotsItr.remove();
-                
             }
-            
         }
         
-        // update bonuses
+        // Update bonuses
         Iterator bonusesItr = bonuses.iterator();
         while (bonusesItr.hasNext()) {
             Bonus bonus = (Bonus) bonusesItr.next();
             bonus.updatePosition(elapsedTime);
-            
-            /** TODO: find better algorithm to handle non
-             * cubic sprites
-             */
-            if (bonus.getX() + bonus.getWidth() < 0 ||
-                    bonus.getX() > screenDimention.width ||
-                    bonus.getY() + bonus.getHeight() < 0 ||
-                    bonus.getY() > screenDimention.height) {
-                
+            if (isOutOfScreen(bonus)) {
                 bonusesItr.remove();
-                
             }
-            
         }
         
-        // Process Collisions
+        ////////////////////////
+        // Process Collisions //
+        ////////////////////////
+        
+        // Process ship-to-ship collisions 
         shipsItr = enemyShips.values().iterator();
         while (shipsItr.hasNext()) {
             Ship ship = (Ship) shipsItr.next();
             ship.processCollisions(targets); 
         }
         
+        // Process shots to player ship(s) collisions
         shotsItr = shots.iterator();
         while (shotsItr.hasNext()) {
             Bullet shot = (Bullet) shotsItr.next();
@@ -163,6 +203,7 @@ public class EnemyShipsManager implements Renderable,
 
         }
         
+        // Process bonuses to player ship(s) collisions
         bonusesItr = bonuses.iterator();
         while (bonusesItr.hasNext()) {
             Bonus bonus = (Bonus) bonusesItr.next();
@@ -170,12 +211,13 @@ public class EnemyShipsManager implements Renderable,
             if (bonus.isHit()) {
                 bonusesItr.remove();
             }
-
         }
 
     }
 
-    
+    /**
+     * Renders all relevant objects and data (ships, shots, etc.)
+     */
     public void render(Graphics g) {
         // Render ships
         Iterator itr = enemyShips.values().iterator();
@@ -199,33 +241,58 @@ public class EnemyShipsManager implements Renderable,
         
     }
     
+    /**
+     * Return true if the sprite is off the screen bounds.
+     * @param sprite	Sptite to test.
+     * @return	True if the sprite is off the screen bounds
+     */
+    private boolean isOutOfScreen(Sprite sprite) {
+        Dimension screenDimension = 
+            gameLoop.getScreenManager().getScreenDimension();
+        
+        return sprite.getX() + sprite.getWidth() < 0 ||
+        	sprite.getX() > screenDimension.width ||
+        	sprite.getY() + sprite.getHeight() < 0 ||
+        	sprite.getY() > screenDimension.height;
+    }
+    
+    /**
+     * Returns true if the level is finished. The level is finished if
+     * all the enemy ships destroyed and there are no active bonuses.
+     * @return	True if the level is finished.
+     */
     public boolean isLevelFinished() {
         return enemyShips.isEmpty() && bonuses.isEmpty();
     }
     
+    /**
+     * Returns true if this macine is the controller.
+     */
     public boolean isController() {
         return gameLoop.isController();
     }
     
+    /**
+     * Return true if this is a network game.
+     */
     public boolean isNetworkGame() {
         return gameLoop.isNetworkGame();
     }
     
+    /**
+     * Returns the game network manager. Null if this is not
+     * a network game.
+     */
     public GameNetworkManager getNetworkManager() {
         return gameLoop.getGameNetworkManager();
     }
     
-    public void addShoot(Bullet shoot) {
-        shots.add(shoot);
-    }
-    
-    public void removeShoot(Bullet shoot) {
-        /** TODO: better be called from the bullet instead of
-         * removing it in the process collision loop.
-         * update also in playershipmanager
-         */
-    }
-    
+    /**
+     * Handles incoming packets. If the packet should be handle by 
+     * the maneger than handle it otherwise search for a ship to
+     * to handle it.
+     * @param packet Packet to handle
+     */
     public void handlePacket(Packet packet) {
         
         if (packet instanceof BulletPacket) {
@@ -233,38 +300,59 @@ public class EnemyShipsManager implements Renderable,
             
             BulletModel model = bulletPacket.getBulletModel();
             
-            int ownerID = model.ownerID;
-            Ship owningShip = (Ship) enemyShips.get(new Integer(ownerID));
+            Ship owningShip = (Ship) enemyShips.get(
+                    new Integer(packet.handlerId));
             
-            if (owningShip != null) {
-                Bullet bullet = new LaserBean(owningShip, model.x, model.y, 
-                        model.dx, model.dy);
+            if (owningShip != null) { // The ship might be destroyed
                 
-                addShoot(bullet);                
+                Bullet bullet = WeaponFactory.getBullet(model, 
+                        owningShip);
+                
+                addShot(bullet);                
             }
             
             packet.setConsumed(true);
             
         }
+        else if (packet instanceof PowerUpPacket) {
+            PowerUpPacket powerPacket = (PowerUpPacket)packet;
+            Bonus powerUp = new PowerUp(powerPacket.x, 
+                    powerPacket.y, powerPacket.powerUp);
+            
+            addBonus(powerUp);
+            packet.setConsumed(true);
+        }
+        else if (packet instanceof WeaponUpgradePacket) {
+            WeaponUpgradePacket wuPacket = (WeaponUpgradePacket)packet;
+            Bonus weaponUpgrade = new WeaponUpgrade(wuPacket.x, 
+                    wuPacket.y, wuPacket.weaponType);
+            
+            addBonus(weaponUpgrade);
+            packet.setConsumed(true);
+        }
         else {
-            // Let the ship handle it
-            Integer handlerID = new Integer(packet.handlerID);
+            // Check if one of the ships can handle it
+            Integer handlerID = new Integer(packet.handlerId);
             Ship ship = (Ship) enemyShips.get(handlerID);
             if (ship != null) {
                 ship.handlePacket(packet);
             }
         }
-
         
     }
     
-    public void createPacket() {
-        
+    /**
+     * Currently this object doesn't creates it's own packets
+     */
+    public void createPacket(GameNetworkManager netManager) {
+        // Currently this object doesn't creates it's own packets
     }
     
-    public int getHandlerID() {
+    /**
+     * Returns the network handler id of this object.
+     */
+    public int getHandlerId() {
         return this.handlerID;
     }
-    
 
 }

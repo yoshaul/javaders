@@ -1,91 +1,196 @@
 package game.ship;
 
-import game.ship.bonus.Bonus;
-import game.ship.bonus.PowerUp;
-import game.ship.bonus.WeaponUpgrade;
-import game.ship.weapon.Weapon;
-import game.ship.weapon.WeaponFactory;
+import game.ship.bonus.*;
+import game.ship.weapon.*;
+import game.sound.SoundFactory;
+import game.util.ResourceManager;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 
+/**
+ * The <code>EnemyShip</code> class extends the abstract Ship class
+ * and defines common behaviours for enemy ships. 
+ */
 public class EnemyShip extends Ship {
 
-    private long initArmor;
-
+    private final float WEAPON_BONUS_PROBABILITY = 0.07f;
+    private final float POWERUP_BONUS_PROBABILITY = 0.8f;
     
-    public EnemyShip(int objectID, int shipType, 
-            float x, float y, float dx, float dy,
-            ShipProperties properties) {
+    private final long maxDecisionTime = 10000; 
         
-        super(objectID, shipType, x, y, dx, dy, properties.image, 
-                WeaponFactory.getWeapon(properties.weaponType, Weapon.DIRECTION_DOWN), 
-                properties.armor, properties.damage, 
-                properties.hitScoreValue, properties.destroyScoreValue);
+    private long timeInAIState;
+    private AIState aiState;	// AI state of the ship
+    
+    private long initArmor;	// The armor this ship was contructed with
+
+    /**
+     * Construct a new enemy ship.
+     * 
+     * @see ShipProperties
+     * @see Ship#Ship(int, int, float, float, ShipProperties)
+     */
+    public EnemyShip(int objectId, int shipType, 
+            float x, float y, ShipProperties prop) {
+        
+        super(objectId, shipType, x, y, prop.maxDX, prop.maxDY, 
+                prop.image, WeaponFactory.getWeapon(
+                        prop.weaponType, prop.weaponLevel,
+                        prop.weaponDirection), 
+                prop.armor, prop.damage, 
+                prop.hitScoreValue, prop.destroyScoreValue);
         
         this.initArmor = armor;
+        aiState = AIState.AI_STATE_NORMAL;
+        timeInAIState = maxDecisionTime;	// force state change
         
     }
     
-    public EnemyShip(ShipModel shipModel) {
-        super(shipModel);
-        this.initArmor = ShipProperties.getShipProperties(
-                shipModel.shipType).armor;
+    /**
+     * Construct a new enemy ship from a model.
+     * @param model	ShipModel object
+     *
+     * @see ShipModel 
+     * @see Ship#Ship(ShipModel)
+     */
+    public EnemyShip(ShipModel model) {
+        this(model.objectId, model.shipType, model.x, model.y,
+                ShipProperties.getShipProperties(model.shipType));
     }
     
+    /**
+     * Overrides the render method. Call the super method and
+     * add power left of the ship in percentage. 
+     * 
+     * @see Ship#render(Graphics)
+     */
     public void render(Graphics g) {
         super.render(g);
         
         if (isActive()) {
-            Font font = new Font("SanSerif", Font.BOLD, 10);
-            g.setColor(Color.GREEN);
-            g.setFont(font);
+            // Draw the armor left to this ship in percents
             
-            int armorLeft = (int) (((double)this.armor/this.initArmor)*100);
+            float armorLeft = (float)this.armor/this.initArmor;
+            int armorPrecent = (int) (armorLeft * 100);
             
-            g.drawString(armorLeft+"%", 
+            g.setFont(ResourceManager.getFont(Font.BOLD, 10));
+            
+            // The color becomes more reddish when the ship looses armor
+            g.setColor(new Color(1-armorLeft, armorLeft, 0.0f));
+            
+            
+            g.drawString(armorPrecent+"%", 
                     (int)Math.round(this.getX()), 
                     (int)Math.round(this.getY())+10);
         }
     }
     
+    /**
+     * Override the update method. Call the super method and adds
+     * some random activities (shooting, changing direction, etc.).
+     * 
+     * @see Ship#update(long)
+     */
     public void update(long elapsedTime) {
-        
-        if (shipContainer.isController()) {
-            // Only the controller machine generate random events
-            double rand = Math.random();
-            if (rand > 0.95) {
-                this.shoot();
-            }
-        }
         
         super.update(elapsedTime);
         
-        if (shipContainer.isNetworkGame() && Math.random() > 0.9) {
+        timeInAIState += elapsedTime;
+        
+        boolean changeState = false;
+        if (shipContainer.isController()) {
+            
+            long randomTime =  (long)(maxDecisionTime * Math.random());
+            
+            changeState = timeInAIState >= randomTime || 
+            	timeInAIState >= maxDecisionTime;
+
+            // Only the controller machine generate random events
+	        if (changeState) {
+	            aiState = aiState.getNextAIState();
+	            timeInAIState = 0;
+	            aiState.update(this);
+	        }
+        }
+        
+        if (shipContainer.isNetworkGame() && shipContainer.isController() 
+                && (changeState || timeSinceLastPacket > 2500*Math.random())) {
             // Send state update
-            createPacket();
+            createPacket(shipContainer.getNetworkManager());
         }
         
     }
     
+    /**
+     * Hit this ship with the bullet 
+     */
+    public void hit(Bullet bullet) {
+        if (isNormal()) {
+            SoundFactory.playSound("hit1.wav");
+            super.hit(bullet);
+	        
+	        // Add the score to the hitting player
+	        if (bullet.getOwner() instanceof PlayerShip){
+	            long damage = bullet.getDamage();
+	            long actualDamage = Math.min(armor, damage);
+	            long score = (armor<=0) ? destroyScoreValue : 
+	                damageScoreValue*actualDamage; 
+	            PlayerShip ship = (PlayerShip) bullet.getOwner();
+	            ship.addScore(score);
+	        }
+        }
+    }
+
+    /**
+     * Hit the ship with a bonus. Enemy ships don't consume bonuses.
+     */
     public void hit(Bonus bonus) {
         // Enemy ships don't consume bonuses
     }
     
-    // Overide Ship destroy method
+    /**
+     * Returns the enemy ship state.
+     */
+    public ShipState getShipState() {
+        return new ShipState(x, y, dx, dy, armor, state);
+    }
+    
+    /**
+     * Override the destroy methos. Call the super method and randomly
+     * drop a bonus.
+     * 
+     * @see Ship#destroy()
+     */
     public void destroy() {
         super.destroy();
         
-        if (Math.random() > 1) {
-            getShipContainer().addBonus(new PowerUp(getCenterX(), getCenterY(),
-                    0.0f, 0.15f, 1));
+        if (shipContainer.isController()) {
+            // Only the controller generates random events
+            Bonus bonus = null;
+            double random = Math.random();
+            if (random < WEAPON_BONUS_PROBABILITY) {
+                bonus = new WeaponUpgrade(getCenterX(), 
+                        getCenterY(), WeaponFactory.getRandomWeaponType());
+                
+            } else if (random < POWERUP_BONUS_PROBABILITY) {
+                int powerBonus = Math.round(initArmor * 0.05f);
+                bonus = new PowerUp(getCenterX(), getCenterY(), powerBonus);
+            }
             
-        } else if (Math.random() > 0) {
-            getShipContainer().addBonus(new WeaponUpgrade(getCenterX(), 
-                    getCenterY(), WeaponFactory.TYPE_LASER_CANNON));
+            if (bonus != null) {
+                // Add the bonus and send to the network player
+                // if in network game
+                getShipContainer().addBonus(bonus);
+                if (getShipContainer().isNetworkGame()) {
+                    bonus.createPacket(getShipContainer().getNetworkManager());
+                }
+            }
         }
         
+        // If it's a network game send the ship state to 
+        // make sure it is destroyed in the other player's world
+        if (getShipContainer().isNetworkGame()) {
+            createPacket(getShipContainer().getNetworkManager());
+        }
     }
 
 }

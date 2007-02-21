@@ -1,3 +1,4 @@
+
 package game.network.server.ejb;
 
 import game.highscore.HighScore;
@@ -7,15 +8,15 @@ import java.rmi.RemoteException;
 import java.sql.*;
 
 import javax.ejb.*;
-import javax.naming.*;
-import javax.rmi.PortableRemoteObject;
 
+/**
+ * The <code>HighScores</code> EJB manages the scores
+ * posted by the game players.
+ */
 public class HighScoresBean implements SessionBean {
 
     private SessionContext sessionContext;
-    private Connection connection;
     
-
 	public HighScoresBean() {
 	    // SessionBean class must implement an empty constructor
 	}
@@ -31,7 +32,7 @@ public class HighScoresBean implements SessionBean {
     }
 
     public void ejbRemove() throws EJBException, RemoteException {
-        DBHelper.releaseConnection(connection);
+        
     }
 
 	public void setSessionContext(SessionContext sessionContext) {
@@ -40,41 +41,28 @@ public class HighScoresBean implements SessionBean {
 	}
 	
 	
-	/* SignInHome interface implementation */
+	/* Home interface implementation */
 	
 	public void ejbCreate() throws CreateException {
-	    connection = DBHelper.getConnection();
+	    
 	}
-	
+
 	
 	/* Implement business methods */
 	
+	/**
+	 * Adds the posted score to the high scores table.
+	 * @see HighScores#postHighScore(HighScore)
+	 */
 	public void postHighScore(HighScore score) throws EJBException { 
 	    
+	    Connection connection = null;
 	    try {
 	        
-	        // Get id for the high scores from the sequence bean
-			InitialContext initialContext = new InitialContext();
+			Long scoreId = EJBHelper.getNextSeqId("high_score");
+
+			connection = DBHelper.getConnection();
 			
-			Context env = (Context) initialContext.lookup("java:comp/env");
-			Object objref = env.lookup("ejb/SequenceFactory");
-			SequenceFactoryHome sequenceFactoryHome = (SequenceFactoryHome) 
-				PortableRemoteObject.narrow(objref, SequenceFactoryHome.class);
-
-			// find the sequence factory for high score table
-			// If not found create it
-			SequenceFactory sequenceFactory = null;
-			try {
-				sequenceFactory = 
-				    sequenceFactoryHome.findByPrimaryKey("high_score");
-			}
-			catch (FinderException fe) {
-			    sequenceFactory = 
-				    sequenceFactoryHome.create("high_score");
-			}
-	        
-			Long scoreId = sequenceFactory.getNextID();
-
 			PreparedStatement ps = connection.prepareStatement(
 	                "INSERT INTO high_score " +
 	                "(score_id, player_name, score, level) " +
@@ -90,27 +78,29 @@ public class HighScoresBean implements SessionBean {
 	        ps.close();
 	        
 	    }
-        catch (SQLException sqlException) {
-            throw new EJBException(sqlException);
+        catch (Exception e) {
+            throw new EJBException(e);
         }
-        catch (NamingException ne) {
-            throw new EJBException(ne);
-        }
-        catch (RemoteException re) {
-            throw new EJBException(re);
-        }
-        catch (CreateException ce) {
-            throw new EJBException(ce);
+        finally {
+            DBHelper.releaseConnection(connection);
         }
 	    
 	}
 	
+	/**
+	 * @see HighScores#getTopTenScores() 
+	 */
 	public HighScore[] getTopTenScores() {
 	    return getHighScores(1, 10);
 	}
 	
+	/**
+	 * @see HighScores#getHighScores(int, int)
+	 */
 	public HighScore[] getHighScores(int fromRank, int toRank)
 			throws EJBException {
+	    
+	    Connection connection = null;
 	    try {	    
 	        if (fromRank < 1) {
 	            throw new IllegalArgumentException("Input out of bounds");
@@ -123,6 +113,7 @@ public class HighScoresBean implements SessionBean {
 
 	        HighScore[] highScores = new HighScore[toRank-fromRank+1];
 	        
+	        connection = DBHelper.getConnection();
 	        
 		    // Create SQL query that selects all the rows in the
 		    // high scores table ordered by score and level descending
@@ -156,8 +147,9 @@ public class HighScoresBean implements SessionBean {
         catch (SQLException sqlException) {
             throw new EJBException(sqlException);
         }
-	    
+        finally {
+            DBHelper.releaseConnection(connection);
+        }
 	}
-	
 
 }

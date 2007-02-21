@@ -2,12 +2,22 @@ package game.network.server.ejb;
 
 import java.io.Serializable;
 
+/**
+ * The <code>OnlinePlayerModel</code> holds data about
+ * a single online player to be sent over the network.
+ */
 public class OnlinePlayerModel implements Serializable {
 
     private Long sessionId;
     private String userName;
     private long sessionStartTime;
     
+    /**
+     * Construct the object.
+     * @param sessionId		Session id of the player.
+     * @param userName		User name of the player.
+     * @param sessionStartTime	Start time of the session.
+     */
     public OnlinePlayerModel(Long sessionId, String userName, 
             long sessionStartTime) {
         

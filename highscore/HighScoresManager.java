@@ -1,20 +1,31 @@
 package game.highscore;
 
 import game.GameConstants;
-import game.network.NetworkManager;
+import game.network.client.NetworkException;
+import game.network.client.NetworkManager;
 
 import java.io.*;
 
+/**
+ * The <code>HighScoresManager</code> class manages the game high
+ * scores. It loads and saves the scores to a file.
+ * We use this class to post high scores to the game server and
+ * to get the best scores from the server.
+ */
 public class HighScoresManager {
 
     private final String HIGH_SCORES_FILE_NAME = 
         GameConstants.RESOURCES + "/" + "scores.dat";
     
     private int numOfHighScores;	// Max number of high scores
-    private HighScore[] highScores;	// Array with all the high scores
+    private HighScore[] highScores;	// Array with all the local high scores
     
     private NetworkManager networkManager;
     
+    /**
+     * Construct new HighScoresManager and load the high scores from a file.
+     * @param numOfHighScores	Max number of high scores to hold.
+     */
     public HighScoresManager(int numOfHighScores) {
         
         this.numOfHighScores = numOfHighScores;
@@ -34,6 +45,10 @@ public class HighScoresManager {
         
     }
     
+    /**
+     * Sets the network manager for server communication.
+     * @param networkManager	The network manager object.
+     */
     public void setNetworkManager(NetworkManager networkManager) {
         this.networkManager = networkManager;
     }
@@ -101,12 +116,17 @@ public class HighScoresManager {
 
     }
     
+    /**
+     * Returns true if the input score and level has place in the 
+     * high scores list.
+     */
     public boolean isHighScore(long score, int level) {
         return isHighScore(new HighScore(null, score, level));
     }
     
     /**
-     * Returns true if the input high score has place in the high scores list.
+     * Returns true if the input high score has place in the 
+     * high scores list.
      */
     public boolean isHighScore(HighScore score) {
         if (score.getScore() > 0 && 
@@ -126,7 +146,7 @@ public class HighScoresManager {
      * Place 1 is the highest score.
      * @param fromPlace
      * @param toPlace
-     * @return
+     * @return	Array of high scores
      * @throws IllegalArgumentException If fromPlace is smaller then 1
      */
     public HighScore[] getHighScores(int fromPlace, int toPlace) 
@@ -154,22 +174,32 @@ public class HighScoresManager {
      * scores starting at <code>fromPlace</code> inclusive and ending at
      * <code>toPlace</code> inclusive.
      * Place 1 is the highest score.
-     * @param fromPlace
-     * @param toPlace
-     * @return
-     * @throws IllegalArgumentException If fromPlace is smaller then 1
+     * @param fromPlace Place of the high score to start with
+     * @param toPlace	Place of the high score to end with
+     * @throws IllegalArgumentException If <code>fromPlace</code> is 
+     * smaller then 1 or smaller then <code>toPlace</code>
+     * @return Array of high scores from the server.
      */
-    public HighScore[] getNetworkHighScores(int fromPlace, int toPlace) {
+    public HighScore[] getNetworkHighScores(int fromPlace, int toPlace) 
+    	throws NetworkException, IllegalArgumentException {
 
-        if (networkManager != null) {
-            return networkManager.getHighScores(fromPlace, toPlace);
+        if (fromPlace < 1) {
+            throw new IllegalArgumentException("Input out of bounds");
         }
         
-        return null;
-
+        if (fromPlace < 1 || fromPlace > toPlace) {
+            throw new IllegalArgumentException("First argument must be " +
+            		"smaller or equal to the second argument");
+        }
+        
+        if (networkManager == null) {
+            throw new NetworkException("NetworkManager is null. " +
+            		"Please restart the game");
+        }
+        
+        return networkManager.getHighScores(fromPlace, toPlace);
+        
     }
-    
-    
     
     /**
      * Clears the high scores list.
@@ -180,6 +210,14 @@ public class HighScoresManager {
         }
     }
     
+    /**
+     * Loads the high scores from a file.
+     * @param clearOldScores	True if we want to clear the high
+     * scores array we hold in this object.
+     * @throws IOException	Error reading the file.
+     * @throws ClassNotFoundException	Class of a serialized HighScore
+     * cannot be found
+     */
     public void loadHighScores(boolean clearOldScores) throws 
     		IOException, ClassNotFoundException {
         
@@ -208,6 +246,10 @@ public class HighScoresManager {
         
     }
     
+    /**
+     * Saves the array of high scores to a file.
+     * @throws IOException	Error saving to a file.
+     */
     public void saveHighScores() throws IOException {
         
         File scoresFile = new File(HIGH_SCORES_FILE_NAME);
@@ -226,10 +268,20 @@ public class HighScoresManager {
         oos.close();
     }
     
-    public void postScoreToServer(HighScore score) {
-        if (networkManager != null) {
-            networkManager.postHighScore(score);
+    /**
+     * Posts a score to the server via the network manager object.
+     * @param score	Score to post
+     * @throws NetworkException	If the network manager doesn't exist or
+     * error when trying to post the score.
+     */
+    public void postScoreToServer(HighScore score) throws NetworkException {
+    
+        if (networkManager == null) {
+            throw new NetworkException("NetworkManager is not initialized");
         }
+        
+        networkManager.postHighScore(score);
+        
     }
     
     public String toString() {

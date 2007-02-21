@@ -1,94 +1,119 @@
+
 package game;
 
-import game.gui.QuitD;
-import game.highscore.HighScoresManager;
-import game.input.InputManager;
-
 import java.awt.*;
-import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 
-
-public class GUIManager implements ActionListener {
+/**
+ * The <code>GUIManager</code> is a helper class to make the Swing
+ * components work with the active rendering used in the game when it
+ * is running (not in the game menu).
+ * This class installs a <code>RepaintManager</code> that ignores
+ * the repaints from swing components so they won't interrupt the
+ * game. We call the <code>render</code> method of this class when we
+ * want to render game dialogs (which extend <code>JPanel</code>). 
+ */
+public class GUIManager {
 
     private GameLoop gameLoop;
     private ScreenManager screenManager;
-    private InputManager inputManager;
-    private HighScoresManager highScoresManager;
+    private RepaintManager oldRepaintManager;
     
-//    private AddHighScoreDialog addHighScoreDialog;
-    private QuitD quitDialog;
-    
-    
-    public GUIManager(GameLoop gameLoop, ScreenManager screenManager, 
-            InputManager inputManager, HighScoresManager highScoresManeger) {
+    public GUIManager(GameLoop gameLoop, ScreenManager screenManager) {
         
         this.gameLoop = gameLoop;
-        this.highScoresManager = highScoresManeger;
         this.screenManager = screenManager;
-        this.inputManager = inputManager;
         
-        NullRepaintManager.install();
+        // Save the current RepaintManager to restore later
+        oldRepaintManager = RepaintManager.currentManager(null);
+        // Set new RepaintManager that ignores repainting
+        RepaintManager.setCurrentManager(new NullRepaintManager());
         
         JFrame gameFrame = screenManager.getFullScreenWindow();
         
         Container container = gameFrame.getContentPane();
         	((JComponent)container).setOpaque(false);
 
-//        
-//        quitDialog = new QuitD(gameFrame,false, inputManager);
-//        
-//        screenManager.getFullScreenWindow().
-//    		getLayeredPane().add(quitDialog, JLayeredPane.MODAL_LAYER);
-//        
         gameFrame.validate();
     }
-    
-    private JButton createButton(String label, String toolTip) {
-        
-        JButton button = new JButton(label);
-        
-      	// We use active repainting
-        button.setIgnoreRepaint(true);
-        button.setOpaque(false);
-        // Don't steal keyboard focus
-        button.setFocusable(false);	
-        button.setBorder(null);
-        // Don't draw button backgroung
-        button.setContentAreaFilled(false);
-        button.setToolTipText(toolTip);
-        
-        button.addActionListener(this);
-        
-        return button;
-        
-    }
-    
-    public void actionPerformed(ActionEvent event) {
-        
-        Object source = event.getSource();
 
-        
-    }
-    
-    
-    public void render(Graphics g) {
-        
-        JFrame gameFrame = (JFrame)screenManager.getFullScreenWindow();
-        
-        gameFrame.getLayeredPane().paintComponents(g);
+    /**
+     * Render the layered pane and all its sub components.
+     */
+    public void render(final Graphics g) {
+
+        final JFrame gameFrame = (JFrame)screenManager.getFullScreenWindow();
+
+        // Use the EventQueue.invokeAndWait to prevent deadlocks
+        if (!SwingUtilities.isEventDispatchThread()) {
+	        try {
+	            EventQueue.invokeAndWait(
+	                new Runnable() {
+	                    public void run() {
+	                        gameFrame.getLayeredPane().paintComponents(g);
+	                    }
+	                }
+	            ); 
+	        }
+	        catch (InterruptedException ex) {
+	            // Ignore
+	        }
+	        catch (InvocationTargetException  ex) {
+	            // Ignore
+	        }
+        }   
+        else {          
+            gameFrame.getLayeredPane().paintComponents(g);    
+        }
 
     }
     
     /**
-     * Adds a dialog to the modal layer pane
+     * Adds a dialog to the modal layer pane of the game frame
      * @param dialog Dialog to add
      */
     public void addDialog(JPanel dialog) {
         gameLoop.getScreenManager().getFullScreenWindow().
 			getLayeredPane().add(dialog, JLayeredPane.MODAL_LAYER);
     }
+    
+    /**
+     * Restores the original <code>RepaintManager</code>.
+     */
+    public void restoreRepaintManager() {
+        RepaintManager.setCurrentManager(oldRepaintManager);
+    }
+    
+    /**
+     * We use the NullRepaintManager to disable all the repainting
+     * since all the painting is done from the game loop
+     */
+	private class NullRepaintManager extends RepaintManager {
+	
+	    public NullRepaintManager() {
+	        setDoubleBufferingEnabled(false);
+	    }
+	
+	    public void addInvalidComponent(JComponent c) {
+	        // do nothing
+	    }
+	
+	    public void addDirtyRegion(JComponent c, int x, int y,
+	        int w, int h)
+	    {
+	        // do nothing
+	    }
+	
+	    public void markCompletelyDirty(JComponent c) {
+	        // do nothing
+	    }
+	
+	    public void paintDirtyRegions() {
+	        // do nothing
+	    }
+	
+	}
+    
 }

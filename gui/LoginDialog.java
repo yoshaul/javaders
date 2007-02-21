@@ -1,6 +1,8 @@
 package game.gui;
 
-import game.Game;
+import game.GameMenu;
+import game.network.InvalidLoginException;
+import game.network.client.NetworkException;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,112 +10,126 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
+/**
+ * The <code>LoginDialog</code> enables the user to supply a user
+ * name and password for logging onto the server.
+ */
 public class LoginDialog extends GameDialog {
 
-    private Game game;
+    private GameMenu gameMenu;
     
     private JTextField userNameField;
     private JPasswordField passwordField;
     private JButton loginButton, cancelButton;
     private JLabel statusLabel;
     
-    public LoginDialog(Game game) {
+    /**
+     * Construct the dialog.
+     * @param game	The game menu.
+     */
+    public LoginDialog(GameMenu game) {
         
         super(game, true);
         
-        this.game = game;
-        
+        this.gameMenu = game;
         this.setTitle("Login");
-        
     }
     
+    /**
+     * Create the dialog UI.
+     */
     protected void createGUI() {
 		
         Container contentPane = this.getContentPane();
-		
-		JPanel inputPanel = new JPanel(new GridLayout(2, 2));
-		
-		inputPanel.add(new JLabel("User Name"));
-		userNameField = new JTextField();
+        JPanel inputPanel = createPanel(new GridLayout(2, 2));
+        inputPanel.add(createLabel(" User Name:"));
+        userNameField = createTextField();
 		inputPanel.add(userNameField);
 		
-		inputPanel.add(new JLabel("Password"));
-		passwordField = new JPasswordField();
+		inputPanel.add(createLabel(" Password:"));
+		passwordField = createPasswordField();
+		passwordField.addActionListener(this);
 		inputPanel.add(passwordField);
 		
 		contentPane.add(inputPanel, BorderLayout.NORTH);
 
-		loginButton = new JButton("Login");
-	    loginButton.addActionListener(this);
+	    loginButton = createButton("Login", "Login", BTN_SMALL_IMAGE);
+	    
+		cancelButton = createButton("Cancel", "Cancel", BTN_SMALL_IMAGE);
 		
-		cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(this);
-		
-		JPanel buttonsPanel = new JPanel(new GridLayout(2, 1));
+		JPanel buttonsPanel = createPanel(new GridLayout(1, 2));
 		buttonsPanel.add(loginButton);
 		buttonsPanel.add(cancelButton);
 
-		statusLabel = new JLabel("Enter username and password to login");
+		statusLabel = createLabel("Enter username and password to login");
 		statusLabel.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		statusLabel.setForeground(Color.RED);
 		
-		JPanel southPanel = new JPanel(new BorderLayout());
+		JPanel southPanel = createPanel(new BorderLayout());
 		southPanel.add(buttonsPanel, BorderLayout.NORTH);
 		southPanel.add(statusLabel, BorderLayout.SOUTH);
 		
 		contentPane.add(southPanel, BorderLayout.SOUTH);
 		
-		this.pack();
+		this.setSize(300, 150);
 		
-        // Center the dialog on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension dialogSize = this.getSize();
-        this.setLocation(
-                Math.max(0,(screenSize.width - dialogSize.width) / 2), 
-                Math.max(0,(screenSize.height - dialogSize.height) / 2));
+		centralizeOnScreen();
 		
     }
 
+    /**
+     * Login to the server. Get the user name and password from
+     * the input fields.
+     * If successful update the <code>gameMenu</code> with the logged
+     * users details (user name and ticket/session id).
+     */
 	private void login() {
 		String userName = userNameField.getText();
 		String password = new String(passwordField.getPassword());
 		passwordField.setText("");
 		statusLabel.setText("Validating username and password");
-//		try {
-			Long ticket = game.getNetworkManager().login(userName, password);
-			
+		try {
+			Long ticket = gameMenu.getNetworkManager().login(userName, password);
 			if (ticket == null) {
-			    statusLabel.setText("Unable to log in ");
-			} else {
-				statusLabel.setText("Logged in successfully ticket = "
-						+ ticket); 
+			    throw new InvalidLoginException("Error: null session id received");
+			} 
+			
+			statusLabel.setText(userName + " logged in successfully");
 				
-				game.setLoggedUser(userName, ticket);
+			gameMenu.setLoggedUser(ticket);
+			
+			hideDialog();
 				
-			}
-//		}
-//		catch (InvalidLoginException e) {
-//			statusLabel.setText(e.getMessage());
-//		}
-//		catch (RemoteException e) {
-//			statusLabel.setText("ERRORL: Remote exception occured");
-//		}
+		}
+		catch (InvalidLoginException ile) {
+			statusLabel.setText(ile.getMessage());
+		}
+		catch (NetworkException ne) {
+			statusLabel.setText("Error connecting to server");
+		}
 	}
 	
+	/**
+	 * Hides the dialog and clears the input fields.
+	 */
+	public void hideDialog() {
+        // Clear the text and password fields
+        userNameField.setText("");
+        passwordField.setText("");
+	    super.hideDialog();
+	}
+	
+	/**
+	 * Respond to user input.
+	 */
 	public void actionPerformed(ActionEvent event) {
-	    
-	    if (event.getSource() == loginButton) {
-	        
+	    Object source = event.getSource();
+	    if (source == loginButton || source == passwordField) {
 	        login();
-	        
-	    } else if (event.getSource() == cancelButton) {
-	        // Clear the fields
-	        userNameField.setText("");
-	        passwordField.setText("");
-	        this.setVisible(false);
+	    } 
+	    else if (event.getSource() == cancelButton) {
+	        hideDialog();
 	    }
-	    
 	}
-	
     
 }

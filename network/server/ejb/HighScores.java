@@ -6,6 +6,10 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBObject;
 
+/**
+ * The <code>HighScores</code> EJB manages the scores
+ * posted by the game players.
+ */
 public interface HighScores extends EJBObject {
 
 	/**

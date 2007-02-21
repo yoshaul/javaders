@@ -1,6 +1,8 @@
 package game.gui;
 
-import game.Game;
+import game.GameMenu;
+import game.network.InvalidLoginException;
+import game.network.client.NetworkException;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,81 +10,88 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
+/**
+ * The <code>SignupDialog</code> enables the user to signup for
+ * a new account. The user must supply user name and password.
+ */
 public class SignupDialog extends GameDialog {
     
-    private Game game;
+    private GameMenu gameMenu;
     
     private JTextField userNameField, emailField;
     private JPasswordField passwordField;
     private JButton signupButton, cancelButton;
     private JLabel statusLabel;
     
-    public SignupDialog(Game game) {
+    /**
+     * Construct the dialog.
+     * @param game	The game menu.
+     */
+    public SignupDialog(GameMenu game) {
         
         super(game, true);
         
-        this.game = game;
-        
+        this.gameMenu = game;
         this.setTitle("Login");
         
     }
     
+    /**
+     * Create the dialog UI.
+     */
     protected void createGUI() {
 		
         Container contentPane = this.getContentPane();
 		
-		JPanel inputPanel = new JPanel(new GridLayout(3, 2));
+		JPanel inputPanel = createPanel(new GridLayout(3, 2));
 		
 		// User name area
-		inputPanel.add(new JLabel("User Name:"));
-		userNameField = new JTextField();
+		inputPanel.add(createLabel(" User Name:"));
+		userNameField = createTextField();
 		inputPanel.add(userNameField);
 		
 		// Password area
-		inputPanel.add(new JLabel("Password:"));
-		passwordField = new JPasswordField();
+		inputPanel.add(createLabel(" Password:"));
+		passwordField = createPasswordField();
 		inputPanel.add(passwordField);
 		
 		// Email area
-		inputPanel.add(new JLabel("Email:"));
-		emailField = new JTextField();
+		inputPanel.add(createLabel(" Email:"));
+		emailField = createTextField();
 		inputPanel.add(emailField);
 		
 		contentPane.add(inputPanel, BorderLayout.NORTH);
 
 		// Create buttons
-		signupButton = new JButton("Signup");
-		signupButton.addActionListener(this);
+		signupButton = createButton("Signup", 
+		        "Signup for a new account", BTN_SMALL_IMAGE);
 		
-		cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(this);
+		cancelButton = createButton("Cancel", "", BTN_SMALL_IMAGE);
 		
-		JPanel buttonsPanel = new JPanel(new GridLayout(2, 1));
+		JPanel buttonsPanel = createPanel(new GridLayout(1, 2));
 		buttonsPanel.add(signupButton);
 		buttonsPanel.add(cancelButton);
 
 		// Create status label 
-		statusLabel = new JLabel("Enter details to signup");
+		statusLabel = createLabel("Enter details to signup");
 		statusLabel.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		statusLabel.setForeground(Color.RED);
 		
-		JPanel southPanel = new JPanel(new BorderLayout());
+		JPanel southPanel = createPanel(new BorderLayout());
 		southPanel.add(buttonsPanel, BorderLayout.NORTH);
 		southPanel.add(statusLabel, BorderLayout.SOUTH);
 		
 		contentPane.add(southPanel, BorderLayout.SOUTH);
 		
-		this.pack();
+		this.setSize(300, 150);
 		
-        // Center the dialog on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension dialogSize = this.getSize();
-        this.setLocation(
-                Math.max(0,(screenSize.width - dialogSize.width) / 2), 
-                Math.max(0,(screenSize.height - dialogSize.height) / 2));
+		centralizeOnScreen();
         
     }
     
+    /**
+     * Respond to user input.
+     */
 	public void actionPerformed(ActionEvent event) {
 	    
 	    if (event.getSource() == signupButton) {
@@ -90,15 +99,27 @@ public class SignupDialog extends GameDialog {
 	        signup();
 	        
 	    } else if (event.getSource() == cancelButton) {
-	        // Clear the fields
-	        userNameField.setText("");
-	        passwordField.setText("");
-	        emailField.setText("");
-	        this.setVisible(false);
+	        
+	        hideDialog();
 	    }
 	    
 	}
 	
+	/**
+	 * Clear the input fields and hide the dialog.
+	 */
+	public void hideDialog() {
+	    // Clear the fields
+        userNameField.setText("");
+        passwordField.setText("");
+        emailField.setText("");
+        super.hideDialog();
+	}
+	
+	/** TODO: handle the case where user already exists here and in the bean */
+	/**
+	 * Sign up for a new account and login afterwards.
+	 */
 	private void signup() {
 	    
 		String userName = userNameField.getText();
@@ -107,22 +128,34 @@ public class SignupDialog extends GameDialog {
 		passwordField.setText("");
 		statusLabel.setText("Creating new user....");
 
-		// Register the new user
-		game.getNetworkManager().signup(
-	            userName, password, email);
-	    
-		// Login with the new user
-		Long ticket = game.getNetworkManager().login(userName, password);
-		
-		if (ticket == null) {
-		    statusLabel.setText("Unable to signup");
+		try {
+			// Register the new user
+			gameMenu.getNetworkManager().signup(
+		            userName, password, email);
+			
+			// Logout before trying login with the new user name
+			gameMenu.logout();
+			
+			// Login with the new user to get session id
+			Long ticket = gameMenu.getNetworkManager().login(userName, password);
+			
+			if (ticket == null) {
+			    throw new InvalidLoginException("Error: null session id received");
+			}
 
-		} else {
-			statusLabel.setText("Logged in successfully ticket = "
-					+ ticket);
+			statusLabel.setText(userName + " logged in successfully");
 			
-			game.setLoggedUser(userName, ticket);
+			// Set the logged user in the gameMenu 
+			gameMenu.setLoggedUser(ticket);
 			
+			hideDialog();
+				
+		}
+		catch (InvalidLoginException ile) {
+		    statusLabel.setText(ile.getMessage());
+		}
+		catch (NetworkException ne) {
+		    statusLabel.setText("Error connecting to server");
 		}
 	}
 	
