@@ -57,14 +57,14 @@ public abstract class GameDialog extends JDialog
      * Show the dialog on the screen.
      */
     public void popDialog() {
-        this.show(true);
+        this.setVisible(true);
     }
     
     /**
      * Hides the dialog.
      */
     public void hideDialog() {
-        this.show(false);
+        this.setVisible(false);
     }
     
     /**

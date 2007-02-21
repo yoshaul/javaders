@@ -49,11 +49,7 @@ public class GameMenu extends JFrame implements ActionListener {
      * @param args	No args
      */
     public static void main(String[] args) {
-        String debugStr = "";
-        if (args.length > 0) {
-            debugStr = args[0];
-        }
-        Logger.init(debugStr);
+        Logger.init(args);
         GameMenu game = new GameMenu();        
         game.start();
     }

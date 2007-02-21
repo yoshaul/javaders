@@ -8,18 +8,29 @@ import javax.swing.JOptionPane;
 /**
  * The <code>Logger</code> class is a simple logging helper.
  * Most of the game errors and exceptions are sent to the Logger.
+ * It also handles the command line parameters.
  */
 public class Logger {
 
     private static boolean debug;	// debug mode flag
+    private static boolean invulnerable; // player ships vulnerability
     
     /**
      * Initializes the Logger, check if in debug mode.
      * This method should be called once when the game starts.
      * (can also be used to redirect out streams)
+     * @param args	Arguments from the command line
      */
-    public static void init(String debugStr) {
-        debug = (debugStr != null && debugStr.equals("debug"));
+    public static void init(String[] args) {
+        for (int i = 0; i < args.length; i++) {
+            String param = args[i];
+            if (param.equals("debug")) {
+                debug = true;
+            }
+            else if (param.equals("invulnerable")) {
+                invulnerable = true;
+            }
+        }
     }
     
    
@@ -79,6 +90,14 @@ public class Logger {
      */
     public static boolean isDebug() {
         return debug;
+    }
+    
+    /**
+     * Returns true if the application started with the invulnerable
+     * flag on.
+     */
+    public static boolean isInvulnerable() {
+        return invulnerable;
     }
     
 }

@@ -82,7 +82,7 @@ public class HighScoresTester extends JFrame implements ActionListener {
         container.add(buttonsPanel, BorderLayout.SOUTH);
         
         pack();
-        show();
+        setVisible(true);
         
     }
     

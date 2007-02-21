@@ -98,7 +98,7 @@ public class AddHighScoreDialog extends InGameDialog {
         this.finished = false;
         this.score = score;
         this.level = level;
-        this.show(true);
+        this.setVisible(true);
         this.requestFocus();
     }
     
@@ -115,7 +115,7 @@ public class AddHighScoreDialog extends InGameDialog {
         highScoresManager.addScore(newHighScore, true);
         finished = true;
         parentState.setPlayerName(name);
-        this.show(false);
+        this.setVisible(false);
     }
 
     /**
@@ -125,7 +125,7 @@ public class AddHighScoreDialog extends InGameDialog {
         
         if (e.getSource() == cancelButton) {
             finished = true;
-            this.show(false);
+            this.setVisible(false);
         }
         
         else if (e.getSource() == okButton) {

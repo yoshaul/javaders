@@ -97,8 +97,8 @@ public class ScreenManager {
     	
     	else { // Full screen is not supported
 
-    	    gameFrame.resize(500,600);
-    	    gameFrame.show();
+    	    gameFrame.setSize(500,600);
+    	    gameFrame.setVisible(true);
     	}
         
         // Create a buffer strategy for the game frame
@@ -156,7 +156,7 @@ public class ScreenManager {
         	gd.setFullScreenWindow(null);
         }
         else {
-            gameFrame.show(false);
+            gameFrame.setVisible(false);
             gameFrame.dispose();
         }
     	

@@ -6,6 +6,7 @@ import game.network.packet.ShipPacket;
 import game.ship.bonus.*;
 import game.ship.weapon.*;
 import game.sound.SoundFactory;
+import game.util.Logger;
 
 import java.awt.*;
 import java.util.Collection;
@@ -19,7 +20,7 @@ public class PlayerShip extends Ship {
     private final long MAX_TIME_BETWEEN_PACKETS = 1000; 
     
     private long score;			// Score the player made
-    private boolean vulnerable = false;	// True if the player is vulnurable
+    private boolean vulnerable = true;	// True if the player is vulnurable
     
     /**
      * Construct a new player ship.
@@ -34,6 +35,10 @@ public class PlayerShip extends Ship {
                         prop.weaponDirection), 
                 prop.armor, prop.damage, 
                 prop.hitScoreValue, prop.destroyScoreValue);
+        
+        if (Logger.isInvulnerable()) {
+            vulnerable = false;
+        }
         
     }
     

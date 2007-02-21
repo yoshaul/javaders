@@ -6,7 +6,8 @@ import java.util.Random;
 /**
  * The AI state class performs actions like movement and
  * firing on a ship according to the events chances defined
- * for this state.
+ * for this state. It also returns the next state when the ship
+ * decides it's time to change state.
  */
 public class AIState {
 
@@ -68,6 +69,10 @@ public class AIState {
         }
     }
     
+    /**
+     * Randomly selects the next AI state. The current state has
+     * some affect on the probability of the next state.
+     */
     public AIState getNextAIState() {
         AIState nextState = AI_STATE_NORMAL;
         float rand = (float) Math.random();

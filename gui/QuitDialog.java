@@ -66,12 +66,12 @@ public class QuitDialog extends InGameDialog {
     public void actionPerformed(ActionEvent e) {
         
         if (e.getSource() == noButton) {
-            this.show(false);
+            this.setVisible(false);
             screenManager.showCursor(false);
             inputManager.setQuit(false);
         }
         else if (e.getSource() == yesButton) {
-            this.show(false);
+            this.setVisible(false);
             screenManager.showCursor(false);
             inputManager.setQuit(true);
         }

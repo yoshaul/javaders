@@ -95,7 +95,7 @@ public class PostHighScoreDialog extends InGameDialog {
     public void popPostHighScore(HighScore score) {
         this.score = score;
         nameField.setText(score.getPlayerName());
-        this.show(true);
+        this.setVisible(true);
     }
     
     /**
@@ -123,7 +123,7 @@ public class PostHighScoreDialog extends InGameDialog {
 	        }
         }
         this.finished = true;
-        this.show(false);
+        this.setVisible(false);
     }
     
     /**

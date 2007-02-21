@@ -11,19 +11,23 @@ import game.ship.Ship;
 public class WeaponFactory {
 
     /** Type of weapons in the game */
-    private static final int NUM_OF_WEAPONS = 2;
+    private static final int NUM_OF_PLAYER_WEAPONS = 2;
     public static final int TYPE_LASER_CANNON = 1;
     public static final int TYPE_FIRE_CANNON = 2;
+    
+    // Only enemy weapons
+    public static final int TYPE_BALL_CANNON = 101;
     
     // Images for the weapon upgrades
     private static final String laserCannonImage = "laserUp.png";
     private static final String fireCannonImage = "fireUp.png";
+    private static final String ballCannonImage = "ballUp.png";
     
     /**
      * Returns a random weapon type.
      */
     public static int getRandomWeaponType() {
-        return 1 + (int)(Math.random() * NUM_OF_WEAPONS);
+        return 1 + (int)(Math.random() * NUM_OF_PLAYER_WEAPONS);
     }
 
     public static String getWeaponImageByType(int type) {
@@ -32,6 +36,8 @@ public class WeaponFactory {
                 return laserCannonImage;
             case TYPE_FIRE_CANNON:
                 return fireCannonImage;
+            case TYPE_BALL_CANNON:
+                return ballCannonImage;
             default:
                 return "";
         }
@@ -57,6 +63,8 @@ public class WeaponFactory {
             case TYPE_FIRE_CANNON:
                 weapon = new FireCannon(direction, weaponLevel);
                 break;
+            case TYPE_BALL_CANNON:
+                weapon = new BallCannon(direction, weaponLevel);
         }
         
         return weapon;
@@ -75,13 +83,24 @@ public class WeaponFactory {
         Bullet bullet = null;
         Class bulletClass = model.bulletClass;
         if (bulletClass == LaserBeam.class) {
-            bullet = new LaserBeam(owner, model.x, model.y, model.dx, model.dy);
+            bullet = new LaserBeam(
+                    owner, model.x, model.y, model.dx, model.dy);
         }
         else if (bulletClass == FireBullet.class) {
-            bullet = new FireBullet(owner, model.x, model.y, model.dx, model.dy);
+            bullet = new FireBullet(
+                    owner, model.x, model.y, model.dx, model.dy);
         }
         else if (bulletClass == BlueLaser.class) {
-            bullet = new BlueLaser(owner, model.x, model.y, model.dx, model.dy);
+            bullet = new BlueLaser(
+                    owner, model.x, model.y, model.dx, model.dy);
+        }
+        else if (bulletClass == BallBullet.class) {
+            bullet = new BallBullet(
+                    owner, model.x, model.y, model.dx, model.dy);
+        }
+        else if (bulletClass == BigBallBullet.class) {
+            bullet = new BigBallBullet(
+                    owner, model.x, model.y, model.dx, model.dy);
         }
         
         return bullet;
