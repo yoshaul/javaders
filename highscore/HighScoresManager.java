@@ -1,6 +1,7 @@
 package game.highscore;
 
 import game.GameConstants;
+import game.network.NetworkManager;
 
 import java.io.*;
 
@@ -11,6 +12,8 @@ public class HighScoresManager {
     
     private int numOfHighScores;	// Max number of high scores
     private HighScore[] highScores;	// Array with all the high scores
+    
+    private NetworkManager networkManager;
     
     public HighScoresManager(int numOfHighScores) {
         
@@ -29,6 +32,10 @@ public class HighScoresManager {
             cnfe.printStackTrace();
         }
         
+    }
+    
+    public void setNetworkManager(NetworkManager networkManager) {
+        this.networkManager = networkManager;
     }
     
     /**
@@ -141,6 +148,29 @@ public class HighScoresManager {
         return ret;
     }
     
+    
+    /**
+     * Return array of <code>HighScore</code> objects containing the high
+     * scores starting at <code>fromPlace</code> inclusive and ending at
+     * <code>toPlace</code> inclusive.
+     * Place 1 is the highest score.
+     * @param fromPlace
+     * @param toPlace
+     * @return
+     * @throws IllegalArgumentException If fromPlace is smaller then 1
+     */
+    public HighScore[] getNetworkHighScores(int fromPlace, int toPlace) {
+
+        if (networkManager != null) {
+            return networkManager.getHighScores(fromPlace, toPlace);
+        }
+        
+        return null;
+
+    }
+    
+    
+    
     /**
      * Clears the high scores list.
      */
@@ -194,6 +224,12 @@ public class HighScoresManager {
         }
         
         oos.close();
+    }
+    
+    public void postScoreToServer(HighScore score) {
+        if (networkManager != null) {
+            networkManager.postHighScore(score);
+        }
     }
     
     public String toString() {

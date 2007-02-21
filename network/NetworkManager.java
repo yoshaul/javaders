@@ -1,5 +1,6 @@
 package game.network;
 
+import game.highscore.HighScore;
 import game.network.packet.Packet;
 
 import java.util.List;
@@ -28,5 +29,11 @@ public interface NetworkManager {
     public Long getReceiverID();
     
     public boolean isInviter();
+    
+    public void postHighScore(HighScore score);
+    
+    public HighScore[] getTopTenScores();
+    
+    public HighScore[] getHighScores(int fromRank, int toRank);
     
 }

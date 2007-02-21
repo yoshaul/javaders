@@ -45,7 +45,7 @@ public class OnlinePlayerBean implements EntityBean {
 			// retrieve the object bound to the name ejb/SignInHome
 			Object objref = env.lookup("ejb/SequenceFactory");
 			
-			// narrow the context to a SignInHome object
+			// narrow the context to a SequenceFactoryHome object
 			SequenceFactoryHome sequenceFactoryHome = (SequenceFactoryHome) 
 				PortableRemoteObject.narrow(objref, SequenceFactoryHome.class);
 			

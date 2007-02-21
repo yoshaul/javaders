@@ -3,6 +3,7 @@ package game.gui;
 import game.GameLoop;
 import game.highscore.HighScore;
 import game.highscore.HighScoresManager;
+import game.state.AddHighScoreState;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,7 @@ public class AddHighScoreDialog extends JPanel implements ActionListener {
 
     private GameLoop gameLoop;
     private HighScoresManager highScoresManager;
+    private AddHighScoreState parentState;
     
     private JTextField nameField;
     private JButton okButton, cancelButton;
@@ -22,13 +24,15 @@ public class AddHighScoreDialog extends JPanel implements ActionListener {
     private int level;
     private boolean finished;
     
-    public AddHighScoreDialog(GameLoop gameLoop, boolean modal, 
+    public AddHighScoreDialog(GameLoop gameLoop, 
+            AddHighScoreState parentState, 
             HighScoresManager highScoresManager) {
         
         super(new BorderLayout());
 //        super(owner, modal);
         this.gameLoop = gameLoop;
         this.highScoresManager = highScoresManager;
+        this.parentState = parentState;
 
         createGUI();
         
@@ -102,6 +106,7 @@ public class AddHighScoreDialog extends JPanel implements ActionListener {
             HighScore newHighScore = new HighScore(name, score, level);
             highScoresManager.addScore(newHighScore, true);
             finished = true;
+            parentState.setPlayerName(name);
             this.show(false);
         }
     }

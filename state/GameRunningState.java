@@ -93,18 +93,9 @@ public class GameRunningState implements GameState {
         else if (playerManager.isGameOver()) {
           
           inputManager.setPaused(true);
-          
-          long playerScore = playerManager.getLocalPlayerShip().getScore();
-          int level = levelsManager.getCurrentLevel();
-          
-          if (highScoresManager.isHighScore(playerScore, level)) {
-              
-              nextGameState = GAME_STATE_HIGH_SCORE;
 
-          } else {
-              /** TODO: redirect to game over state? */
-              inputManager.setQuit(true);
-          }
+          nextGameState = GAME_STATE_HIGH_SCORE;
+
         }
         
     }

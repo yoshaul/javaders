@@ -62,6 +62,7 @@ public class Game extends JFrame implements ActionListener {
         
         networkManager = new J2EENetworkManager(this);
         highScoresManager = new HighScoresManager(10);
+        highScoresManager.setNetworkManager(networkManager);
         
         createGUI();
         

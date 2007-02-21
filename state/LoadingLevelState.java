@@ -76,7 +76,7 @@ public class LoadingLevelState implements GameState {
     public void update(GameLoop gameLoop, long elapsedTime) {
         timeInState += elapsedTime;
         
-        if (levelLoaded && timeInState > 3000) {
+        if (levelLoaded && timeInState > 1000) {
             if (!gameLoop.isNetworkGame() || friendReady) {
                 nextGameState = GameState.GAME_STATE_RUNNING;    
             }

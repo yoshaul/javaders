@@ -8,7 +8,8 @@ import javax.ejb.FinderException;
 
 public interface SequenceFactoryHome extends EJBHome {
 
-    public String create(String pk) throws RemoteException, CreateException;
+    public SequenceFactory create(String pk) 
+    	throws RemoteException, CreateException;
     
     public SequenceFactory findByPrimaryKey(String pk) 
     		throws RemoteException,	FinderException;

@@ -4,6 +4,9 @@ import java.rmi.RemoteException;
 import java.util.*;
 
 import game.Game;
+import game.highscore.HighScore;
+import game.network.client.ClientJNDINames;
+import game.network.client.EJBHelper;
 import game.network.packet.*;
 import game.network.server.ejb.*;
 
@@ -93,17 +96,18 @@ public class J2EENetworkManager implements NetworkManager {
 //System.err.println(initialContext.list("java:comp/env"));
 //System.err.println("\n\n\n\n");
 //			Object objref = initialContext.lookup("java:comp/env/ejb/SignIn");
-//			Object objref = initialContext.lookup("java:comp/env/ejb/SignInBean");
+			Object objref = initialContext.lookup(ClientJNDINames.SIGN_IN_BEAN);
 //System.out.println("GOT OBJECT:" + objref.toString());
-//System.out.println("CLASS:" + objref.getClass() + "\n\n");
-			
-			
+//System.out.println("CLASS NAME:" + objref.getClass().getName());
+//			
+
+/* oORIGINAL			
 			// obtain the environment maming context of the application client
 			Context env = (Context) initialContext.lookup("java:comp/env");
 			
 			// retrieve the object bound to the name ejb/SignInHome
 			Object objref = env.lookup("ejb/SignIn");
-			
+*/			
 			// narrow the context to a SignInHome object
 			SignInHome signInHome = (SignInHome) 
 				PortableRemoteObject.narrow(objref, SignInHome.class);
@@ -163,11 +167,13 @@ public class J2EENetworkManager implements NetworkManager {
 			// create an initial naming context
 			InitialContext initialContext = new InitialContext();
 			
-			// obtain the environment maming context of the application client
-			Context env = (Context) initialContext.lookup("java:comp/env");
+//			// obtain the environment maming context of the application client
+//			Context env = (Context) initialContext.lookup("java:comp/env");
+//			
+//			// retrieve the object bound to the name ejb/SignInHome
+//			Object objref = env.lookup("ejb/SignIn");
 			
-			// retrieve the object bound to the name ejb/SignInHome
-			Object objref = env.lookup("ejb/SignIn");
+			Object objref = initialContext.lookup(ClientJNDINames.SIGN_IN_BEAN);
 			
 			// narrow the context to a SignInHome object
 			SignInHome signInHome = (SignInHome) 
@@ -312,6 +318,10 @@ public class J2EENetworkManager implements NetworkManager {
     private void initJMSConnection() 
     	throws JMSException, NamingException {
         
+//         Hashtable env = new Hashtable();
+//      env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.cosnaming.CNCtxFactory");
+//      env.put(Context.PROVIDER_URL, "iiop://josh.game-server.cc:3268");
+
         Context context = new InitialContext();
         System.err.println("Getting connection factory...");
         ConnectionFactory connectionFactory = 
@@ -344,5 +354,67 @@ public class J2EENetworkManager implements NetworkManager {
         return this.inviter;
     }
     
+    public void postHighScore(HighScore score) {
+        try {
+            HighScoresHome highScoresHome= (HighScoresHome) 
+				EJBHelper.getEJBHome(
+			        JNDINames.HIGH_SCORES_BEAN, HighScoresHome.class);  
+            
+            HighScores highScores = highScoresHome.create();
+            
+            highScores.postHighScore(score);
+            
+        }
+        catch (NamingException ne) {
+            ne.printStackTrace();
+            throw new RuntimeException(ne);
+        }
+        catch (CreateException ce) {
+            ce.printStackTrace();
+            throw new RuntimeException(ce);
+        }
+        catch (RemoteException re) {
+            re.printStackTrace();
+            throw new RuntimeException(re);
+        }
+        
+        /** TODO: handle exceptions. Probably throw my network exception */
+
+    }
+    
+    public HighScore[] getTopTenScores() {
+        
+        return getHighScores(1, 10);
+
+    }
+    
+    public HighScore[] getHighScores(int fromRank, int toRank) {
+        try {
+            HighScoresHome highScoresHome= (HighScoresHome) 
+    			EJBHelper.getEJBHome(
+    		        JNDINames.HIGH_SCORES_BEAN, HighScoresHome.class);
+            
+            HighScores highScores = highScoresHome.create();
+            
+            return highScores.getHighScores(fromRank, toRank);
+            
+        }
+        catch (NamingException ne) {
+            ne.printStackTrace();
+            throw new RuntimeException(ne);
+        }
+        catch (CreateException ce) {
+            ce.printStackTrace();
+            throw new RuntimeException(ce);
+        }
+        catch (RemoteException re) {
+            re.printStackTrace();
+            throw new RuntimeException(re);
+        }
+        
+        /** TODO: handle exceptions. Probably throw my network exception */
+        
+        
+    }
     
 }

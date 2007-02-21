@@ -4,7 +4,7 @@ import game.ship.Ship;
 import game.sound.SoundFactory;
 
 
-public class LaserCanon implements Weapon {
+public class LaserCannon implements Weapon {
 
     private final int weaponType = 
         WeaponFactory.TYPE_LASER_CANNON;
@@ -16,7 +16,7 @@ public class LaserCanon implements Weapon {
     private int weaponLevel;
     
     
-    public LaserCanon(int direction, int weaponLevel) {
+    public LaserCannon(int direction, int weaponLevel) {
         this.direction = direction;
         this.weaponLevel = weaponLevel;
         this.lastFiringTime = 0;

@@ -1,7 +1,6 @@
 package game.gui;
 
-import game.highscore.HighScoresManager;
-import game.highscore.HighScoresRenderer;
+import game.highscore.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +11,9 @@ import javax.swing.*;
 public class HighScoresDialog extends GameDialog {
 
     private HighScoresManager highScoresManager;
-    private JButton closeButton, clearButton;
+    private HighScore[] highScores;
+    private JButton closeButton, clearButton, 
+    	localScoresButton, networkScoresButton;
     private JPanel renderPanel;
     
     public HighScoresDialog(JFrame owner, boolean modal, 
@@ -21,6 +22,7 @@ public class HighScoresDialog extends GameDialog {
         super(owner, modal);
         
         this.highScoresManager = highScoresManager;
+        this.highScores = highScoresManager.getHighScores();
         
         createGUI();
         
@@ -30,14 +32,15 @@ public class HighScoresDialog extends GameDialog {
         
         setVisible(false);
         
-        setUndecorated(true);
+//        setUndecorated(true);
+        setResizable(false);
         
         Container container = getContentPane();
         container.setLayout(new BorderLayout());
         
         renderPanel = new JPanel();
         
-        JPanel buttonsPanel = new JPanel(new FlowLayout());
+        JPanel buttonsPanel = new JPanel(new GridLayout(2,2));
         
         closeButton = new JButton("Close");
         closeButton.addActionListener(this);
@@ -47,10 +50,18 @@ public class HighScoresDialog extends GameDialog {
         clearButton.addActionListener(this);
         buttonsPanel.add(clearButton);
         
+        localScoresButton = new JButton("Local High Scores");
+        localScoresButton.addActionListener(this);
+        buttonsPanel.add(localScoresButton);
+        
+        networkScoresButton = new JButton("Network High Scores");
+        networkScoresButton.addActionListener(this);
+        buttonsPanel.add(networkScoresButton);
+        
         container.add(renderPanel, BorderLayout.CENTER);
         container.add(buttonsPanel, BorderLayout.SOUTH);
         
-        setSize(300, 400);
+        setSize(350, 400);
         
         // Center the dialog on the screen
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -67,7 +78,7 @@ public class HighScoresDialog extends GameDialog {
         Graphics rg = renderPanel.getGraphics();
         rg.setClip(0, 0, renderPanel.getWidth(), renderPanel.getHeight());
         // Paint high scores on the render panel
-        HighScoresRenderer.render(rg, highScoresManager.getHighScores());
+        HighScoresRenderer.render(rg, highScores);
         
     }
     
@@ -84,7 +95,14 @@ public class HighScoresDialog extends GameDialog {
                 ioe.printStackTrace();
             }
             repaint();
-            
+        }
+        else if (event.getSource() == localScoresButton) {
+            highScores = highScoresManager.getHighScores();
+            repaint();
+        }
+        else if (event.getSource() == networkScoresButton) {
+            highScores = highScoresManager.getNetworkHighScores(1, 10);
+            repaint();
         }
         
     }

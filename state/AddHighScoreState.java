@@ -5,17 +5,27 @@ import java.awt.Graphics;
 import game.GUIManager;
 import game.GameLoop;
 import game.gui.AddHighScoreDialog;
+import game.gui.PostHighScoreDialog;
+import game.highscore.HighScore;
 import game.highscore.HighScoresManager;
 
 public class AddHighScoreState implements GameState {
 
+    private final static int INTERNAL_STATE_ADD_HIGH_SCORE = 1;
+    private final static int INTERNAL_STATE_POST_SCORE = 2;
+    
     private GameLoop gameLoop;
     private AddHighScoreDialog addHighScoreDialog;
+    private PostHighScoreDialog postScoreDialog;
     private HighScoresManager highScoresManager;
     private GUIManager guiManager;
+    private String playerName;
     private long timeInState;
     private boolean levelLoaded;
     private int nextGameState;
+    private int internalState;
+    private long playerScore;
+    private int level;
     
     public AddHighScoreState(GameLoop gameLoop) {
         this.gameLoop = gameLoop;
@@ -25,11 +35,15 @@ public class AddHighScoreState implements GameState {
     
     public void init() {
         
-        addHighScoreDialog = new AddHighScoreDialog(gameLoop, true, 
+        addHighScoreDialog = new AddHighScoreDialog(gameLoop, this, 
                 highScoresManager);
 
         guiManager.addDialog(addHighScoreDialog);
         
+        postScoreDialog = new PostHighScoreDialog(gameLoop, 
+                highScoresManager);
+        
+        guiManager.addDialog(postScoreDialog);
     }
 
     public void cleanup() {
@@ -51,15 +65,24 @@ public class AddHighScoreState implements GameState {
         timeInState = 0;
         nextGameState = GameState.GAME_STATE_HIGH_SCORE;
         
-        long playerScore = 
+        playerScore = 
             gameLoop.getPlayerManager().getLocalPlayerShip().getScore();
         
-        int level = gameLoop.getLevelsManager().getCurrentLevel();
+        level = gameLoop.getLevelsManager().getCurrentLevel();
         
-        HighScoresManager highScoresManager = gameLoop.getHighScoresManager();
-        
-        popAddHighScoreDialog(playerScore, level, highScoresManager);
-        
+        if (highScoresManager.isHighScore(playerScore, level)) {
+            
+            internalState = INTERNAL_STATE_ADD_HIGH_SCORE;
+            
+            HighScoresManager highScoresManager = 
+                gameLoop.getHighScoresManager();
+            
+            popAddHighScoreDialog(playerScore, level, highScoresManager);
+        }
+        else {
+            internalState = INTERNAL_STATE_POST_SCORE;
+            popPostScoreDialog(new HighScore(playerName, playerScore, level));
+        }
     }
 
     public void gatherInput(GameLoop gameLoop, long elapsedTime) {
@@ -70,11 +93,23 @@ public class AddHighScoreState implements GameState {
         
         timeInState += elapsedTime;
         
-        if (addHighScoreDialog.isFinished()) {
+        if (internalState == INTERNAL_STATE_ADD_HIGH_SCORE &&
+                addHighScoreDialog.isFinished()) {
             /** TODO: show high scores */
-//            nextGameState =
+            if (playerName != null) {
+                internalState = INTERNAL_STATE_POST_SCORE;
+                popPostScoreDialog(
+                        new HighScore(playerName, playerScore, level));
+            }
+            else {
+                gameLoop.getInputManager().setQuit(true);
+            }
+        }
+        
+        if (internalState == INTERNAL_STATE_POST_SCORE &&
+                postScoreDialog.isFinished()) {
+            
             gameLoop.getInputManager().setQuit(true);
-//            gameLoop.getGUIManager().get
             
         }
 
@@ -103,11 +138,19 @@ public class AddHighScoreState implements GameState {
         return GameState.GAME_STATE_HIGH_SCORE;
     }
     
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+    
     private void popAddHighScoreDialog(long score, int level, 
             HighScoresManager highScoresManager) {
         
         addHighScoreDialog.addHighScore(score, level);
         
+    }
+    
+    private void popPostScoreDialog(HighScore score) {
+        postScoreDialog.popPostHighScore(score);
     }
 
 }

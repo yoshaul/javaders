@@ -32,8 +32,8 @@ public class SequenceFactoryBean implements EntityBean {
         
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "INSETR INTO sequence_factory " +
-                    "(table_name, next_id " +
+                    "INSERT INTO sequence_factory " +
+                    "(table_name, next_id) " +
                     "VALUES(?, ?)");
             
             ps.setString(1, tableName);

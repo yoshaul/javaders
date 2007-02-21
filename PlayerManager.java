@@ -33,7 +33,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
                 ShipProperties.PLAYER_SHIP_TYPE,
                 200, 540, 0, 0, 
                 new ImageIcon(GameConstants.IMAGES_DIR+"player01.png").getImage(), 
-                new LaserCanon(Weapon.DIRECTION_UP, 2)
+                new FireCannon(Weapon.DIRECTION_UP, 2)
         );
 
         player1Ship.setShipContainer(this);
@@ -43,7 +43,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
                     ShipProperties.PLAYER_SHIP_TYPE,
                     400, 540, 0, 0,
                     new ImageIcon(GameConstants.IMAGES_DIR+"Bajoran.gif").getImage(), 
-                    new LaserCanon(Weapon.DIRECTION_UP, 2)
+                    new FireCannon(Weapon.DIRECTION_UP, 2)
             );
             
             player2Ship.setShipContainer(this);

@@ -6,6 +6,11 @@ public class HighScoresRenderer {
 
     public static void render(Graphics g, HighScore[] highScores) {
         
+        if (highScores == null) {
+            // Create empty high scores array
+            highScores = new HighScore[1];
+        }
+        
         // Get the number of occupied high scores
         int numberOfHighScores = 0;
         if (highScores[0] == null) {

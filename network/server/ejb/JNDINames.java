@@ -10,5 +10,8 @@ public interface JNDINames {
 	
 	public final static String ONLINE_PLAYER_BEAN = 
 	    "java:comp/env/ejb/OnlinePlayer";
+	
+	public final static String HIGH_SCORES_BEAN = 
+	    "java:comp/env/ejb/HighScores";
     
 }

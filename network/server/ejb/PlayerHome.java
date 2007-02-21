@@ -8,10 +8,7 @@ public interface PlayerHome extends EJBHome {
 
     public Player findByPrimaryKey(String pk) 
     	throws RemoteException, FinderException;
-    
-    public Player create() 
-		throws RemoteException, CreateException;
-    
+
     public Player create(String pk, String password) 
     	throws RemoteException, CreateException;
     
