@@ -1,17 +1,17 @@
-package game;
+package game.gui;
+
+import game.Game;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
-public class LoginDialog extends JDialog implements ActionListener {
+public class LoginDialog extends GameDialog {
 
     private Game game;
     
-    // Login dialog
     private JTextField userNameField;
     private JPasswordField passwordField;
     private JButton loginButton, cancelButton;
@@ -19,15 +19,15 @@ public class LoginDialog extends JDialog implements ActionListener {
     
     public LoginDialog(Game game) {
         
-        super(game, "Login", true);
+        super(game, true);
         
         this.game = game;
         
-        createGUI();
+        this.setTitle("Login");
         
     }
     
-    private void createGUI() {
+    protected void createGUI() {
 		
         Container contentPane = this.getContentPane();
 		
@@ -71,7 +71,6 @@ public class LoginDialog extends JDialog implements ActionListener {
         this.setLocation(
                 Math.max(0,(screenSize.width - dialogSize.width) / 2), 
                 Math.max(0,(screenSize.height - dialogSize.height) / 2));
-        
 		
     }
 
@@ -81,7 +80,7 @@ public class LoginDialog extends JDialog implements ActionListener {
 		passwordField.setText("");
 		statusLabel.setText("Validating username and password");
 //		try {
-			String ticket = game.getNetworkManager().login(userName, password);
+			Long ticket = game.getNetworkManager().login(userName, password);
 			
 			if (ticket == null) {
 			    statusLabel.setText("Unable to log in ");
@@ -89,7 +88,7 @@ public class LoginDialog extends JDialog implements ActionListener {
 				statusLabel.setText("Logged in successfully ticket = "
 						+ ticket); 
 				
-				game.setLoggedUser(userName);
+				game.setLoggedUser(userName, ticket);
 				
 			}
 //		}

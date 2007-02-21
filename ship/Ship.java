@@ -1,7 +1,9 @@
 package game.ship;
 
+import game.network.GameNetworkManager;
+import game.network.packet.*;
+import game.ship.weapon.*;
 import game.sound.SoundFactory;
-import game.util.Log;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -9,43 +11,77 @@ import java.util.Collection;
 import java.util.Iterator;
 
 
-public abstract class Ship extends Sprite implements Target {
+public abstract class Ship extends Sprite implements Target, PacketHandler {
 
     private final static int STATE_NORMAL = 0;
     private final static int STATE_EXPLODING = 1;
     private final static int STATE_DESTROYED = 2;
     
-    private ShipContainer shipContainer;
+    protected ShipContainer shipContainer;
+    
+    protected int objectID; 
+    private int shipType;
     
     /** The ship's armor */
     protected long armor;
     /** The damage the ship causes when colliding with a traget */ 
     private long damage;
     
+    private long hitScoreValue;
+    private long destroyScoreValue;
+    
     private int state = STATE_NORMAL;
     
-    protected Weapon gun;
+    protected Weapon weapon;
     //private Weapon secondWeapon;
 
-    public Ship(double x, double y, double dx, double dy,
-            Image image, Weapon gun, long armor, long damage) {
+    public Ship(int objectID, int shipType,
+            float x, float y, float dx, float dy,
+            Image image, Weapon gun, long armor, long damage, 
+            long hitScoreValue, long destroyScoreValue) {
+        
         super(x, y, dx, dy, image);
-        this.gun = gun;
+        this.objectID = objectID;
+        this.shipType = shipType;
+        this.weapon = gun;
         this.armor = armor;
         this.damage = damage;
+        this.hitScoreValue = hitScoreValue;
+        this.destroyScoreValue = destroyScoreValue;
+        
+        // Set this ship as the owner of the weapon
+        this.weapon.setOwner(this);
     }
     
-    public Ship(double x, double y, double dx, double dy,
+    public Ship(int objectID, int shipType, 
+            float x, float y, float dx, float dy,
             ShipProperties properties) {
+
         
-        this(x, y, dx, dy, properties.image, 
-                properties.weapon, properties.armor, 
-                properties.damage);
+        this(objectID, shipType, x, y, dx, dy, properties.image, 
+                WeaponFactory.getWeapon(properties.weaponType, 
+                        properties.weaponLevel, properties.weaponDirection) ,
+                properties.armor, properties.damage, 
+                properties.hitScoreValue, properties.destroyScoreValue);
+        
+    }
+    
+    public Ship(ShipModel model) {
+        this(model.objectID, model.shipType, 
+                model.x, model.y, model.dx, model.dy);
+    }
+    
+    public Ship(int objectID, int shipType, 
+            float x, float y, float dx, float dy) {
+        
+        this(objectID, shipType, 
+                x, y, dx, dy, 
+                ShipProperties.getShipProperties(shipType));
         
     }
     
     public void shoot() {
-        gun.shoot(getCenterX(), getY());
+        weapon.fire(getCenterX(), getY());
     }
     
     public void processCollisions(Collection targets) {
@@ -62,9 +98,9 @@ public abstract class Ship extends Sprite implements Target {
             }
         }
         
-        if (gun != null) {
-            gun.processCollisions(targets);
-        }
+//        if (weapon != null) {
+//            weapon.processCollisions(targets);
+//        }
     }
     
     public boolean isCollision(int x0, int y0, int x1, int y1) {
@@ -100,21 +136,34 @@ public abstract class Ship extends Sprite implements Target {
         }
     }
     
+    public void hit(Bullet bullet) {
+        if (state == STATE_NORMAL) {
+	        
+            SoundFactory.playSound("hit1.wav");
+            long damage = bullet.getDamage();
+            armor -= damage;
+	        if (armor <= 0) {
+	            destroy();
+	        }
+	        
+	        // Add the score to the hitting player
+	        if (bullet.getOwner() instanceof PlayerShip){
+	            long score = (armor<=0) ? destroyScoreValue : hitScoreValue; 
+	            PlayerShip ship = (PlayerShip) bullet.getOwner();
+	            ship.addScore(score);
+	        }
+        }
+    }
+    
     public void update(long elapsedTime) {
         if (isActive()) {
 	        updatePosition(elapsedTime);
-	        if (gun != null) {
-	            gun.update(elapsedTime);
-	        }
         }
     }
     
     public void render(Graphics g) {
         if (isActive()) {
 	        super.render(g);
-	        if (gun != null) {
-	            gun.render(g);
-	        }
         }
     }
     
@@ -124,8 +173,16 @@ public abstract class Ship extends Sprite implements Target {
         this.state = STATE_DESTROYED;
     }
     
+    protected void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
+    
     public long getDamage() {
-        return damage;
+        return this.damage;
+    }
+    
+    public long getArmor() {
+        return this.armor;
     }
     
     public void setShipContainer(ShipContainer container) {
@@ -144,4 +201,56 @@ public abstract class Ship extends Sprite implements Target {
         return state == STATE_DESTROYED;
     }
     
+    public int getObjectID() {
+        return this.objectID;
+    }
+    
+    public ShipModel getShipModel() {
+        return new ShipModel(objectID, shipType, 
+                getX(), getY(), getDx(), getDy());
+    }
+    
+    // Implement PacketHandler interface
+    public void handlePacket(Packet packet) {
+        
+        if (packet instanceof ShipPacket) {
+            ShipPacket shipPacket = (ShipPacket)packet;
+            ShipState shipState = shipPacket.getShipState();
+            
+            setX(shipState.x);
+            setY(shipState.y);
+            setDx(shipState.dx);
+            setDy(shipState.dy);
+            armor = shipState.armor;
+            state = shipState.state;
+            
+            packet.setConsumed(true);
+        }
+        
+    }
+    
+    public void createPacket() {
+        
+        if (!shipContainer.isNetworkGame()) {
+            return;
+        }
+        
+        ShipState shipState = new ShipState(x, y, dx, dy, armor, state);
+        
+        GameNetworkManager netManager = 
+            shipContainer.getNetworkManager();
+        
+        Packet shipPacket = new ShipPacket(netManager.getSenderID(),
+                netManager.getReceiverID(), getHandlerID(), shipState);
+        
+        netManager.sendPacket(shipPacket);
+    }
+    
+    public int getHandlerID() {
+        return this.objectID;
+    }
+    
+    public ShipContainer getShipContainer() {
+        return shipContainer;
+    }
 }

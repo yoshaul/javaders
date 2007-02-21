@@ -6,34 +6,50 @@ import game.GameConstants;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.sound.sampled.*;
 
-import sun.awt.image.ByteInterleavedRaster;
 
 public class SoundFactory {
     
     private static LineListener listener = new Listener34();
     
-    private static Clip cachedClip = initCache();
-    private static AudioInputStream stream;
+    private static Map cachedClips = new HashMap();
     
     public SoundFactory() {
         
     }
     
+    public static void init() {
+        cachedClips = new HashMap();
+    }
+    
     public static void playSound(String fileName) {
         
         try {
-            File soundFile = new File(GameConstants.SOUNDS_DIR + fileName);
-            AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
-            AudioFormat audioFormat = ais.getFormat();
-            DataLine.Info info = new DataLine.Info(Clip.class, audioFormat);
-            // Obtain a line 
-            Clip clip = (Clip) AudioSystem.getLine(info);
+            
+            Clip clip = (Clip)cachedClips.get(fileName);
+            
+            if (clip == null) {
+                File soundFile = new File(GameConstants.SOUNDS_DIR + fileName);
+                AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
+                AudioFormat audioFormat = ais.getFormat();
+                DataLine.Info info = new DataLine.Info(Clip.class, audioFormat);
+                // Obtain a line 
+                clip = (Clip) AudioSystem.getLine(info);
+                // Open the line (aquire resources)
+                clip.open(ais);
+                synchronized (cachedClips) {
+                    // Unfortunatlly this allows only one sound 
+//                    cachedClips.put(fileName, clip);
+                }
+            }
+
             
             // Open the line (aquire resources)
-            clip.open(ais);
+//            clip.open(ais);
 //clip.addLineListener(listener);            
             // Start playing the playback
             clip.start();
@@ -47,13 +63,13 @@ public class SoundFactory {
         }
         
         catch (UnsupportedAudioFileException uafe) {
-            //
+            uafe.printStackTrace();
         }
         catch (LineUnavailableException lue) {
-            //
+            lue.printStackTrace();
         }
         catch (IOException ioe) {
-            //
+            ioe.printStackTrace();
         }
         
     }
@@ -103,31 +119,6 @@ public class SoundFactory {
         
     }
     
-    
-    public static void playCachedSound() {
-        try {
-        cachedClip.open(stream);
-        cachedClip.start();
-
-        } catch (Exception e){}
-    }
-
-    private static Clip initCache() {
-        Clip clip = null;
-        try {
-        File soundFile = new File(GameConstants.SOUNDS_DIR + "laser1.wav");
-        stream = AudioSystem.getAudioInputStream(soundFile);
-        AudioFormat audioFormat = stream.getFormat();
-        DataLine.Info info = new DataLine.Info(Clip.class, audioFormat);
-        // Obtain a line 
-        clip = (Clip) AudioSystem.getLine(info);
-        clip.addLineListener(listener); 
-        }
-        catch (Exception e) {
-            //
-        }
-        return clip;
-    }
     
     public static void playAppletClip(String fileName) {
         try {

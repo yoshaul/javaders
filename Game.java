@@ -1,12 +1,12 @@
 
 package game;
 
-import game.network.J2EENetworkManager;
-import game.network.NetworkManager;
+import game.gui.*;
+import game.highscore.HighScoresManager;
+import game.network.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 import javax.swing.*;
 
@@ -16,14 +16,17 @@ public class Game extends JFrame implements ActionListener {
 //    private GUIManager guiManager;
     
     private NetworkManager networkManager;
+    private HighScoresManager highScoresManager;
 
     // GUI components
     private JPanel guiPanel;
     private JButton startButton, multiplayerButton, 
-    	loginButton, exitButton, signupButton;
+    	loginButton, exitButton, signupButton, highScoresButton;
     
-    private LoginDialog loginDialog;
-    private SignupDialog signupDialog;
+    private GameDialog loginDialog, signupDialog, 
+    	availablePlayersDialog, highScoresDialog;
+    
+    private Long sessionId = null;
     
     private boolean exited = false;
     private boolean startSingle = false;
@@ -41,12 +44,32 @@ public class Game extends JFrame implements ActionListener {
         
         super("Super Game");
         
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.addWindowListener(
+            new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    releaseResources();
+                    System.out.println("disposing window....");
+                    dispose();
+                    System.out.println("calling exit....");
+                    System.exit(0);
+                }
+            }
+            
+        );
+        
+        
+        
+        networkManager = new J2EENetworkManager(this);
+        highScoresManager = new HighScoresManager(10);
         
         createGUI();
         
+        // Create game dialogs
         loginDialog = new LoginDialog(this);
         signupDialog = new SignupDialog(this);
+        availablePlayersDialog = new AvailablePlayersDialog(this);
+        highScoresDialog = new HighScoresDialog(this, true, highScoresManager);
         
         this.pack();
         
@@ -57,9 +80,6 @@ public class Game extends JFrame implements ActionListener {
                 Math.max(0,(screenSize.width - windowSize.width) / 2), 
                 Math.max(0,(screenSize.height - windowSize.height) / 2));
         
-        
-        networkManager = new J2EENetworkManager();
-        
         this.setVisible(true);
 
     }
@@ -68,7 +88,6 @@ public class Game extends JFrame implements ActionListener {
         
         while(!exited) {
             try {
-                
                 if (startSingle) {
                     startSinglePlayerGame();
                 } else if (startMultiplayer){
@@ -81,8 +100,9 @@ public class Game extends JFrame implements ActionListener {
                 //
             }
         }
-        
+        releaseResources();
         System.exit(0);
+        
     }
     
     private JButton createButton(String label, String toolTip) {
@@ -108,23 +128,37 @@ public class Game extends JFrame implements ActionListener {
     public void startSinglePlayerGame() {
         // start new game
         startSingle = false;
-        startGame(false);
+        startGame(false, true);
         
     }
     
     public void startMultiPlayerGame() {
         // start new game
         startMultiplayer = false;
-        startGame(true);
+        // Start new network game. The inviter is the controller
+        startGame(true, networkManager.isInviter());
         
     }
     
-    public void startGame(boolean multiPlayer) {
+    public void startGame(boolean multiPlayer, boolean controller) {
         // Hide the game menu
         this.setVisible(false);
         
         // Start a new game loop thread
-        GameLoop gameLoop = new GameLoop(multiPlayer);
+        GameNetworkManager gnm = null;
+        if (multiPlayer){
+            
+            JMSGameListener jmsGameListener = 
+                ((J2EENetworkManager)networkManager).getJMSGameListener();
+            
+            gnm = new J2EEGameNetworkManager(/*gameLoop,*/
+                    jmsGameListener, networkManager.getSenderID(),
+                    networkManager.getReceiverID(), networkManager.isInviter());    
+        }
+        
+        GameLoop gameLoop = new GameLoop(multiPlayer, controller, 
+                highScoresManager, gnm);
+        
         Thread gameThread = new Thread(gameLoop);
         gameThread.run();
         try {
@@ -157,12 +191,15 @@ public class Game extends JFrame implements ActionListener {
         
         signupButton = createButton("Signup", "Signup");
         
+        highScoresButton = createButton("High Scores", "View High Scores");
+        
         exitButton = createButton("Exit", "Exit the game");
         
         guiPanel.add(startButton);
         guiPanel.add(multiplayerButton);
         guiPanel.add(loginButton);
         guiPanel.add(signupButton);
+        guiPanel.add(highScoresButton);
         guiPanel.add(exitButton);
         
         guiPanel.setBackground(Color.BLUE);
@@ -183,13 +220,31 @@ public class Game extends JFrame implements ActionListener {
         signupDialog.setVisible(true);
     }
     
+    private void popHighScoresDialog() {
+        System.out.println(highScoresManager.toString());
+        highScoresDialog.setVisible(true);
+    }
+    
+    private void popAvailablePlayersDialog() {
+        ((AvailablePlayersDialog)availablePlayersDialog).refresh();
+        availablePlayersDialog.setVisible(true);
+    }
+    
     public void actionPerformed(ActionEvent event) {
 	    
         if (event.getSource() == exitButton) {
             exited = true;
             
         } else if (event.getSource() == loginButton) {
-            popLoginDialog();
+            if (sessionId == null) {
+                // User no logged in yet
+                popLoginDialog();    
+            } 
+            else {
+                // User logged in so we log out
+                logout();
+            }
+            
             
         } else if (event.getSource() == startButton) {
             startSingle = true;
@@ -198,20 +253,54 @@ public class Game extends JFrame implements ActionListener {
             popSignupDialod();
             
         } else if (event.getSource() == multiplayerButton) {
-            startMultiplayer = true;
-        }
+            
+            popAvailablePlayersDialog();
+            
+//            startMultiplayer = true;
         
+    	} else if (event.getSource() == highScoresButton) {
+    	    popHighScoresDialog();
+    	}
 	}
     
-    public void setLoggedUser (String userName) {
+    public void setLoggedUser (String userName, Long sessionId) {
         
-        System.out.println("User " + userName + " Loggedin");
+        this.sessionId = sessionId;
+        loginButton.setText("Logout");
         multiplayerButton.setEnabled(true);
+        networkManager.acceptInvitations(true, sessionId);
+        loginDialog.setVisible(false);
+        signupDialog.setVisible(false);
+        System.out.println("User " + userName + " loggedin successfully. " +
+        		"Session id = " + sessionId);
         
+    }
+    
+    private void logout() {
+        
+        loginButton.setText("Login");
+        multiplayerButton.setEnabled(false);
+        networkManager.acceptInvitations(false, sessionId);
+        networkManager.logout(sessionId);
+        this.sessionId = null;
+        System.out.println("Logged out successfully");
+        
+    }
+    
+    private void releaseResources() {
+        System.out.println("Releasing resources....");
+        if (sessionId != null) {
+            networkManager.acceptInvitations(false, sessionId);
+            networkManager.logout(sessionId); 
+        }
     }
     
     public NetworkManager getNetworkManager() {
         return this.networkManager;
+    }
+    
+    public void setStartMultiplayer(boolean start) {
+        this.startMultiplayer = start;
     }
     
 }

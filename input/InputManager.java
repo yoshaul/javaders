@@ -1,6 +1,9 @@
 
 package game.input;
 
+import game.GameLoop;
+import game.gui.QuitD;
+import game.gui.QuitDialog;
 import game.ship.*;
 
 import java.awt.event.KeyEvent;
@@ -10,9 +13,15 @@ import java.awt.event.MouseListener;
 import java.util.Map;
 import java.util.HashMap;
 
+import javax.swing.JLayeredPane;
+
 
 public class InputManager implements KeyListener, MouseListener {
 
+    private GameLoop gameLoop;
+    
+    private QuitD quitDialog;
+    
     private GameAction exit;
     private GameAction pause;
     private GameAction moveLeft;
@@ -23,16 +32,24 @@ public class InputManager implements KeyListener, MouseListener {
     private GameAction fireMissile;
     
     private boolean paused = false;
+    private boolean quit = false;
     
     private Map keyCodeToGameAction;
     
     private Ship player;
     
-    public InputManager(Ship player) {
+    public InputManager(GameLoop gameLoop, Ship player) {
+        
+        this.gameLoop = gameLoop;
         
         this.player = player;
         
+        this.quitDialog = new QuitD(gameLoop, false, this);
+        
         createGameActions();
+        
+        gameLoop.getScreenManager().getFullScreenWindow().
+        	getLayeredPane().add(quitDialog, JLayeredPane.MODAL_LAYER);
         
     }
     
@@ -44,9 +61,9 @@ public class InputManager implements KeyListener, MouseListener {
             return;
         }
         
-        double velocityX = 0;
-        double velocityY = 0;
-        double maxVelocity = 0.3;
+        float velocityX = 0;
+        float velocityY = 0;
+        float maxVelocity = 0.3f;
         
         if (moveLeft.isPressed()) {
             velocityX -= maxVelocity;
@@ -66,7 +83,6 @@ public class InputManager implements KeyListener, MouseListener {
         
         if (fireBullet.isPressed()) {
             player.shoot();
-            fireBullet.release();
         }
         
 	}
@@ -74,12 +90,27 @@ public class InputManager implements KeyListener, MouseListener {
     private void gatherSpecialInput() {
 
         if (pause.isPressed()) {
-            paused = !paused;
+            setPaused(!paused);
+        }
+        
+        if (exit.isPressed()) {
+            setPaused(true);
+            exit.reset();
+            quitDialog.setVisible(true);
+            quitDialog.requestFocus();
         }
     }
     
     public boolean isExited() {
-        return exit.isPressed();
+//        return exit.isPressed();
+        return quit;
+    }
+    
+    public void setQuit(boolean quit) {
+        // Return the focus to the game frame
+        gameLoop.getScreenManager().getFullScreenWindow().requestFocus();
+        this.quit = quit;
+        setPaused(false);
     }
     
     public boolean isPaused() {
@@ -88,6 +119,7 @@ public class InputManager implements KeyListener, MouseListener {
     
     public void setPaused(boolean paused) {
         this.paused = paused;
+        pause.reset();
     }
     
     /* Implement KeyListener interface */

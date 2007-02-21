@@ -12,10 +12,13 @@ import javax.ejb.EJBObject;
  */
 public interface SignIn extends EJBObject {
 	
-	public String validateUser(String userName, String password)
+	public Long login(String userName, String password)
 		throws RemoteException, InvalidLoginException;
 	
-	public String addUser(String userName, String password, String role)
+	public void logout(Long sessiondId)
+		throws RemoteException;
+	
+	public void addUser(String userName, String password, String role)
 		throws RemoteException;
 
 }

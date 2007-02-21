@@ -8,22 +8,22 @@ import java.awt.Image;
 
 public abstract class Sprite implements Movable, Renderable {
 
-    private double x;		// Vertical position in pixels
-    private double y;		// Horizontal position in pixels
-    private double dx;		// Vertical velocity
-    private double dy;		// Horizontal velocity
+    protected float x;		// Vertical position in pixels
+    protected float y;		// Horizontal position in pixels
+    protected float dx;		// Vertical velocity
+    protected float dy;		// Horizontal velocity
     
     protected boolean active = true;
     
     private Image spriteImage;
     
     
-    public Sprite(double x, double y, double dx, double dy, Image image) {
+    public Sprite(float x, float y, float dx, float dy, Image image) {
         this(x, y, dx, dy);
         this.spriteImage = image;
     }
     
-    public Sprite(double x, double y, double dx, double dy) {
+    public Sprite(float x, float y, float dx, float dy) {
         this.x = x;
         this.y = y;
         this.dx = dx;
@@ -47,49 +47,49 @@ public abstract class Sprite implements Movable, Renderable {
     /**
      * @return Returns the dx.
      */
-    public double getDx() {
+    public float getDx() {
         return dx;
     }
     /**
      * @param dx The dx to set.
      */
-    public void setDx(double dx) {
+    public void setDx(float dx) {
         this.dx = dx;
     }
     /**
      * @return Returns the dy.
      */
-    public double getDy() {
+    public float getDy() {
         return dy;
     }
     /**
      * @param dy The dy to set.
      */
-    public void setDy(double dy) {
+    public void setDy(float dy) {
         this.dy = dy;
     }
     /**
      * @return Returns the x.
      */
-    public double getX() {
+    public float getX() {
         return x;
     }
     /**
      * @param x The x to set.
      */
-    public void setX(double x) {
+    public void setX(float x) {
         this.x = x;
     }
     /**
      * @return Returns the y.
      */
-    public double getY() {
+    public float getY() {
         return y;
     }
     /**
      * @param y The y to set.
      */
-    public void setY(double y) {
+    public void setY(float y) {
         this.y = y;
     }
     /**

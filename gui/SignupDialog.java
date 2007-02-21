@@ -1,17 +1,17 @@
-package game;
+package game.gui;
+
+import game.Game;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
-public class SignupDialog extends JDialog implements ActionListener {
+public class SignupDialog extends GameDialog {
     
     private Game game;
     
-    // Login dialog
     private JTextField userNameField, emailField;
     private JPasswordField passwordField;
     private JButton signupButton, cancelButton;
@@ -19,15 +19,15 @@ public class SignupDialog extends JDialog implements ActionListener {
     
     public SignupDialog(Game game) {
         
-        super(game, "Login", true);
+        super(game, true);
         
         this.game = game;
         
-        createGUI();
+        this.setTitle("Login");
         
     }
     
-    private void createGUI() {
+    protected void createGUI() {
 		
         Container contentPane = this.getContentPane();
 		
@@ -99,36 +99,31 @@ public class SignupDialog extends JDialog implements ActionListener {
 	    
 	}
 	
-		private void signup() {
-		    
-			String userName = userNameField.getText();
-			String password = new String(passwordField.getPassword());
-			String email = emailField.getText();
-			passwordField.setText("");
-			statusLabel.setText("Creating new user....");
-	//		try {
-			    String ticket = game.getNetworkManager().signup(
-			            userName, password, email);
-			    
-				if (ticket == null) {
-				    statusLabel.setText("Unable to signup");
-	
-				} else {
-					statusLabel.setText("Logged in successfully ticket = "
-							+ ticket);
-					
-					game.setLoggedUser(userName);
-					
-				}
-			    
-	//		}
-//		catch (RemoteException e) {
-//			statusLabel.setText("ERRORL: Remote exception occurred");
-//		}
+	private void signup() {
 	    
+		String userName = userNameField.getText();
+		String password = new String(passwordField.getPassword());
+		String email = emailField.getText();
+		passwordField.setText("");
+		statusLabel.setText("Creating new user....");
+
+		// Register the new user
+		game.getNetworkManager().signup(
+	            userName, password, email);
 	    
+		// Login with the new user
+		Long ticket = game.getNetworkManager().login(userName, password);
+		
+		if (ticket == null) {
+		    statusLabel.setText("Unable to signup");
+
+		} else {
+			statusLabel.setText("Logged in successfully ticket = "
+					+ ticket);
+			
+			game.setLoggedUser(userName, ticket);
+			
+		}
 	}
-	
-	
 	
 }

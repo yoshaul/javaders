@@ -1,6 +1,7 @@
 package game.ship;
 
 import game.GameConstants;
+import game.ship.weapon.Weapon;
 
 import java.awt.Image;
 import java.util.HashMap;
@@ -10,6 +11,8 @@ import javax.swing.ImageIcon;
 
 public class ShipProperties {
 
+    public static final int PLAYER_SHIP_TYPE = 0;
+    
     public static final int SHIP_TYPE_1 = 1;
     public static final int SHIP_TYPE_2 = 2;
     public static final int SHIP_TYPE_3 = 3;
@@ -22,24 +25,28 @@ public class ShipProperties {
 
     public long armor;
     public long damage;
+    public long hitScoreValue;
+    public long destroyScoreValue;
     public Image image;
     public String imageName;
     public int weaponType;
-    public Weapon weapon;
+    public int weaponLevel;
+    public int weaponDirection;
+
 
     
     
     private static Map initShipsProperties() {
         
         
-        final ShipProperties ShipType1 = 
-            new ShipProperties(20, 1, "ship40px.png", 1);    
-        final ShipProperties ShipType2 = 
-            new ShipProperties(30, 1, "ship240px.png", 1);
-        final ShipProperties ShipType3 = 
-            new ShipProperties(40, 2, "Bajoran.gif", 1);
-        final ShipProperties ShipType4 = 
-            new ShipProperties(50, 2, "ship40px.png", 2);
+        final ShipProperties ShipType1 = new ShipProperties(
+                20, 1, 100, 500, "ship40px.png", 1, 1, Weapon.DIRECTION_DOWN);    
+        final ShipProperties ShipType2 = new ShipProperties(
+                30, 1, 150, 1000, "ship240px.png", 1, 1, Weapon.DIRECTION_DOWN);
+        final ShipProperties ShipType3 = new ShipProperties(
+                40, 2, 200, 2500, "Bajoran.gif", 1, 1, Weapon.DIRECTION_DOWN);
+        final ShipProperties ShipType4 = new ShipProperties(
+                50, 2, 300, 4500, "ship40px.png", 2, 1, Weapon.DIRECTION_DOWN);
         
         Map shipsProperties = new HashMap();
         
@@ -55,13 +62,17 @@ public class ShipProperties {
     }
     
     private ShipProperties(long armor, long damage, 
-            String imageName, int weaponType) {
+            long hitScoreValue, long destroyScoreValue, String imageName, 
+            int weaponType, int weaponLevel, int weaponDirection) {
         
         this.armor = armor;
         this.damage = damage;
+        this.hitScoreValue = hitScoreValue;
+        this.destroyScoreValue = destroyScoreValue;
         this.image = new ImageIcon(GameConstants.IMAGES_DIR + imageName).getImage();
         this.weaponType = weaponType;
-        this.weapon = new LaserCanon(Weapon.DIRECTION_DOWN);
+        this.weaponLevel = weaponLevel;
+        this.weaponDirection = weaponDirection;
         
     }
     

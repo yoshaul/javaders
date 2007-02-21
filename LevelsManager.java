@@ -1,6 +1,7 @@
 
 package game;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -20,29 +21,36 @@ import org.xml.sax.SAXParseException;
 
 import game.ship.*;
 
-//import org.xml.sax.*;
 
 public class LevelsManager implements ErrorHandler {
 
+    private GameLoop gameLoop;
+    
     private Document xmlDocument;
     private int currentLevel = 0;
     private boolean levelFinished = true;
     
     private Sprite player;
     
-    public LevelsManager() {
+    public LevelsManager(GameLoop gameLoop) {
+        this.gameLoop = gameLoop;
         loadXMLFile();
     }
     
-    public Collection loadNextLevel() {
+    public int getCurrentLevel() {
+        return this.currentLevel;
+    }
+    
+    public Map loadNextLevel() {
         currentLevel++;
         return loadLevel(currentLevel);
     }
     
-    public Collection loadLevel(int levelNumber) {
+    public Map loadLevel(int levelNumber) {
 System.out.println("loadLevel num = " + levelNumber);        
-        levelFinished = false;
-        Collection enemyShips = new ArrayList();
+        int curObjectID = GameConstants.FIRST_ENEMY_SHIP_ID;
+		levelFinished = false;
+        Map enemyShips = new HashMap();
         Element level = null;
         boolean levelFound = false;
         // Get all the level nodes 
@@ -63,7 +71,10 @@ System.out.println("loadLevel num = " + levelNumber);
         }
 
         if (levelFound) {
-	        // Get and create the ship types and ammount for the level
+            Dimension screenDimention = 
+                gameLoop.getScreenManager().getScreenDimension();
+            
+            // Get and create the ship types and ammount for the level
 	        NodeList ships = level.getElementsByTagName("enemyShips");
 	        int length = ships.getLength();
 	        for (int i = 0; i < ships.getLength(); i++) {
@@ -79,12 +90,14 @@ System.out.println("loadLevel num = " + levelNumber);
 	            
 	            int shipType = Integer.parseInt(typeStr);
 	            int numOfShips = Integer.parseInt(numShipsStr);
-	            
+
 	            // Create the ship objects
-	            for (int j = 0; j < numOfShips; j++) {
-	              enemyShips.add(new EnemyShip(                    
-	                      Math.random()*800, Math.random()*500,
-	                      (Math.random()-0.5)/5, (Math.random()-0.5)/5, 
+	            for (int j = 0; j < numOfShips; j++, curObjectID++) {
+	                enemyShips.put(new Integer(curObjectID),
+	                  new EnemyShip(curObjectID, shipType,
+	                          (float)(50+Math.random()*(screenDimention.width-50)), 
+	                          (float)(50+Math.random()*screenDimention.height/2),
+	                          (float)(Math.random()-0.5)/5, (float)(Math.random()-0.5)/5, 
 	                      ShipProperties.getShipProperties(shipType)));
 	            }
 	              
