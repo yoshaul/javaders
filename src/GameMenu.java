@@ -71,7 +71,7 @@ public class GameMenu extends JFrame implements ActionListener {
         );
         
         // Initialize the managers
-        networkManager = new J2EENetworkManager(this);
+        networkManager = new NullNetworkManager(this);
         highScoresManager = new HighScoresManager(10);
         highScoresManager.setNetworkManager(networkManager);
         

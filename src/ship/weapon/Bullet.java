@@ -4,6 +4,7 @@ import game.GameConstants;
 import game.network.client.GameNetworkManager;
 import game.network.packet.*;
 import game.ship.*;
+import game.util.ResourceManager;
 
 import java.awt.Image;
 import java.util.Collection;
@@ -37,7 +38,7 @@ public abstract class Bullet extends Sprite implements PacketHandler {
             String imageName, long damage) {
         
         super(x, y, dx, dy);
-        Image image = new ImageIcon(GameConstants.IMAGES_DIR + imageName).getImage();
+        Image image = ResourceManager.loadImage(GameConstants.IMAGES_DIR + imageName);
         this.setSpriteImage(image);
         // Center the bullet relative to the initial x value
         setX(x-((float)image.getWidth(null)/2));

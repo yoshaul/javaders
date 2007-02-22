@@ -4,8 +4,8 @@ package game.util;
 import game.GameConstants;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 
@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
  */
 public class ResourceManager {
 
+	private static ClassLoader cl = ResourceManager.class.getClassLoader();
     private static Font gameFont;
     private static Cursor gameCursor, invisibleCursor;
     
@@ -29,15 +30,14 @@ public class ResourceManager {
         
         // Create the game font
         try {
-	        File file = new File(
-	                GameConstants.RESOURCES + "/" + GameConstants.GAME_FONT);
-	        FileInputStream fis = new FileInputStream(file);
-	        gameFont = Font.createFont(Font.TRUETYPE_FONT, fis); 
-	        fis.close();
+        	String path = GameConstants.RESOURCES + "/" + GameConstants.GAME_FONT;
+        	InputStream is = getResourceAsStream(path);
+	        gameFont = Font.createFont(Font.TRUETYPE_FONT, is); 
         }
         catch (Exception e) {
-            Logger.exception(e);
+//            Logger.exception(e);
             gameFont = new Font("Serif", Font.PLAIN, 1);
+            throw new RuntimeException(e);
         }
         
         // Load the game cursors
@@ -45,6 +45,14 @@ public class ResourceManager {
         gameCursor = getCursor(GameConstants.IMAGES_DIR + 
                 GameConstants.GAME_CURSOR);
         
+    }
+    
+    public static URL getResource(String resource) {
+    	return cl.getResource(resource);
+    }
+    
+    public static InputStream getResourceAsStream(String resource) {
+    	return cl.getResourceAsStream(resource);
     }
     
     /**
@@ -88,9 +96,11 @@ public class ResourceManager {
             cursor = gameCursor;
         }
         else {
+        	Image image = imageName.equals("") ? 
+        			new ImageIcon("").getImage() : loadImage(imageName);
             cursor = 
                 Toolkit.getDefaultToolkit().createCustomCursor(
-                    loadImage(imageName), new Point(16, 16), imageName);
+                		image , new Point(16, 16), imageName);
         }
         
         return cursor;
@@ -102,6 +112,7 @@ public class ResourceManager {
      * @param imageName	Image name to load
      */
     public static Image loadImage(String imageName) {
-        return new ImageIcon(imageName).getImage();
+//        return new ImageIcon(imageName).getImage();
+    	return new ImageIcon(getResource(imageName)).getImage();
     }
 }

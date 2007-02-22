@@ -2,7 +2,6 @@
 package game;
 
 import java.awt.Dimension;
-import java.io.File;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -12,6 +11,7 @@ import org.w3c.dom.*;
 
 import game.ship.*;
 import game.util.Logger;
+import game.util.ResourceManager;
 
 /**
  * The <code>LevelsManager</code> class is used to load the levels
@@ -24,7 +24,7 @@ public class LevelsManager {
     private Document xmlDocument;
     private int currentLevel = 0;
     private int lastLevel;
-    private boolean levelFinished = true;
+//    private boolean levelFinished = true;
     
     /**
      * Construct a LevelManager and load the levels xml file.
@@ -189,15 +189,18 @@ public class LevelsManager {
         try {
             DocumentBuilderFactory factory =
                 DocumentBuilderFactory.newInstance();
-            factory.setValidating(true);  
+//            factory.setValidating(true);  
+            factory.setValidating(false);
             DocumentBuilder builder = factory.newDocumentBuilder();
             this.xmlDocument = builder.parse(
-                   new File(GameConstants.CONFIG_DIR+"levels.xml"));
+            		ResourceManager.getResourceAsStream(
+            				GameConstants.CONFIG_DIR+"levels.xml"));
  
             Element root = xmlDocument.getDocumentElement();
            
             Node lastLevelNode = root.getElementsByTagName("lastLevel").item(0);
-            lastLevel = Integer.parseInt(lastLevelNode.getAttributes().getNamedItem("levelNum").getNodeValue());
+            lastLevel = Integer.parseInt(
+            		lastLevelNode.getAttributes().getNamedItem("levelNum").getNodeValue());
         } 
         catch (Exception e) {
             // If any exception occures during the parsing exit the game

@@ -2,10 +2,12 @@
 package game.sound;
 
 import game.GameConstants;
+import game.util.ResourceManager;
 
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.io.*;
+import java.net.URL;
 
 import javax.sound.sampled.*;
 
@@ -26,8 +28,10 @@ public class SoundFactory {
 
         try {
             
-            File soundFile = new File(GameConstants.SOUNDS_DIR + fileName);
-            AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
+//            File soundFile = new File(GameConstants.SOUNDS_DIR + fileName);
+        	InputStream is = ResourceManager.getResourceAsStream(
+        			GameConstants.SOUNDS_DIR + fileName);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(is);
             AudioFormat audioFormat = ais.getFormat();
             DataLine.Info info = new DataLine.Info(Clip.class, audioFormat);
             // Obtain a line 
@@ -61,8 +65,9 @@ public class SoundFactory {
      */
     public static void playAppletClip(String fileName) {
         try {
-	        File file = new File(GameConstants.SOUNDS_DIR + fileName);
-	        AudioClip clip = Applet.newAudioClip(file.toURL());
+	        URL soundURL = ResourceManager.getResource(
+	        		GameConstants.SOUNDS_DIR + fileName);
+	        AudioClip clip = Applet.newAudioClip(soundURL);
 	        clip.play();
         }
         catch (Exception e) {}

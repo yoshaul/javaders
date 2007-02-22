@@ -1,7 +1,7 @@
 @echo off
-SET ANT_HOME=C:\JAVA\apache-ant-1.6.1
+SET ANT_HOME=E:\DEVELOPMENT\apache-ant-1.6.1
 SET J2EE_HOME=C:\JAVA\Sun\AppServer
-SET JAVA_HOME=C:\j2sdk1.4.2_06
+SET JAVA_HOME=C:\Java\jdk1.5.0
 
 SET CLASSPATH=.\;%JAVA_HOME%\lib;%J2EE_HOME%\lib\j2ee.jar;%CLASSPATH%
 

@@ -70,7 +70,7 @@ public class LaserCannon extends AbstractWeapon {
 	            getOwner().getShipContainer().addShot(shoot1);
 	            getOwner().getShipContainer().addShot(shoot2);
 	
-	            SoundFactory.playAppletClip("enemylaser.wav");
+	            SoundFactory.playSound("enemylaser.wav");
             }
             else if (weaponLevel == 3) {
 	            // Fire one blue laser up
@@ -114,7 +114,7 @@ public class LaserCannon extends AbstractWeapon {
 	            getOwner().getShipContainer().addShot(shoot2);
 	            getOwner().getShipContainer().addShot(shoot3);
 	
-	            SoundFactory.playAppletClip("enemylaser.wav");
+	            SoundFactory.playSound("enemylaser.wav");
             }
             else if (weaponLevel == 5) {
 	            // Fire two blue lasers up
@@ -135,7 +135,7 @@ public class LaserCannon extends AbstractWeapon {
 	            getOwner().getShipContainer().addShot(shoot1);
 	            getOwner().getShipContainer().addShot(shoot2);
 	
-	            SoundFactory.playAppletClip("enemylaser.wav");
+	            SoundFactory.playSound("enemylaser.wav");
             }
             
             else if (weaponLevel >= 6) {
@@ -163,7 +163,7 @@ public class LaserCannon extends AbstractWeapon {
 	            getOwner().getShipContainer().addShot(shoot2);
 	            getOwner().getShipContainer().addShot(shoot3);
 	
-	            SoundFactory.playAppletClip("enemylaser.wav");
+	            SoundFactory.playSound("enemylaser.wav");
             }
 
         }
