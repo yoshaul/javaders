@@ -4,9 +4,25 @@
     <groupId>yossis</groupId>
     <artifactId>game</artifactId>
     <packaging>jar</packaging>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
     <name>Java Seminar Final Project Game</name>
+    <description>Space Shooter game written as part of Advanced Java Seminar</description>
     <url>http://josh.game.server.cc</url>
+    <inceptionYear>2005</inceptionYear>
+
+    <scm>
+        <connection>scm:svn:http://josh.game-server.cc/svn/game/trunk</connection>
+        <developerConnection>scm:svn:http://josh.game-server.cc/svn/game/trunk</developerConnection>
+        <url>http://josh.game-server.cc/svn/game/trunk</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Yossi Shaul</name>
+            <email>yossis@alphacsp.com</email>
+            <timezone>GMT+2</timezone>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
@@ -21,6 +37,14 @@
             <version>1.1</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>5.1</version>
+            <scope>test</scope>
+            <classifier>jdk15</classifier>
+        </dependency>
     </dependencies>
 
     <build>
@@ -29,13 +53,23 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
                     <debug>true</debug>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <optimize>false</optimize>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/config/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -51,4 +85,63 @@
 
         <defaultGoal>compile</defaultGoal>
     </build>
+
+    <!-- reposting section -->
+    <reporting>
+        <plugins>
+            <!-- testing reports -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <configuration>
+                    <showSuccess>true</showSuccess>
+                </configuration>
+            </plugin>
+
+            <!-- documentation reports -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+
+            <!-- code style reports -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <targetJdk>1.5</targetJdk>
+                    <rulesets>
+                        <ruleset>/rulesets/basic.xml</ruleset>
+                        <ruleset>/rulesets/imports.xml</ruleset>
+                        <ruleset>/rulesets/unusedcode.xml</ruleset>
+                        <ruleset>/rulesets/finalizers.xml</ruleset>
+                    </rulesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <configuration>
+                    <tags>
+                        <tag>TODO</tag>
+                        <tag>todo</tag>
+                    </tags>
+                </configuration>
+            </plugin>
+
+            <!-- code coverage -->
+            <!--<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+            </plugin>-->
+        </plugins>
+    </reporting>
 </project>
