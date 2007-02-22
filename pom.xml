@@ -50,15 +50,5 @@
         </plugins>
 
         <defaultGoal>compile</defaultGoal>
-        <directory>out</directory>
-        <outputDirectory>out/classes</outputDirectory>
-        <sourceDirectory>src</sourceDirectory>
-        <!--testSourceDirectory>src/test</testSourceDirectory>
-        <testOutputDirectory>out/testclasses</testOutputDirectory-->
-        <resources>
-            <resource>
-                <directory>resources</directory>
-            </resource>
-        </resources>
     </build>
 </project>
