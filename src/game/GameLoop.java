@@ -59,16 +59,17 @@ public class GameLoop implements Runnable {
      * initialize the game managers.
      */
     private void init() {
-        
+
+        levelsManager = new LevelsManager(this);
         screenManager = ScreenManager.getInstance();
         screenManager.setFullScreen();
         guiManager = new GUIManager(this, screenManager);
         inputManager = new InputManager(this/*, playerManager.getLocalPlayerShip()*/);
-        
+
         playerManager = new PlayerManager(this);
-        
+
         screenManager.getFullScreenWindow().addKeyListener(inputManager);
-        
+
         enemyShipsManager = new EnemyShipsManager(this);
         enemyShipsManager.addTarget(playerManager.getLocalPlayerShip());
         if (networkGame) {
@@ -76,9 +77,8 @@ public class GameLoop implements Runnable {
         }
 
         staticObjectsManager = new StaticObjectsManager(this);
-        
-        levelsManager = new LevelsManager(this);
-        
+
+
         // Create the various game states and add them to the game
         // states list
         gameStatesById = new HashMap();

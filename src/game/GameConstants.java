@@ -19,7 +19,7 @@ public final class GameConstants {
     
     public final static String SOUNDS_DIR = RESOURCES + "/" + SOUNDS + "/";
     
-    public final static String CONFIG_DIR = "config/";
+    public final static String CONFIG_DIR = "config";
     
     public final static String DBName = "java:comp/env/jdbc/gameDB";
     

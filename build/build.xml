@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<project name="game" default="build" basedir="../">
+
+    <property name="src.dir" value="src"/>
+    <property name="out.dir" value="out"/>
+    <property name="classes.dir" value="${out.dir}/classes"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="resources.dir" value="resources"/>
+
+    <path id="libraries" description="Include all jars in the liibrarydir in the fileset">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- ================================================================= -->
+    <!-- Compile                                                           -->
+    <!-- ================================================================= -->
+    <target name="compile" description="Compiles the source code">
+
+        <mkdir dir="${classes.dir}"/>
+
+        <javac srcdir="${src.dir}"
+               destdir="${classes.dir}"
+               debug="on" 
+			   classpathref="libraries">
+            <include name="**/*.java"/>
+        </javac>
+
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Build                                                             -->
+    <!-- ================================================================= -->
+    <target name="build" depends="compile"
+            description="Compiles the project and copies resources">
+
+        <copy todir="${classes.dir}">
+            <fileset dir="${resources.dir}" />
+        </copy>
+
+        <jar destfile="${out.dir}/game.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="game.GameMenu"/>
+            </manifest>
+        </jar>
+
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Clean                                                             -->
+    <!-- ================================================================= -->
+    <target name="clean" description="Deletes the build directory">
+        <delete dir="${out.dir}" failonerror="true" />
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Start                                                             -->
+    <!-- ================================================================= -->
+    <target name="start" description="Starts the game">
+        <java jar="${out.dir}/game.jar" fork="true"/>
+    </target>
+
+</project>
