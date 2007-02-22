@@ -8,7 +8,6 @@ import game.ship.Ship;
 public class LaserBeam extends Bullet {
     
     private final static String imageName = "laserbeam.png";
-    private final static double DX = 0.3;
     private final static long damage = 5;
     
     /**

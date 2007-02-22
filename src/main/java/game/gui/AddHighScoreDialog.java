@@ -19,7 +19,6 @@ import javax.swing.border.Border;
  */
 public class AddHighScoreDialog extends InGameDialog {
 
-    private GameLoop gameLoop;
     private HighScoresManager highScoresManager;
     private AddHighScoreState parentState;
     
@@ -41,7 +40,6 @@ public class AddHighScoreDialog extends InGameDialog {
             HighScoresManager highScoresManager) {
         
         super(gameLoop.getScreenManager(), DEFAULT_BG_IMAGE);
-        this.gameLoop = gameLoop;
         this.highScoresManager = highScoresManager;
         this.parentState = parentState;
 

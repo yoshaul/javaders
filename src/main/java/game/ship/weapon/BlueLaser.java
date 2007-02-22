@@ -9,7 +9,6 @@ import game.ship.Ship;
 public class BlueLaser extends Bullet {
     
     private final static String imageName = "bluelaser.png";
-    private final static double DX = 0.3;
     private final static long damage = 10;
     
     /**

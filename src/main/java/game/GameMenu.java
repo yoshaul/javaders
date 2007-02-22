@@ -361,7 +361,7 @@ public class GameMenu extends JFrame implements ActionListener {
      * Show the available players dialog.
      */
     private void popAvailablePlayersDialog() {
-        availablePlayersDialog.popDialog();;
+        availablePlayersDialog.popDialog();
     }
     
     public void actionPerformed(ActionEvent event) {

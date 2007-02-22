@@ -10,8 +10,6 @@ import java.awt.Image;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.swing.ImageIcon;
-
 /**
  * The abstract Bullet class represents a bullet fired by
  * a ship's weapon.
@@ -20,7 +18,6 @@ import javax.swing.ImageIcon;
 public abstract class Bullet extends Sprite implements PacketHandler {
 
     private Ship owner;			// Ship that fired the bullet
-    private String imageName;	// Image name for the bullet
     private long damage;		// The damage the bullet cause
     private boolean hit;		// True if this bullet hit some object
 

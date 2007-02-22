@@ -73,7 +73,7 @@ public class LoadingLevelState implements GameState {
         
         // Check for network input
         if (gameLoop.isNetworkGame()) {
-            gameLoop.getGameNetworkManager().gatherInput(this);;
+            gameLoop.getGameNetworkManager().gatherInput(this);
         }
     }
 

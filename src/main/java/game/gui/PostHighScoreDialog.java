@@ -17,7 +17,6 @@ import javax.swing.*;
  */
 public class PostHighScoreDialog extends InGameDialog {
 
-    private GameLoop gameLoop;
     private HighScoresManager highScoresManager;
     private JTextField nameField;
     private JButton yesButton, noButton;
@@ -33,7 +32,6 @@ public class PostHighScoreDialog extends InGameDialog {
             HighScoresManager highScoresManager) {
         
         super(gameLoop.getScreenManager(), DEFAULT_BG_IMAGE);
-        this.gameLoop = gameLoop;
         this.highScoresManager = highScoresManager;
         
         createGUI();

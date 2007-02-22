@@ -3,7 +3,6 @@ package game.gamestate;
 import java.awt.Graphics;
 
 import game.*;
-import game.highscore.HighScoresManager;
 import game.input.InputManager;
 import game.network.client.GameNetworkManager;
 import game.network.packet.Packet;
@@ -26,7 +25,6 @@ public class GameRunningState implements GameState {
     private StaticObjectsManager staticObjectsManager;
     private EnemyShipsManager enemyShipsManager;
     private PlayerManager playerManager;
-    private HighScoresManager highScoresManager;
     private boolean networkGame;
     private boolean finished;
     private int internalState;
@@ -44,7 +42,6 @@ public class GameRunningState implements GameState {
         this.staticObjectsManager = gameLoop.getStaticObjectsManager();
         this.enemyShipsManager = gameLoop.getEnemyShipsManager();
         this.playerManager = gameLoop.getPlayerManager();
-        this.highScoresManager = gameLoop.getHighScoresManager();
         this.networkGame = gameLoop.isNetworkGame();
     }
     

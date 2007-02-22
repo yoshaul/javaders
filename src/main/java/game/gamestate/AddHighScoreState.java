@@ -27,7 +27,6 @@ public class AddHighScoreState implements GameState {
     private GUIManager guiManager;
     private String playerName;
     private long timeInState;
-    private boolean levelLoaded;
     private int nextGameState;
     private int internalState;
     private long playerScore;
