@@ -60,7 +60,7 @@ public class ScreenManager {
      *
      */
     public void setFullScreen() {
-        DisplayMode displayMode = new DisplayMode(800, 600, 32, 
+        DisplayMode displayMode = new DisplayMode(800, 600, 32,
                 DisplayMode.REFRESH_RATE_UNKNOWN);
         setFullScreen(displayMode);
     }
