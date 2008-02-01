@@ -44,7 +44,7 @@ public abstract class Bonus extends Sprite implements PacketHandler {
      * hit.
      * @param targets Collection of <code>Target</code> objects (player ship).
      */
-    public void processCollisions(Collection targets) {
+    public void processCollisions(Collection<Target> targets) {
         int x0 = Math.round(this.getX());
         int y0 = Math.round(this.getY());
         int x1 = x0 + this.getWidth();

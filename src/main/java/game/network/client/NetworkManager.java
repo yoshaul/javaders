@@ -3,6 +3,7 @@ package game.network.client;
 
 import game.highscore.HighScore;
 import game.network.InvalidLoginException;
+import game.network.server.ejb.OnlinePlayerModel;
 import game.network.packet.InvitationPacket;
 import game.network.packet.Packet;
 
@@ -87,7 +88,7 @@ public interface NetworkManager {
      * online players details.
      * @return	List of available players.
      */
-    public List getAvailablePlayers() throws NetworkException;
+    public List<OnlinePlayerModel> getAvailablePlayers() throws NetworkException;
     
     /**
      * Returns the logged user session id.

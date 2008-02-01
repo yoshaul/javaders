@@ -3,6 +3,7 @@ package game.network.client;
 import game.GameMenu;
 import game.highscore.HighScore;
 import game.network.InvalidLoginException;
+import game.network.server.ejb.OnlinePlayerModel;
 import game.network.packet.InvitationPacket;
 import game.network.packet.Packet;
 
@@ -62,7 +63,7 @@ public class NullNetworkManager implements NetworkManager {
 
 	}
 
-	public List getAvailablePlayers() throws NetworkException {
+	public List<OnlinePlayerModel> getAvailablePlayers() throws NetworkException {
 		// TODO Auto-generated method stub
 		return null;
 	}

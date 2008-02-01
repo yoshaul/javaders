@@ -9,6 +9,7 @@ import game.util.ResourceManager;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -27,7 +28,7 @@ public class AvailablePlayersDialog extends GameDialog {
     private JTable playersTable;
     private DefaultTableModel tableModel;
     
-    private java.util.List availablePlayers;
+    private List<OnlinePlayerModel> availablePlayers;
     private boolean invitationSent;
     
     /**
@@ -144,14 +145,11 @@ public class AvailablePlayersDialog extends GameDialog {
 	        tableModel.setRowCount(0);
 	        
 	        // Get the available players from the server
-	        availablePlayers = 
+	        availablePlayers =
 	            gameMenu.getNetworkManager().getAvailablePlayers();
-	        
+
 	        // Add the players to the table
-	        Iterator itr = availablePlayers.iterator();
-	        while (itr.hasNext()) {
-	            OnlinePlayerModel playerModel = (OnlinePlayerModel) itr.next();
-	
+            for (OnlinePlayerModel playerModel : availablePlayers) {
 	            Date startDate = new Date(playerModel.getSessionStartTime());
 	            
 	            tableModel.addRow(new String[]{playerModel.getUserName(),

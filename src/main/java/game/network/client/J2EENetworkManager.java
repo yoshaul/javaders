@@ -176,8 +176,8 @@ public class J2EENetworkManager implements NetworkManager {
     /**
      * @see NetworkManager#getAvailablePlayers()
      */
-    public List getAvailablePlayers() throws NetworkException{
-        List playersModels = new ArrayList();
+    public List<OnlinePlayerModel> getAvailablePlayers() throws NetworkException{
+        List<OnlinePlayerModel> playersModels = new ArrayList<OnlinePlayerModel>();
         try {
 
             OnlinePlayerHome onlinePlayerHome = (OnlinePlayerHome) 

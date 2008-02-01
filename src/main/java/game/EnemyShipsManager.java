@@ -23,14 +23,14 @@ public class EnemyShipsManager implements Renderable,
     private GameLoop gameLoop;
     
     /** Map of the enemy ships. Object id as key, Ship object as value */
-    private Map enemyShips;
+    private Map<Integer, Ship> enemyShips;
     
     /** Collection of active shots fired by the ships */
-    private Collection shots;
+    private Collection<Bullet> shots;
     /** Collection of active bonuses dropped by the ships */
-    private Collection bonuses;
+    private Collection<Bonus> bonuses;
     /** Collection of targets for the enemy ships (i.e., player ship(s)) */
-    private Collection targets;
+    private Collection<Target> targets;
     
     
     /**
@@ -39,10 +39,10 @@ public class EnemyShipsManager implements Renderable,
      */
     public EnemyShipsManager(GameLoop gameLoop) {
         this.gameLoop = gameLoop;
-        enemyShips = new HashMap();
-        shots = new ArrayList();
-        bonuses = new ArrayList();
-        targets = new ArrayList();
+        enemyShips = new HashMap<Integer, Ship>();
+        shots = new ArrayList<Bullet>();
+        bonuses = new ArrayList<Bonus>();
+        targets = new ArrayList<Target>();
     }
     
     /**
@@ -127,10 +127,10 @@ public class EnemyShipsManager implements Renderable,
             gameLoop.getScreenManager().getScreenInsets();
         
         // Update ships
-        Iterator shipsItr = enemyShips.values().iterator();
+        Iterator<Ship> shipsItr = enemyShips.values().iterator();
         while (shipsItr.hasNext()) {
-            Ship ship = (Ship) shipsItr.next();
-            
+            Ship ship = shipsItr.next();
+
             if (ship.isDestroyed()) {
                 // Remove the destroyed ship
 				shipsItr.remove();
@@ -162,9 +162,9 @@ public class EnemyShipsManager implements Renderable,
         }
         
         // Update shots
-        Iterator shotsItr = shots.iterator();
+        Iterator<Bullet> shotsItr = shots.iterator();
         while (shotsItr.hasNext()) {
-            Bullet shot = (Bullet) shotsItr.next();
+            Bullet shot = shotsItr.next();
             shot.updatePosition(elapsedTime);
             if (isOutOfScreen(shot)) {
                 shotsItr.remove();
@@ -172,9 +172,9 @@ public class EnemyShipsManager implements Renderable,
         }
         
         // Update bonuses
-        Iterator bonusesItr = bonuses.iterator();
+        Iterator<Bonus> bonusesItr = bonuses.iterator();
         while (bonusesItr.hasNext()) {
-            Bonus bonus = (Bonus) bonusesItr.next();
+            Bonus bonus = bonusesItr.next();
             bonus.updatePosition(elapsedTime);
             if (isOutOfScreen(bonus)) {
                 bonusesItr.remove();
@@ -188,14 +188,14 @@ public class EnemyShipsManager implements Renderable,
         // Process ship-to-ship collisions 
         shipsItr = enemyShips.values().iterator();
         while (shipsItr.hasNext()) {
-            Ship ship = (Ship) shipsItr.next();
+            Ship ship = shipsItr.next();
             ship.processCollisions(targets); 
         }
         
         // Process shots to player ship(s) collisions
         shotsItr = shots.iterator();
         while (shotsItr.hasNext()) {
-            Bullet shot = (Bullet) shotsItr.next();
+            Bullet shot = shotsItr.next();
             shot.processCollisions(targets);
             if (shot.isHit()) {
                 shotsItr.remove();
@@ -206,7 +206,7 @@ public class EnemyShipsManager implements Renderable,
         // Process bonuses to player ship(s) collisions
         bonusesItr = bonuses.iterator();
         while (bonusesItr.hasNext()) {
-            Bonus bonus = (Bonus) bonusesItr.next();
+            Bonus bonus = bonusesItr.next();
             bonus.processCollisions(targets);
             if (bonus.isHit()) {
                 bonusesItr.remove();
@@ -220,22 +220,22 @@ public class EnemyShipsManager implements Renderable,
      */
     public void render(Graphics g) {
         // Render ships
-        Iterator itr = enemyShips.values().iterator();
+        Iterator<Ship> itr = enemyShips.values().iterator();
         while (itr.hasNext()) {
-            Sprite ship = (Sprite) itr.next();
+            Sprite ship = itr.next();
             ship.render(g);
         }
         
         // Render shots
-        Iterator shotsItr = shots.iterator();
+        Iterator<Bullet> shotsItr = shots.iterator();
         while (shotsItr.hasNext()) {
-            Sprite shot = (Sprite) shotsItr.next();
+            Sprite shot = shotsItr.next();
             shot.render(g);
         }
         
-        Iterator bonusesItr = bonuses.iterator();
+        Iterator<Bonus> bonusesItr = bonuses.iterator();
         while (bonusesItr.hasNext()) {
-            Sprite bonus = (Sprite) bonusesItr.next();
+            Sprite bonus = bonusesItr.next();
             bonus.render(g);
         }
         
