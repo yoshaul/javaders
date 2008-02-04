@@ -22,12 +22,10 @@ public class Logger {
      * @param args	Arguments from the command line
      */
     public static void init(String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            String param = args[i];
+        for (String param : args) {
             if (param.equals("debug")) {
                 debug = true;
-            }
-            else if (param.equals("invulnerable")) {
+            } else if (param.equals("invulnerable")) {
                 invulnerable = true;
             }
         }

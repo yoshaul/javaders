@@ -70,7 +70,7 @@ public class LevelsManager {
      * ships map.
      * @return	Map with the enemy ships for the level.
      */
-    public Map loadNextLevel() {
+    public Map<Integer, Ship> loadNextLevel() {
         currentLevel++;
         return loadLevel(currentLevel);
     }
@@ -81,10 +81,10 @@ public class LevelsManager {
      * @param levelNumber	Number of the level to load.
      * @return	Map of enemy ships
      */
-    public Map loadLevel(int levelNumber) {
+    public Map<Integer, Ship> loadLevel(int levelNumber) {
 
         int curObjectID = GameConstants.FIRST_ENEMY_SHIP_ID;
-        Map enemyShips = new HashMap();
+        Map<Integer, Ship> enemyShips = new HashMap<Integer, Ship>();
 
         Element level = getLevelElement(levelNumber);
 
@@ -117,7 +117,7 @@ public class LevelsManager {
 
             // Create the ship objects
             for (int j = 0; j < numOfShips; j++, curObjectID++) {
-                enemyShips.put(new Integer(curObjectID),
+                enemyShips.put(curObjectID,
                   new EnemyShip(curObjectID, shipType,
                           (float)(50+Math.random()*(screenDimention.width-50)),
                           (float)(50+Math.random()*screenDimention.height/2),

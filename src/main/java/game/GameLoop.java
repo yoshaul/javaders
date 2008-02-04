@@ -32,10 +32,9 @@ public class GameLoop implements Runnable {
     private boolean controller;
 
     // The various game states
-    private GameState curGameState, loadingState, runningState, 
-    	addHighScoreState;
-    
-    private Map gameStatesById;
+    private GameState curGameState;
+
+    private Map<Integer, GameState> gameStatesById;
     
     /**
      * Construct the game loop and initialize objects.
@@ -81,23 +80,21 @@ public class GameLoop implements Runnable {
 
         // Create the various game states and add them to the game
         // states list
-        gameStatesById = new HashMap();
-        loadingState = new LoadingLevelState(this);
-        gameStatesById.put(new Integer(loadingState.getGameStateId()),
+        gameStatesById = new HashMap<Integer, GameState>();
+        GameState loadingState = new LoadingLevelState(this);
+        gameStatesById.put(loadingState.getGameStateId(),
                 loadingState);
-        
-        runningState = new GameRunningState(this);
-        gameStatesById.put(new Integer(runningState.getGameStateId()),
+
+        GameState runningState = new GameRunningState(this);
+        gameStatesById.put(runningState.getGameStateId(),
                 runningState);
-        
-        addHighScoreState = new AddHighScoreState(this);
-        gameStatesById.put(new Integer(addHighScoreState.getGameStateId()), 
+
+        GameState addHighScoreState = new AddHighScoreState(this);
+        gameStatesById.put(addHighScoreState.getGameStateId(),
                 addHighScoreState);
         
         // Init all the game states
-        Iterator gameStatesItr = gameStatesById.values().iterator();
-        while(gameStatesItr.hasNext()) {
-            GameState gameState = (GameState)gameStatesItr.next();
+        for (GameState gameState : gameStatesById.values()) {
             gameState.init();
         }
         
@@ -163,8 +160,7 @@ public class GameLoop implements Runnable {
     private void changeGameState() {
         // Switch game state
         int nextStateId = curGameState.getNextGameState();
-        curGameState = (GameState)
-    		gameStatesById.get(new Integer(nextStateId));
+        curGameState = gameStatesById.get(nextStateId);
         curGameState.start();
     }
     

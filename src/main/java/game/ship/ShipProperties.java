@@ -54,7 +54,7 @@ public class ShipProperties {
     public static final int BOSS_SHIP_TYPE_4 = 204;
     public static final int BOSS_SHIP_TYPE_5 = 205;
     
-    public static Map shipsProperties = initShipsProperties();
+    public static Map<Integer, ShipProperties> shipsProperties = initShipsProperties();
 
     public float maxDX, maxDY;
     public long armor;
@@ -71,171 +71,171 @@ public class ShipProperties {
      * Initialize the <code>ShipProperties</code> for the various ships.
      * @return	Map whit the ship type as key and ShipProperties as value.
      */
-    private static Map initShipsProperties() {
+    private static Map<Integer, ShipProperties> initShipsProperties() {
         
-        Map shipsProperties = new HashMap();
+        Map<Integer, ShipProperties> shipsProperties = new HashMap<Integer, ShipProperties>();
         
         final ShipProperties PlayerShipType1 = new ShipProperties(0.25f, 0.25f,
                 20, 1, 10, 500, "player1.png", WeaponFactory.TYPE_FIRE_CANNON, 
                 1, Weapon.DIRECTION_UP);
 
-        shipsProperties.put(new Integer(PLAYER_SHIP_TYPE_1), PlayerShipType1);
+        shipsProperties.put(PLAYER_SHIP_TYPE_1, PlayerShipType1);
         
         final ShipProperties PlayerShipType2 = new ShipProperties(0.25f, 0.25f,
                 20, 1, 10, 500, "player2.png", WeaponFactory.TYPE_FIRE_CANNON, 
                 1, Weapon.DIRECTION_UP);
         
-        shipsProperties.put(new Integer(PLAYER_SHIP_TYPE_2), PlayerShipType2);
+        shipsProperties.put(PLAYER_SHIP_TYPE_2, PlayerShipType2);
         
         final ShipProperties ShipType1 = new ShipProperties(0.07f, 0.07f,
                 20, 1, 10, 500, "ZamsAirspeeder.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 1, Weapon.DIRECTION_DOWN);    
         
-        shipsProperties.put(new Integer(SHIP_TYPE_1), ShipType1);
+        shipsProperties.put(SHIP_TYPE_1, ShipType1);
         
         final ShipProperties ShipType2 = new ShipProperties(0.09f, 0.09f,
                 30, 1, 15, 1000, "RepublicGunship.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 1, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(SHIP_TYPE_2), ShipType2);
+        shipsProperties.put(SHIP_TYPE_2, ShipType2);
         
         final ShipProperties ShipType3 = new ShipProperties(0.11f, 0.11f,
                 40, 2, 20, 2500, "RepublicAssaultShip.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 1, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(SHIP_TYPE_3), ShipType3);
+        shipsProperties.put(SHIP_TYPE_3, ShipType3);
         
         final ShipProperties ShipType4 = new ShipProperties(0.12f, 0.12f,
                 50, 2, 30, 4500, "bajoran2.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 2, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(SHIP_TYPE_4), ShipType4);
+        shipsProperties.put(SHIP_TYPE_4, ShipType4);
         
         final ShipProperties BossShipType1 = new ShipProperties(0.07f, 0.07f,
                 500, 2, 15, 50000, "boss1.png", 
                 WeaponFactory.TYPE_BALL_CANNON, 2, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(BOSS_SHIP_TYPE_1), BossShipType1);
+        shipsProperties.put(BOSS_SHIP_TYPE_1, BossShipType1);
         
         final ShipProperties RoboShipType1 = new ShipProperties(0.05f, 0.05f,
                 25, 2, 12, 550, "robo1.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 1, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(ROBO_SHIP_TYPE_1), RoboShipType1);
+        shipsProperties.put(ROBO_SHIP_TYPE_1, RoboShipType1);
         
         final ShipProperties RoboShipType2 = new ShipProperties(0.05f, 0.05f,
                 35, 2, 15, 550, "robo2.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 1, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(ROBO_SHIP_TYPE_2), RoboShipType2);
+        shipsProperties.put(ROBO_SHIP_TYPE_2, RoboShipType2);
         
         final ShipProperties RoboShipType3 = new ShipProperties(0.11f, 0.11f,
                 20, 1, 30, 800, "robo3.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 2, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(ROBO_SHIP_TYPE_3), RoboShipType3);
+        shipsProperties.put(ROBO_SHIP_TYPE_3, RoboShipType3);
         
         final ShipProperties RoboShipType4 = new ShipProperties(0.07f, 0.07f,
                 65, 2, 20, 1000, "robo4.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 2, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(ROBO_SHIP_TYPE_4), RoboShipType4);
+        shipsProperties.put(ROBO_SHIP_TYPE_4, RoboShipType4);
         
         final ShipProperties RoboShipType5 = new ShipProperties(0.07f, 0.07f,
                 75, 2, 15, 1500, "robo5.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 3, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(ROBO_SHIP_TYPE_5), RoboShipType5);
+        shipsProperties.put(ROBO_SHIP_TYPE_5, RoboShipType5);
         
         final ShipProperties RoboShipType6 = new ShipProperties(0.08f, 0.08f,
                 110, 3, 11, 1500, "robo6.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 2, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(ROBO_SHIP_TYPE_6), RoboShipType6);
+        shipsProperties.put(ROBO_SHIP_TYPE_6, RoboShipType6);
         
         final ShipProperties RoboShipType7 = new ShipProperties(0.06f, 0.06f,
                 150, 3, 20, 2500, "robo7.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 4, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(ROBO_SHIP_TYPE_7), RoboShipType7);
+        shipsProperties.put(ROBO_SHIP_TYPE_7, RoboShipType7);
         
         final ShipProperties BossShipType2 = new ShipProperties(0.08f, 0.08f,
                 750, 3, 15, 60000, "boss2.png", 
                 WeaponFactory.TYPE_BALL_CANNON, 4, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(BOSS_SHIP_TYPE_2), BossShipType2);
+        shipsProperties.put(BOSS_SHIP_TYPE_2, BossShipType2);
         
         final ShipProperties BossShipType3 = new ShipProperties(0.09f, 0.09f,
                 1550, 3, 20, 75000, "boss3.png", 
                 WeaponFactory.TYPE_BALL_CANNON, 5, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(BOSS_SHIP_TYPE_3), BossShipType3);
+        shipsProperties.put(BOSS_SHIP_TYPE_3, BossShipType3);
         
         final ShipProperties CardromShipType1 = new ShipProperties(0.1f, 0.1f,
                 90, 2, 15, 1000, "cardrom1.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 4, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(CARDROM_SHIP_TYPE_1), CardromShipType1);
+        shipsProperties.put(CARDROM_SHIP_TYPE_1, CardromShipType1);
         
         final ShipProperties CardromShipType2 = new ShipProperties(0.08f, 0.08f,
                 100, 2, 20, 1200, "cardrom2.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 5, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(CARDROM_SHIP_TYPE_2), CardromShipType2);
+        shipsProperties.put(CARDROM_SHIP_TYPE_2, CardromShipType2);
         
         final ShipProperties CardromShipType3 = new ShipProperties(0.09f, 0.09f,
                 120, 2, 20, 1500, "cardrom3.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 5, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(CARDROM_SHIP_TYPE_3), CardromShipType3);
+        shipsProperties.put(CARDROM_SHIP_TYPE_3, CardromShipType3);
         
         final ShipProperties CardromShipType4 = new ShipProperties(0.1f, 0.1f,
                 200, 2, 15, 2000, "cardrom4.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 7, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(CARDROM_SHIP_TYPE_4), CardromShipType4);
+        shipsProperties.put(CARDROM_SHIP_TYPE_4, CardromShipType4);
         
         final ShipProperties CardromShipType5 = new ShipProperties(0.16f, 0.16f,
                 60, 2, 25, 1500, "cardrom5.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 5, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(CARDROM_SHIP_TYPE_5), CardromShipType5);
+        shipsProperties.put(CARDROM_SHIP_TYPE_5, CardromShipType5);
         
         final ShipProperties BossShipType4 = new ShipProperties(0.15f, 0.15f,
                 2500, 2, 10, 100000, "boss4.png", 
                 WeaponFactory.TYPE_BALL_CANNON, 7, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(BOSS_SHIP_TYPE_4), BossShipType4);
+        shipsProperties.put(BOSS_SHIP_TYPE_4, BossShipType4);
         
         final ShipProperties ColorShipType1 = new ShipProperties(0.17f, 0.17f,
                 120, 1, 15, 2500, "color1.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 5, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(COLOR_SHIP_TYPE_1), ColorShipType1); 
+        shipsProperties.put(COLOR_SHIP_TYPE_1, ColorShipType1);
         
         final ShipProperties ColorShipType2 = new ShipProperties(0.1f, 0.1f,
                 220, 2, 20, 3500, "color2.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 6, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(COLOR_SHIP_TYPE_2), ColorShipType2); 
+        shipsProperties.put(COLOR_SHIP_TYPE_2, ColorShipType2);
 
         final ShipProperties ColorShipType3 = new ShipProperties(0.1f, 0.1f,
                 250, 2, 20, 4400, "color3.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 7, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(COLOR_SHIP_TYPE_3), ColorShipType3); 
+        shipsProperties.put(COLOR_SHIP_TYPE_3, ColorShipType3);
 
         final ShipProperties ColorShipType4 = new ShipProperties(0.2f, 0.2f,
                 530, 2, 20, 10000, "color4.png", 
                 WeaponFactory.TYPE_LASER_CANNON, 8, Weapon.DIRECTION_DOWN);
         
-        shipsProperties.put(new Integer(COLOR_SHIP_TYPE_4), ColorShipType4); 
+        shipsProperties.put(COLOR_SHIP_TYPE_4, ColorShipType4);
         
         final ShipProperties BossShipType5 = new ShipProperties(0.16f, 0.16f,
                 5000, 2, 10, 200000, "boss5.png", 
                 WeaponFactory.TYPE_BALL_CANNON, 10, Weapon.DIRECTION_DOWN);        
         
-        shipsProperties.put(new Integer(BOSS_SHIP_TYPE_5), BossShipType5);
+        shipsProperties.put(BOSS_SHIP_TYPE_5, BossShipType5);
         
         return shipsProperties;
         
@@ -278,9 +278,7 @@ public class ShipProperties {
      * @param shipType	The ship type.
      */
     public static ShipProperties getShipProperties(int shipType) {
-        
-        return (ShipProperties) shipsProperties.get(new Integer(shipType));
-        
+        return shipsProperties.get(shipType);
     }
     
 }

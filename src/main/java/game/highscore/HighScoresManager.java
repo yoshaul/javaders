@@ -129,13 +129,10 @@ public class HighScoresManager {
      * high scores list.
      */
     public boolean isHighScore(HighScore score) {
-        if (score.getScore() > 0 && 
-                (highScores[numOfHighScores-1] == null ||
-                highScores[numOfHighScores-1].compareTo(score) < 0)) {
-            return true;
-        }
-        
-        return false;
+        return score.getScore() > 0 &&
+                (highScores[numOfHighScores - 1] == null ||
+                        highScores[numOfHighScores - 1].compareTo(score) < 0);
+
     }
     
     

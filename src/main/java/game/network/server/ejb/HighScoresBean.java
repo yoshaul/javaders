@@ -68,7 +68,7 @@ public class HighScoresBean implements SessionBean {
 	                "(score_id, player_name, score, level) " +
 	                "values(?, ?, ?, ?)");
 	        
-	        ps.setLong(1, scoreId.longValue());
+	        ps.setLong(1, scoreId);
 	        ps.setString(2, score.getPlayerName());
 	        ps.setLong(3, score.getScore());
 	        ps.setInt(4, score.getLevel());

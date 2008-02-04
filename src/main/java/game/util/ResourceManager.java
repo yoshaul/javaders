@@ -86,7 +86,7 @@ public class ResourceManager {
      * @return	A cursor
      */
     public static Cursor getCursor(String imageName) {
-        Cursor cursor = null;
+        Cursor cursor;
         
         if (imageName.equals("") && invisibleCursor != null) {
             cursor = invisibleCursor;

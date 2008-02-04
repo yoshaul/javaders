@@ -65,8 +65,8 @@ public abstract class Sprite implements Movable, Renderable {
      */
     public void render(Graphics g) {
         
-        g.drawImage(spriteImage, (int)Math.round(x), 
-                (int)Math.round(y), null);
+        g.drawImage(spriteImage, Math.round(x),
+                Math.round(y), null);
         
     }
     

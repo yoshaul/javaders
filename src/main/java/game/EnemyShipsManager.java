@@ -50,7 +50,7 @@ public class EnemyShipsManager implements Renderable,
      * level and set the enemy ships.
      * @param enemyShips	Map of enemy ships for the current level
      */
-    public void newLevel(Map enemyShips) {
+    public void newLevel(Map<Integer, Ship> enemyShips) {
         // Make sure no objects left from previous level
         this.shots.clear();
         this.bonuses.clear();
@@ -70,7 +70,7 @@ public class EnemyShipsManager implements Renderable,
      * Adds a collection of targets.
      * @param targets	Collection of Target objects.
      */
-    public void addTarget(Collection targets) {
+    public void addTarget(Collection<Target> targets) {
         targets.addAll(targets);
     }
     
@@ -80,7 +80,7 @@ public class EnemyShipsManager implements Renderable,
      */
     public void addShip(Ship ship) {
         ship.setShipContainer(this);
-        enemyShips.put(new Integer(ship.getHandlerId()), ship);
+        enemyShips.put(ship.getHandlerId(), ship);
     }
     
     /**
@@ -104,10 +104,8 @@ public class EnemyShipsManager implements Renderable,
      * to be the ships container.
      * @param enemyShips	New map of ships.
      */
-    private void setEnemyShips(Map enemyShips) {
-        Iterator shipsItr = enemyShips.values().iterator();
-        while (shipsItr.hasNext()) {
-            Ship ship = (Ship) shipsItr.next();
+    private void setEnemyShips(Map<Integer, Ship> enemyShips) {
+        for (Ship ship : enemyShips.values()) {
             ship.setShipContainer(this);
         }
         this.enemyShips = enemyShips;
@@ -220,22 +218,16 @@ public class EnemyShipsManager implements Renderable,
      */
     public void render(Graphics g) {
         // Render ships
-        Iterator<Ship> itr = enemyShips.values().iterator();
-        while (itr.hasNext()) {
-            Sprite ship = itr.next();
+        for (Ship ship : enemyShips.values()) {
             ship.render(g);
         }
         
         // Render shots
-        Iterator<Bullet> shotsItr = shots.iterator();
-        while (shotsItr.hasNext()) {
-            Sprite shot = shotsItr.next();
+        for (Bullet shot : shots) {
             shot.render(g);
         }
-        
-        Iterator<Bonus> bonusesItr = bonuses.iterator();
-        while (bonusesItr.hasNext()) {
-            Sprite bonus = bonusesItr.next();
+
+        for (Bonus bonus : bonuses) {
             bonus.render(g);
         }
         
@@ -300,8 +292,8 @@ public class EnemyShipsManager implements Renderable,
             
             BulletModel model = bulletPacket.getBulletModel();
             
-            Ship owningShip = (Ship) enemyShips.get(
-                    new Integer(packet.handlerId));
+            Ship owningShip = enemyShips.get(
+                    packet.handlerId);
             
             if (owningShip != null) { // The ship might be destroyed
                 
@@ -332,8 +324,8 @@ public class EnemyShipsManager implements Renderable,
         }
         else {
             // Check if one of the ships can handle it
-            Integer handlerID = new Integer(packet.handlerId);
-            Ship ship = (Ship) enemyShips.get(handlerID);
+            Integer handlerID = packet.handlerId;
+            Ship ship = enemyShips.get(handlerID);
             if (ship != null) {
                 ship.handlePacket(packet);
             }

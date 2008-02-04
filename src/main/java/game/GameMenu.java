@@ -25,9 +25,7 @@ public class GameMenu extends JFrame implements ActionListener {
     private NetworkManager networkManager;
     private HighScoresManager highScoresManager;
 
-    // GUI components
-    private JPanel guiPanel;
-    private JButton startButton, multiplayerButton, 
+    private JButton startButton, multiplayerButton,
     	loginoutButton, exitButton, signupButton, highScoresButton;
     
     // Game menu dialogs
@@ -212,8 +210,8 @@ public class GameMenu extends JFrame implements ActionListener {
         }
         
         Container container = this.getContentPane();
-        
-        guiPanel = new JPanel(new GridLayout(8, 1, 5, 0));
+
+        JPanel guiPanel = new JPanel(new GridLayout(8, 1, 5, 0));
         
         JLabel menuLabel = new JLabel("Game Menu", SwingConstants.CENTER);
         menuLabel.setFont(ResourceManager.getFont(Font.BOLD, 16));

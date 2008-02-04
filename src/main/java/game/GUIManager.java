@@ -44,7 +44,7 @@ public class GUIManager {
      */
     public void render(final Graphics g) {
 
-        final JFrame gameFrame = (JFrame)screenManager.getFullScreenWindow();
+        final JFrame gameFrame = screenManager.getFullScreenWindow();
 
         // Use the EventQueue.invokeAndWait to prevent deadlocks
         if (!SwingUtilities.isEventDispatchThread()) {

@@ -23,10 +23,9 @@ import javax.swing.JFrame;
 public class ScreenManager {
 
     private static ScreenManager screenManager;
-    private GraphicsEnvironment ge;
     private GraphicsDevice gd;
     private DisplayMode oldDM;
-    private boolean fullScreen;
+    private boolean fullScreen = true;
     private JFrame gameFrame;
     private boolean debugMode;
     
@@ -35,7 +34,7 @@ public class ScreenManager {
      * <code>ScreenManager</code> class.
      */
     private ScreenManager() {
-    	ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     	gd = ge.getDefaultScreenDevice();
     	oldDM = gd.getDisplayMode();
     	gameFrame = new JFrame();

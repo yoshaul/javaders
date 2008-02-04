@@ -77,8 +77,8 @@ public class PlayerShip extends Ship {
 	                    RenderingHints.VALUE_ANTIALIAS_ON);
 	            
 	            g.setColor(Color.GREEN);
-	            g.drawOval((int) Math.round(getX()) - 3, 
-	                    (int) Math.round(getY()) - 10, getWidth() + 6, 
+	            g.drawOval(Math.round(getX()) - 3,
+	                    Math.round(getY()) - 10, getWidth() + 6, 
 	                    getHeight() + 20);
 	        }
         }

@@ -132,15 +132,13 @@ public class LoadingLevelState implements GameState {
             
             NewLevelPacket newLevel = (NewLevelPacket)packet;
             // Get the enemy ships models
-            Collection enemyShipsModels = newLevel.getEnemyShipsModels();
+            Collection<ShipModel> enemyShipsModels = newLevel.getEnemyShipsModels();
             
             // Build Ships from the models
-            Map enemyShips = new HashMap();
-            Iterator modelsItr = enemyShipsModels.iterator();
-            while (modelsItr.hasNext()) {
-                ShipModel model = (ShipModel) modelsItr.next();
-                EnemyShip ship = new EnemyShip(model);
-                enemyShips.put(new Integer(ship.getHandlerId()), ship);
+            Map<Integer, Ship> enemyShips = new HashMap<Integer, Ship>();
+            for (ShipModel enemyShipsModel : enemyShipsModels) {
+                EnemyShip ship = new EnemyShip(enemyShipsModel);
+                enemyShips.put(ship.getHandlerId(), ship);
             }
             
             // Update the ship managers
@@ -264,7 +262,7 @@ public class LoadingLevelState implements GameState {
             if (gameLoop.isController()) {
                 // Only the controller machine loads the file and then send
                 // the data to the other player
-                Map enemyShips = levelsManager.loadNextLevel();
+                Map<Integer, Ship> enemyShips = levelsManager.loadNextLevel();
                 gameLoop.getEnemyShipsManager().newLevel(enemyShips);
                 gameLoop.getPlayerManager().newLevel(enemyShips.values());
                 
@@ -272,10 +270,9 @@ public class LoadingLevelState implements GameState {
                 if (gameLoop.isNetworkGame()) {
                     
                     // Build ship models collection
-                    Collection enemyShipsModels = new ArrayList(enemyShips.size());
-                    Iterator enemyShipsItr = enemyShips.values().iterator();
-                    while (enemyShipsItr.hasNext()) {
-                        Ship ship = (Ship) enemyShipsItr.next();
+                    Collection<ShipModel> enemyShipsModels = new ArrayList<ShipModel>(enemyShips.size());
+                    for (Object o : enemyShips.values()) {
+                        Ship ship = (Ship) o;
                         ShipModel model = ship.getShipModel();
                         enemyShipsModels.add(model);
                     }

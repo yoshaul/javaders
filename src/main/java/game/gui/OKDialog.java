@@ -17,8 +17,7 @@ import javax.swing.*;
 public class OKDialog extends GameDialog {
 
     private JLabel textLabel;
-    private JButton okButton;
-    
+
     /**
      * Construct the dialog.
      * @param owner	Owner frame.
@@ -44,8 +43,8 @@ public class OKDialog extends GameDialog {
         contentPane.add(textLabel, BorderLayout.NORTH);
         
         JPanel buttonsPanel = createPanel(new GridLayout(1, 1));
-        
-        okButton = createButton("OK", "", BTN_SMALL_IMAGE);
+
+        JButton okButton = createButton("OK", "", BTN_SMALL_IMAGE);
         buttonsPanel.add(okButton);
         
         contentPane.add(buttonsPanel, BorderLayout.SOUTH);

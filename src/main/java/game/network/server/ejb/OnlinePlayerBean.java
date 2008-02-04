@@ -46,7 +46,7 @@ public class OnlinePlayerBean implements EntityBean {
 	        	"(session_id, user_name, session_start_time, accept_invitations) " +
 	        	"values(?, ?, ?, ?)");
 	        
-	        ps.setLong(1, sessionId.longValue());
+	        ps.setLong(1, sessionId);
 	        ps.setString(2, userName);
 	        ps.setLong(3, sessionStartTime);
 	        ps.setBoolean(4, acceptInvitations);
@@ -98,12 +98,12 @@ public class OnlinePlayerBean implements EntityBean {
                     "FROM online_player " +
                     "WHERE session_id = ?");
             
-            ps.setLong(1, sessionId.longValue());
+            ps.setLong(1, sessionId);
             
             ResultSet rs = ps.executeQuery();
             
 			if (rs.next()) {
-			    this.sessionId = new Long(rs.getLong(1));
+			    this.sessionId = rs.getLong(1);
 			    this.userName = rs.getString(2);
 			    this.sessionStartTime = rs.getLong(3);
 			    this.acceptInvitations = rs.getBoolean(4);
@@ -142,7 +142,7 @@ public class OnlinePlayerBean implements EntityBean {
                     "DELETE FROM online_player " +
                     "WHERE session_id = ?");
             
-            ps.setLong(1, sessionId.longValue());
+            ps.setLong(1, sessionId);
             
             ps.executeUpdate();
             
@@ -176,7 +176,7 @@ public class OnlinePlayerBean implements EntityBean {
             ps.setString(1, userName);
             ps.setLong(2, sessionStartTime);
             ps.setBoolean(3, acceptInvitations);
-            ps.setLong(4, sessionId.longValue());
+            ps.setLong(4, sessionId);
             
             ps.executeUpdate();
             
@@ -211,7 +211,7 @@ public class OnlinePlayerBean implements EntityBean {
     public Long ejbFindByPrimaryKey(Long sessionId) 
 			throws FinderException {
 
-		boolean found = false;
+		boolean found;
 		
 		Connection connection = null;
 		try {
@@ -222,7 +222,7 @@ public class OnlinePlayerBean implements EntityBean {
 					"FROM online_player " +
 					"WHERE session_id = ?");
 		
-			ps.setLong(1, sessionId.longValue());			
+			ps.setLong(1, sessionId);
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -253,7 +253,7 @@ public class OnlinePlayerBean implements EntityBean {
     public Collection ejbFindByAcceptInvitations() 
 			throws FinderException {
 
-		Collection result = new ArrayList();
+		Collection<Long> result = new ArrayList<Long>();
 		
 		Connection connection = null;
 		try {
@@ -269,7 +269,7 @@ public class OnlinePlayerBean implements EntityBean {
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-			    Long sessionId = new Long(rs.getLong(1));
+			    Long sessionId = rs.getLong(1);
 			    result.add(sessionId);
 			}
 			

@@ -3,6 +3,8 @@ package game.network.packet;
 
 import java.util.Collection;
 
+import game.ship.ShipModel;
+
 /**
  * The <code>NewLevelPacket</code> is created and sent by the 
  * controller player (the player whose computer is controlling
@@ -11,7 +13,7 @@ import java.util.Collection;
  */
 public class NewLevelPacket extends Packet {
 
-    private Collection enemyShipsModels;
+    private Collection<ShipModel> enemyShipsModels;
 
     /**
      * Constructs a new <code>NewLevelPacket</code>. The handler id
@@ -23,7 +25,7 @@ public class NewLevelPacket extends Packet {
      * objects of the enemy ships for the new level. 
      */
     public NewLevelPacket(Long senderId, Long receiverId, 
-            Collection enemyShipsModels) {
+            Collection<ShipModel> enemyShipsModels) {
 
         super(senderId, receiverId);
         this.enemyShipsModels = enemyShipsModels;
@@ -33,7 +35,7 @@ public class NewLevelPacket extends Packet {
      * Returns the enemy ships models.
      * @return	Collection of enemy ship models.
      */
-    public Collection getEnemyShipsModels() {
+    public Collection<ShipModel> getEnemyShipsModels() {
         return this.enemyShipsModels;
     }
 }

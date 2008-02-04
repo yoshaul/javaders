@@ -228,7 +228,7 @@ public class PlayerBean implements EntityBean {
     public String ejbFindByPrimaryKey(String userName) 
     		throws FinderException {
         
-        boolean found = false;
+        boolean found;
         
         Connection connection = null;
         try {

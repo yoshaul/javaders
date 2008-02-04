@@ -78,9 +78,9 @@ public class EnemyShip extends Ship {
             g.setColor(new Color(1-armorLeft, armorLeft, 0.0f));
             
             
-            g.drawString(armorPrecent+"%", 
-                    (int)Math.round(this.getX()), 
-                    (int)Math.round(this.getY())+10);
+            g.drawString(armorPrecent+"%",
+                    Math.round(this.getX()),
+                    Math.round(this.getY()) +10);
         }
     }
     

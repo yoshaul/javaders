@@ -44,7 +44,7 @@ public class EJBHelper {
 		
 		// find the sequence factory for the input table.
 		// If not found create it.
-		SequenceFactory sequenceFactory = null;
+		SequenceFactory sequenceFactory;
 		try {
 			sequenceFactory = 
 			    sequenceFactoryHome.findByPrimaryKey(tableName);

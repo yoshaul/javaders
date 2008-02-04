@@ -33,7 +33,7 @@ public abstract class InGameDialog extends JPanel implements ActionListener {
     public InGameDialog(ScreenManager screenManager, String imageName) {
         this.screenManager = screenManager;
         
-        if (imageName != null && imageName != "") {
+        if (imageName != null && !imageName.equals("")) {
             bgImage = ResourceManager.loadImage(
                     GameConstants.IMAGES_DIR + imageName);            
         }

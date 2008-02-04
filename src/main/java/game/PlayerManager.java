@@ -27,7 +27,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
     private PlayerShip player1Ship, player2Ship, localPlayer, networkPlayer;
 
     /** Collection of active shots fired by the ships */
-    private Collection shots;
+    private Collection<Bullet> shots;
     /** Collection of targets for the ships (i.e., enemy ships) */
     private Collection targets;
     /** True if the player ship (and network ship) are destroyed */
@@ -41,7 +41,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
         
         this.gameLoop = gameLoop;
         this.inputManager = gameLoop.getInputManager();
-        this.shots = new ArrayList();
+        this.shots = new ArrayList<Bullet>();
         this.targets = new ArrayList();
         this.gameOver = false;
         
@@ -261,9 +261,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
         }
         
         // Render shots
-        Iterator shotsItr = shots.iterator();
-        while (shotsItr.hasNext()) {
-            Sprite shot = (Sprite) shotsItr.next();
+        for (Sprite shot : shots) {
             shot.render(g);
         }
     }

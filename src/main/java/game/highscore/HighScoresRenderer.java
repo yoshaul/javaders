@@ -26,9 +26,7 @@ public class HighScoresRenderer {
         
         // Get the number of occupied high scores
         int numberOfHighScores = 0;
-        if (highScores[0] == null) {
-            numberOfHighScores = 0;
-        } else {
+        if (highScores[0] != null) {
             int i;
             for (i = 0; i < highScores.length && highScores[i] != null; i++) {
                 // iterate
@@ -44,9 +42,9 @@ public class HighScoresRenderer {
 
         // Each column takes different percentage of the screen width
         // Rank column is the narrowest and name is the widest
-        int rankWidth = (int)Math.round(bounds.width * 0.15f);
-        int nameWidth = (int)Math.round(bounds.width * 0.35f);
-        int scoreWidth = (int)Math.round(bounds.width * 0.30f);
+        int rankWidth = Math.round(bounds.width * 0.15f);
+        int nameWidth = Math.round(bounds.width * 0.35f);
+        int scoreWidth = Math.round(bounds.width * 0.30f);
         
         // Calculate the columns places
         int rankPlace = leftMargins;
@@ -74,7 +72,7 @@ public class HighScoresRenderer {
         for (int i = 0; i < numberOfHighScores; i++) {
             
             // Draw the high score rank
-            g.drawString((i+1)+"", rankPlace, 
+            g.drawString((i+1)+"", rankPlace,
                     topMargins + horizontalSpace*(i+1));
             
             // Draw player name

@@ -9,39 +9,38 @@ import game.sound.SoundFactory;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
- * The abstract <code>Ship</code> class is the base class for all the 
- * ships in the game/ 
+ * The abstract <code>Ship</code> class is the base class for all the
+ * ships in the game/
  */
 public abstract class Ship extends Sprite implements Target, PacketHandler {
 
     private final static int STATE_NORMAL = 0;
     private final static int STATE_EXPLODING = 1;
     private final static int STATE_DESTROYED = 2;
-    
+
     protected ShipContainer shipContainer;
-    
+
     /** Time passed since the last packet send */
     protected long timeSinceLastPacket;
-    
-    protected int objectId; 
+
+    protected int objectId;
     private int shipType;
-    
+
     /** The ship's armor */
     protected long armor;
-    /** The damage the ship causes when colliding with a traget */ 
+    /** The damage the ship causes when colliding with a traget */
     private long damage;
-    
+
     /** Max vertical and horizontal velocity of the ship */
     protected float maxDX, maxDY;
-    
+
     protected long damageScoreValue;
     protected long destroyScoreValue;
-    
+
     protected int state = STATE_NORMAL;
-    
+
     protected Weapon weapon;
     //private Weapon secondWeapon;
 
@@ -62,9 +61,9 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      */
     public Ship(int objectId, int shipType,
             float x, float y, float dx, float dy,
-            Image image, Weapon gun, long armor, long damage, 
+            Image image, Weapon gun, long armor, long damage,
             long hitScoreValue, long destroyScoreValue) {
-        
+
         super(x, y, dx, dy, image);
         this.objectId = objectId;
         this.shipType = shipType;
@@ -75,14 +74,14 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
         this.damage = damage;
         this.damageScoreValue = hitScoreValue;
         this.destroyScoreValue = destroyScoreValue;
-        
+
         // Set this ship as the owner of the weapon
         this.weapon.setOwner(this);
-        
+
         this.timeSinceLastPacket = 0;
     }
-   
-    
+
+
     /**
      * Costruct a new ship from ship type.
      * @param objectId	Network handler id of the ship
@@ -94,15 +93,15 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     public Ship(int objectId, int shipType, float x, float y,
             ShipProperties prop) {
 
-        this(objectId, shipType, x, y, prop.maxDX, prop.maxDY, 
-                prop.image, WeaponFactory.getWeapon(prop.weaponType, 
+        this(objectId, shipType, x, y, prop.maxDX, prop.maxDY,
+                prop.image, WeaponFactory.getWeapon(prop.weaponType,
                         prop.weaponLevel, prop.weaponDirection) ,
-                prop.armor, prop.damage, 
+                prop.armor, prop.damage,
                 prop.hitScoreValue, prop.destroyScoreValue);
-        
+
     }
-    
-    
+
+
     /**
      * Construct a new ship from a <code>ShipModel</code>.
      * @param model	ShipModel with the ship details
@@ -112,59 +111,57 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
         this(model.objectId, model.shipType, model.x, model.y,
                 ShipProperties.getShipProperties(model.shipType));
     }
-    
-    
+
+
     /**
      * Calls the main weapon to fire.
      */
     public void shoot() {
         weapon.fire(getCenterX(), getY());
     }
-    
+
     /**
      * Check if this ship collides with one of the targets(ships).
      * If so hit it and with <code>damage</code>.
      * Note that this method is for ship-to-ship collision only.
      * @param targets	Collection of target ships.
      */
-    public void processCollisions(Collection targets) {
-        
+    public void processCollisions(Collection<Target> targets) {
+
         if (!active) {
             return;
         }
-        
-        int x0 = (int)Math.round(this.getX());
-        int y0 = (int)Math.round(this.getY());
+
+        int x0 = Math.round(this.getX());
+        int y0 = Math.round(this.getY());
         int x1 = x0 + this.getWidth();
         int y1 = y0 + this.getHeight();
 
-        Iterator targetsItr = targets.iterator();
-        while (targetsItr.hasNext()) {
-            Target target = (Target) targetsItr.next();
+        for (Target target : targets) {
             if (target.isCollision(x0, y0, x1, y1)) {
                 target.hit(this.getDamage());
             }
         }
 
     }
-    
+
     /**
      * Returns true if this ship collide with the rectangle
      * (x0, y0), (x1, y1) (top-left and bottom-right respectively)
      */
     public boolean isCollision(int x0, int y0, int x1, int y1) {
-        
+
         if (state == STATE_DESTROYED) {
             return false;
         }
         else {
-        
+
 	        // get the pixel location of this ship
-	        int s2x = (int)Math.round(this.getX());
-	        int s2y = (int)Math.round(this.getY());
+	        int s2x = Math.round(this.getX());
+	        int s2y = Math.round(this.getY());
 	        int s2x1 = s2x + this.getWidth();
 	        int s2y1 = s2y + this.getHeight();
-	
+
 	        // check if the boundaries intersect
 	        return ( x0 < s2x1 &&
 	                 s2x < x1  &&
@@ -172,16 +169,16 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
 	                 s2y < y1);
         }
     }
-    
+
     /**
      * Called by a game object to hit this ship.
      * @param damage Amount of damage the hit cause
      */
     public void hit(long damage) {
         if (state == STATE_NORMAL) {
-	        
+
             SoundFactory.playSound("hit1.wav");
-            
+
             long actualDamage = Math.min(armor, damage);
             armor -= actualDamage;
 	        if (armor == 0) {
@@ -189,7 +186,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
 	        }
         }
     }
-    
+
     /**
      * Called by a bullet when it hits this ship.
      * If the owner of the bullet is a player ship we add
@@ -205,7 +202,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
 	        }
         }
     }
-    
+
     /**
      * Updates the ship's state.
      * @param elapsedTime	Time passed since the last update.
@@ -216,7 +213,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
 	        updatePosition(elapsedTime);
         }
     }
-    
+
     /**
      * Render the ship.
      */
@@ -225,7 +222,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
 	        super.render(g);
         }
     }
-    
+
     /**
      * Destroy this ship.
      */
@@ -234,7 +231,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
         this.setActive(false);
         this.state = STATE_DESTROYED;
     }
-    
+
     /**
      * Sets the main weapon of the ship.
      * @param weapon	New main weapon
@@ -242,16 +239,16 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     protected void setWeapon(Weapon weapon) {
         this.weapon = weapon;
     }
-    
+
     /**
-     * Returns the damage caused by this ship when it collides with 
+     * Returns the damage caused by this ship when it collides with
      * other game objects.
      * @return	Damage caused by this ship.
      */
     public long getDamage() {
         return this.damage;
     }
-    
+
     /**
      * Returns the ship armot (hit points).
      * @return The ship armor.
@@ -259,7 +256,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     public long getArmor() {
         return this.armor;
     }
-    
+
     /**
      * Returns the max vertical velocity of the ship.
      * @return Max vertical velocity of the ship.
@@ -267,7 +264,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     public float getMaxDX() {
         return this.maxDX;
     }
-    
+
     /**
      * Returns the max horizontal velocity of the ship.
      * @return Max horizontal velocity of the ship.
@@ -275,11 +272,11 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     public float getMaxDY() {
         return this.maxDY;
     }
-    
+
     public void setShipContainer(ShipContainer container) {
         this.shipContainer = container;
     }
-    
+
     /**
      * Returns true if this ship state is in normal state (can fight).
      * @return True if this ship is in normal state.
@@ -287,7 +284,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     public boolean isNormal() {
         return state == STATE_NORMAL;
     }
-    
+
     /**
      * Returns true if this ship state is exploding.
      * @return True if this ship is exploding.
@@ -295,7 +292,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     public boolean isExploding() {
         return state == STATE_EXPLODING;
     }
-    
+
     /**
      * Returns true if this ship state is destroyed.
      * @return True if this ship is destroyed.
@@ -303,17 +300,17 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     public boolean isDestroyed() {
         return state == STATE_DESTROYED;
     }
-    
+
     /**
      * Returns <code>ShipModel</code> object of this ship.
      * @return	ShipModel object of this ship
      * @see game.ship.ShipModel
      */
     public ShipModel getShipModel() {
-        return new ShipModel(objectId, shipType, 
+        return new ShipModel(objectId, shipType,
                 getX(), getY(), getDx(), getDy());
     }
-    
+
     /**
      * Returns <code>ShipState</code> object of this ship to send over
      * the network. This method is abstract since the player's ship
@@ -322,45 +319,45 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      * @see game.ship.ShipState
      */
     public abstract ShipState getShipState();
-    
+
     /**
      * Handle incoming packet.
      * Called by the <code>ShipContainer</code> according to the ship
      * network id.
      */
     public void handlePacket(Packet packet) {
-        
+
         if (packet instanceof ShipPacket) {
             ShipPacket shipPacket = (ShipPacket)packet;
             ShipState shipState = shipPacket.getShipState();
-            
+
             setX(shipState.x);
             setY(shipState.y);
             setDx(shipState.dx);
             setDy(shipState.dy);
             armor = shipState.armor;
             state = shipState.state;
-            
+
             packet.setConsumed(true);
         }
-        
+
     }
-    
+
     /**
      * Generates and sends a packet with the details of this ship.
      */
     public void createPacket(GameNetworkManager netManager) {
 
         ShipState shipState = getShipState();
-        
+
         Packet shipPacket = new ShipPacket(netManager.getSenderId(),
                 netManager.getReceiverId(), getHandlerId(), shipState);
-        
+
         netManager.sendPacket(shipPacket);
-        
+
         timeSinceLastPacket = 0;
     }
-    
+
     /**
      * Returns the network handler id of this ship.
      * @return	Network handler id
@@ -368,7 +365,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     public int getHandlerId() {
         return this.objectId;
     }
-    
+
     /**
      * Returns the <code>ShipContainer</code> object containing this ship.
      * @return ShipContainer object

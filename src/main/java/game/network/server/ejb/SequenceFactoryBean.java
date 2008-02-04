@@ -25,7 +25,7 @@ public class SequenceFactoryBean implements EntityBean {
      */
     public String ejbCreate(String tableName) throws CreateException {
         this.tableName = tableName;
-        this.nextID = new Long(1);	// Start from id 1
+        this.nextID = (long) 1;	// Start from id 1
         
         Connection connection = null;
         try {
@@ -36,7 +36,7 @@ public class SequenceFactoryBean implements EntityBean {
                     "VALUES(?, ?)");
             
             ps.setString(1, tableName);
-            ps.setLong(2, nextID.longValue());
+            ps.setLong(2, nextID);
             
             ps.executeUpdate();
             
@@ -95,7 +95,7 @@ public class SequenceFactoryBean implements EntityBean {
             
 			if (rs.next()) {
 			    this.tableName = rs.getString(1);
-			    this.nextID = new Long(rs.getLong(2));
+			    this.nextID = rs.getLong(2);
 			}
 			else {
 			    throw new EJBException("Table name not found: " + tableName);
@@ -157,7 +157,7 @@ public class SequenceFactoryBean implements EntityBean {
                     "SET next_id = ? " +
                     "WHERE table_name = ?");
             
-            ps.setLong(1, nextID.longValue());
+            ps.setLong(1, nextID);
             ps.setString(2, tableName);
             
             ps.executeUpdate();
@@ -189,7 +189,7 @@ public class SequenceFactoryBean implements EntityBean {
      * @param tableName	Primary key
      */
     public String ejbFindByPrimaryKey(String tableName) throws FinderException {
-        boolean found = false;
+        boolean found;
         
         Connection connection = null;
         try {
@@ -232,10 +232,10 @@ public class SequenceFactoryBean implements EntityBean {
      */
     public Long getNextID() { 
         
-        Long id = new Long(nextID.longValue());
+        Long id = nextID;
         
         // Increment the id by 1
-        nextID = new Long(nextID.longValue() + 1);
+        nextID = nextID + 1;
         
         return id;
         

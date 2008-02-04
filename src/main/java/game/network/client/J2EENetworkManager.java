@@ -188,17 +188,16 @@ public class J2EENetworkManager implements NetworkManager {
             Collection result = onlinePlayerHome.findByAcceptInvitations(); 
 
             // Get the online players models
-            Iterator itr = result.iterator();
-            while (itr.hasNext()) {
+            for (Object aResult : result) {
                 OnlinePlayer onlinePlayer = (OnlinePlayer)
-                	PortableRemoteObject.narrow(itr.next(), 
-                	        OnlinePlayer.class);
-                
+                        PortableRemoteObject.narrow(aResult,
+                                OnlinePlayer.class);
+
                 // Add the player if it's not the current player
                 if (!onlinePlayer.getPrimaryKey().equals(this.sessionId)) {
-                    playersModels.add(onlinePlayer.getOnlinePlayerModel());    
+                    playersModels.add(onlinePlayer.getOnlinePlayerModel());
                 }
-                
+
             }
             return playersModels;
         }
