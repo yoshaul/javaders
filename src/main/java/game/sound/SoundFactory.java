@@ -4,12 +4,13 @@ package game.sound;
 import game.GameConstants;
 import game.util.ResourceManager;
 
+import javax.sound.sampled.*;
 import java.applet.Applet;
 import java.applet.AudioClip;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-
-import javax.sound.sampled.*;
 
 /**
  * The <code>SoundFactory</code> class is used to play sounds
@@ -31,7 +32,8 @@ public class SoundFactory {
 //            File soundFile = new File(GameConstants.SOUNDS_DIR + fileName);
         	InputStream is = ResourceManager.getResourceAsStream(
         			GameConstants.SOUNDS_DIR + fileName);
-            AudioInputStream ais = AudioSystem.getAudioInputStream(is);
+            BufferedInputStream bis = new BufferedInputStream(is);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(bis);
             AudioFormat audioFormat = ais.getFormat();
             DataLine.Info info = new DataLine.Info(Clip.class, audioFormat);
             // Obtain a line 
