@@ -1,25 +1,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>yossis</groupId>
-    <artifactId>game</artifactId>
+    <groupId>org.yossis</groupId>
+    <artifactId>javaders</artifactId>
     <packaging>jar</packaging>
-    <version>1.1-SNAPSHOT</version>
-    <name>Java Seminar Final Project Game</name>
+    <version>1.1</version>
+    <name>Javaders - Java Seminar Final Project Game</name>
     <description>Space Shooter game written as part of Advanced Java Seminar</description>
     <url>http://josh.game.server.cc</url>
     <inceptionYear>2005</inceptionYear>
 
     <scm>
-        <connection>scm:svn:http://josh.game-server.cc/svn/game/trunk</connection>
-        <developerConnection>scm:svn:http://josh.game-server.cc/svn/game/trunk</developerConnection>
-        <url>http://josh.game-server.cc/svn/game/trunk</url>
+        <connection>scm:git@github.com:yoshaul/javaders.git</connection>
+        <developerConnection>scm:git@github.com:yoshaul/javaders.git</developerConnection>
+        <url>https://github.com/yoshaul/javaders</url>
     </scm>
 
     <developers>
         <developer>
             <name>Yossi Shaul</name>
-            <email>yossis@alphacsp.com</email>
+            <email>yoshaul@gmail.com</email>
             <timezone>GMT+2</timezone>
         </developer>
     </developers>
@@ -86,7 +86,7 @@
         <defaultGoal>compile</defaultGoal>
     </build>
 
-    <!-- reposting section -->
+    <!-- reporting section -->
     <reporting>
         <plugins>
             <!-- testing reports -->
