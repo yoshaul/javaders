@@ -84,6 +84,7 @@ public class GameMenu extends JFrame implements ActionListener {
 
         this.addWindowListener(
                 new WindowAdapter() {
+                    @Override
                     public void windowClosing(WindowEvent e) {
                         exitGame();
                     }
@@ -381,6 +382,7 @@ public class GameMenu extends JFrame implements ActionListener {
         availablePlayersDialog.popDialog();
     }
 
+    @Override
     public void actionPerformed(ActionEvent event) {
         Object eventSource = event.getSource();
         if (eventSource == exitButton) {

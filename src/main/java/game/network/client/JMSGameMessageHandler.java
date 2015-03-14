@@ -59,6 +59,7 @@ public class JMSGameMessageHandler implements MessageListener {
      * New message received from the JMS queue. send to the network
      * manager to handle.
      */
+    @Override
     public void onMessage(Message message) {
 
         if (message instanceof ObjectMessage) {

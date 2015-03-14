@@ -137,6 +137,7 @@ public class AddHighScoreDialog extends InGameDialog {
     /**
      * Handle user input.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == cancelButton) {

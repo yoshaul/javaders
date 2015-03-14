@@ -84,6 +84,7 @@ public class EnemyShip extends Ship {
      *
      * @see Ship#render(Graphics)
      */
+    @Override
     public void render(Graphics g) {
         super.render(g);
 
@@ -111,6 +112,7 @@ public class EnemyShip extends Ship {
      *
      * @see Ship#update(long)
      */
+    @Override
     public void update(long elapsedTime) {
 
         super.update(elapsedTime);
@@ -144,6 +146,7 @@ public class EnemyShip extends Ship {
     /**
      * Hit this ship with the bullet
      */
+    @Override
     public void hit(Bullet bullet) {
         if (isNormal()) {
             SoundFactory.playSound("hit1.wav");
@@ -164,6 +167,7 @@ public class EnemyShip extends Ship {
     /**
      * Hit the ship with a bonus. Enemy ships don't consume bonuses.
      */
+    @Override
     public void hit(Bonus bonus) {
         // Enemy ships don't consume bonuses
     }
@@ -171,6 +175,7 @@ public class EnemyShip extends Ship {
     /**
      * Returns the enemy ship state.
      */
+    @Override
     public ShipState getShipState() {
         return new ShipState(x, y, dx, dy, armor, state);
     }
@@ -181,6 +186,7 @@ public class EnemyShip extends Ship {
      *
      * @see Ship#destroy()
      */
+    @Override
     public void destroy() {
         super.destroy();
 

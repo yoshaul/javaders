@@ -44,6 +44,7 @@ public class BallCannon extends AbstractWeapon {
     /**
      * Fire a new bullet(s).
      */
+    @Override
     public void fire(float x, float y) {
 
         long now = System.currentTimeMillis();

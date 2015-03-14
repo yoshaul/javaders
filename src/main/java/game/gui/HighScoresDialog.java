@@ -64,6 +64,7 @@ public class HighScoresDialog extends GameDialog {
     /**
      * Create the dialog UI.
      */
+    @Override
     protected void createGUI() {
 
         setVisible(false);
@@ -105,6 +106,7 @@ public class HighScoresDialog extends GameDialog {
      * Override the paint method to paint the high scores on
      * the render panel.
      */
+    @Override
     public void paint(Graphics g) {
         super.paint(g);
 
@@ -121,6 +123,7 @@ public class HighScoresDialog extends GameDialog {
     /**
      * React to user input.
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
 
         if (event.getSource() == closeButton) {

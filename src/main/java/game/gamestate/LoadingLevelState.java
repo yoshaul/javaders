@@ -67,6 +67,7 @@ public class LoadingLevelState implements GameState {
     /**
      * Initialize state.
      */
+    @Override
     public void init() {
         // Nothing to initialize
     }
@@ -77,6 +78,7 @@ public class LoadingLevelState implements GameState {
      *
      * @see game.gamestate.GameState init method
      */
+    @Override
     public void start() {
         timeInState = 0;
         levelLoaded = friendReady = finished = false;
@@ -93,6 +95,7 @@ public class LoadingLevelState implements GameState {
      * Check for special input from the player (quit, pause, etc.)
      * Check for network input.
      */
+    @Override
     public void gatherInput(GameLoop gameLoop, long elapsedTime) {
 
         // Check if the user wants to quit
@@ -110,6 +113,7 @@ public class LoadingLevelState implements GameState {
      * If no more levels left display a message and go to the
      * add high score state.
      */
+    @Override
     public void update(GameLoop gameLoop, long elapsedTime) {
         timeInState += elapsedTime;
 
@@ -130,6 +134,7 @@ public class LoadingLevelState implements GameState {
     /**
      * Render the loading message and dialogs if any.
      */
+    @Override
     public void render(GameLoop gameLoop) {
         Graphics g = gameLoop.getScreenManager().getGraphics();
 
@@ -151,6 +156,7 @@ public class LoadingLevelState implements GameState {
      * Otherwise it waits for the ready signal after sending
      * the level details.
      */
+    @Override
     public void handlePacket(Packet packet) {
 
         if (packet instanceof NewLevelPacket) {
@@ -202,6 +208,7 @@ public class LoadingLevelState implements GameState {
      *
      * @return True if the current state is finished
      */
+    @Override
     public boolean isFinished() {
         return finished;
     }
@@ -211,6 +218,7 @@ public class LoadingLevelState implements GameState {
      *
      * @return Next game state.
      */
+    @Override
     public int getNextGameState() {
         return nextGameState;
     }
@@ -220,6 +228,7 @@ public class LoadingLevelState implements GameState {
      *
      * @return Id of this game state
      */
+    @Override
     public int getGameStateId() {
         return GameState.GAME_STATE_LOADING;
     }
@@ -270,6 +279,7 @@ public class LoadingLevelState implements GameState {
     // load new level in a new thread
     private class LevelLoaderThread implements Runnable {
 
+        @Override
         public void run() {
 
             Logger.printMemoryUsage("New level memory usage before:");

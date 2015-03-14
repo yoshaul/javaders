@@ -65,6 +65,7 @@ public class AddHighScoreState implements GameState {
     /**
      * Initialize state; create the state dialogs.
      */
+    @Override
     public void init() {
 
         addHighScoreDialog = new AddHighScoreDialog(gameLoop, this,
@@ -84,6 +85,7 @@ public class AddHighScoreState implements GameState {
      *
      * @see game.gamestate.GameState init method
      */
+    @Override
     public void start() {
         timeInState = 0;
         gameLoop.getScreenManager().showCursor(true);
@@ -108,6 +110,7 @@ public class AddHighScoreState implements GameState {
     /**
      * This state is gathering input with Swing components.
      */
+    @Override
     public void gatherInput(GameLoop gameLoop, long elapsedTime) {
         // The input is gathered by swing TextField
     }
@@ -116,6 +119,7 @@ public class AddHighScoreState implements GameState {
      * Update the state. If this state is finished the game is
      * over and we exit the game loop.
      */
+    @Override
     public void update(GameLoop gameLoop, long elapsedTime) {
 
         timeInState += elapsedTime;
@@ -144,6 +148,7 @@ public class AddHighScoreState implements GameState {
     /**
      * Render the state data.
      */
+    @Override
     public void render(GameLoop gameLoop) {
 
         Graphics g = gameLoop.getScreenManager().getGraphics();
@@ -161,6 +166,7 @@ public class AddHighScoreState implements GameState {
     /**
      * No packets are handled in this state.
      */
+    @Override
     public void handlePacket(Packet packet) {
         // No packets to handle in this state
     }
@@ -168,6 +174,7 @@ public class AddHighScoreState implements GameState {
     /**
      * Returns true if this level is finished.
      */
+    @Override
     public boolean isFinished() {
         return finished;
     }
@@ -175,6 +182,7 @@ public class AddHighScoreState implements GameState {
     /**
      * Returns the next game state after this state is finished.
      */
+    @Override
     public int getNextGameState() {
         return nextGameState;
     }
@@ -182,6 +190,7 @@ public class AddHighScoreState implements GameState {
     /**
      * Returns this state id.
      */
+    @Override
     public int getGameStateId() {
         return GameState.GAME_STATE_HIGH_SCORE;
     }

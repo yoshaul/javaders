@@ -86,6 +86,7 @@ public class JMSMessageHandler implements MessageListener {
      * New message received from the JMS topic designed for this
      * user. Send to the network manager to handle.
      */
+    @Override
     public void onMessage(Message message) {
 
         if (message instanceof ObjectMessage) {

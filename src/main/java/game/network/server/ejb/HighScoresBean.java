@@ -45,18 +45,22 @@ public class HighScoresBean implements SessionBean {
     
 	/* SessionBean implementation */
 
+    @Override
     public void ejbActivate() throws EJBException, RemoteException {
         // Not in use in stateless session beans
     }
 
+    @Override
     public void ejbPassivate() throws EJBException, RemoteException {
         // Not in use in stateless session beans
     }
 
+    @Override
     public void ejbRemove() throws EJBException, RemoteException {
 
     }
 
+    @Override
     public void setSessionContext(SessionContext sessionContext) {
 
         this.sessionContext = sessionContext;

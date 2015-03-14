@@ -70,6 +70,7 @@ public class PlayerShip extends Ship {
      *
      * @see Ship#update(long)
      */
+    @Override
     public void update(long elapsedTime) {
 
         super.update(elapsedTime);
@@ -86,6 +87,7 @@ public class PlayerShip extends Ship {
      * Override the render methos. Call the super method and
      * render some more data.
      */
+    @Override
     public void render(Graphics g) {
 
         if (isActive()) {
@@ -111,6 +113,7 @@ public class PlayerShip extends Ship {
      * Process ship-to-ship collisions only if this ship
      * is vulnerable.
      */
+    @Override
     public void processCollisions(Collection targets) {
 
         if (vulnerable) {
@@ -157,6 +160,7 @@ public class PlayerShip extends Ship {
     /**
      * Returns the player's ship state.
      */
+    @Override
     public ShipState getShipState() {
         return new PlayerShipState(x, y, dx, dy, armor, state, score);
     }
@@ -164,6 +168,7 @@ public class PlayerShip extends Ship {
     /**
      * Hit the player ship if the ship is vulnerable.
      */
+    @Override
     public void hit(long damage) {
         if (vulnerable) {
             super.hit(damage);
@@ -173,6 +178,7 @@ public class PlayerShip extends Ship {
     /**
      * Hit only if vulnerable.
      */
+    @Override
     public void hit(Bullet bullet) {
         if (vulnerable && isNormal()) {
             SoundFactory.playSound("playerHit.wav");
@@ -183,6 +189,7 @@ public class PlayerShip extends Ship {
     /**
      * Hit the player ship with a bonus.
      */
+    @Override
     public void hit(Bonus bonus) {
         if (isNormal()) {
             if (bonus instanceof PowerUp) {
@@ -219,6 +226,7 @@ public class PlayerShip extends Ship {
     /**
      * Handle incoming packet.
      */
+    @Override
     public void handlePacket(Packet packet) {
 
         super.handlePacket(packet);

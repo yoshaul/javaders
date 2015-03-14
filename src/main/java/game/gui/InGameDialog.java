@@ -148,6 +148,7 @@ public abstract class InGameDialog extends JPanel implements ActionListener {
     /**
      * Paint the dialog and the background image.
      */
+    @Override
     public void paint(Graphics g) {
         if (bgImage != null) {
             g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), null);

@@ -56,6 +56,7 @@ public class LoginDialog extends GameDialog {
     /**
      * Create the dialog UI.
      */
+    @Override
     protected void createGUI() {
 
         Container contentPane = this.getContentPane();
@@ -128,6 +129,7 @@ public class LoginDialog extends GameDialog {
     /**
      * Hides the dialog and clears the input fields.
      */
+    @Override
     public void hideDialog() {
         // Clear the text and password fields
         userNameField.setText("");
@@ -138,6 +140,7 @@ public class LoginDialog extends GameDialog {
     /**
      * Respond to user input.
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
         if (source == loginButton || source == passwordField) {

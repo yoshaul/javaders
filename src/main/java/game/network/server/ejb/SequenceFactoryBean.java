@@ -82,6 +82,7 @@ public class SequenceFactoryBean implements EntityBean {
     /**
      * Set the primary key.
      */
+    @Override
     public void ejbActivate() throws EJBException, RemoteException {
         this.tableName = (String) entityContext.getPrimaryKey();
     }
@@ -89,6 +90,7 @@ public class SequenceFactoryBean implements EntityBean {
     /**
      * Unset the primary key.
      */
+    @Override
     public void ejbPassivate() throws EJBException, RemoteException {
         this.tableName = null;
     }
@@ -96,6 +98,7 @@ public class SequenceFactoryBean implements EntityBean {
     /**
      * Load the details from the database.
      */
+    @Override
     public void ejbLoad() throws EJBException, RemoteException {
         Connection connection = null;
         try {
@@ -132,6 +135,7 @@ public class SequenceFactoryBean implements EntityBean {
     /**
      * Remove from the database.
      */
+    @Override
     public void ejbRemove() throws RemoveException, EJBException,
             RemoteException {
 
@@ -161,6 +165,7 @@ public class SequenceFactoryBean implements EntityBean {
     /**
      * Store details to the database.
      */
+    @Override
     public void ejbStore() throws EJBException, RemoteException {
         Connection connection = null;
         try {
@@ -185,11 +190,13 @@ public class SequenceFactoryBean implements EntityBean {
 
     }
 
+    @Override
     public void setEntityContext(EntityContext entityContext)
             throws EJBException, RemoteException {
         this.entityContext = entityContext;
     }
 
+    @Override
     public void unsetEntityContext() throws EJBException, RemoteException {
         this.entityContext = null;
 

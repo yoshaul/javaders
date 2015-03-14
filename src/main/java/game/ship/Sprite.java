@@ -70,6 +70,7 @@ public abstract class Sprite implements Movable, Renderable {
      *
      * @param elapsedTime Time elapsed since last update in milliseconds
      */
+    @Override
     public void updatePosition(long elapsedTime) {
 
         x += dx * elapsedTime;
@@ -80,6 +81,7 @@ public abstract class Sprite implements Movable, Renderable {
     /**
      * Render the image in the current position.
      */
+    @Override
     public void render(Graphics g) {
 
         g.drawImage(spriteImage, Math.round(x),

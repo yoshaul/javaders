@@ -57,6 +57,7 @@ public class SignupDialog extends GameDialog {
     /**
      * Create the dialog UI.
      */
+    @Override
     protected void createGUI() {
 
         Container contentPane = this.getContentPane();
@@ -110,6 +111,7 @@ public class SignupDialog extends GameDialog {
     /**
      * Respond to user input.
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
 
         if (event.getSource() == signupButton) {
@@ -126,6 +128,7 @@ public class SignupDialog extends GameDialog {
     /**
      * Clear the input fields and hide the dialog.
      */
+    @Override
     public void hideDialog() {
         // Clear the fields
         userNameField.setText("");

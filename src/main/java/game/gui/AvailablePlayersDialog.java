@@ -68,6 +68,7 @@ public class AvailablePlayersDialog extends GameDialog {
     /**
      * Create the dialog UI.
      */
+    @Override
     protected void createGUI() {
 
         Container contentPane = this.getContentPane();
@@ -144,6 +145,7 @@ public class AvailablePlayersDialog extends GameDialog {
     /**
      * Refresh the online players list and show the dialog.
      */
+    @Override
     public void popDialog() {
         this.refresh();
         super.popDialog();
@@ -152,6 +154,7 @@ public class AvailablePlayersDialog extends GameDialog {
     /**
      * Hide the dialog.
      */
+    @Override
     public void hideDialog() {
         this.setVisible(false);
     }
@@ -246,6 +249,7 @@ public class AvailablePlayersDialog extends GameDialog {
     /**
      * React to the user input.
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
 
         if (event.getSource() == inviteButton) {
@@ -272,6 +276,7 @@ public class AvailablePlayersDialog extends GameDialog {
             super(columnNames, rowCount);
         }
 
+        @Override
         public boolean isCellEditable(int row, int col) {
             return false;
         }

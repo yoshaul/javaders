@@ -77,6 +77,7 @@ public class J2EENetworkManager implements NetworkManager {
      *
      * @param accept Treu if the user is ready to accept invitations to play.
      */
+    @Override
     public void acceptInvitations(boolean accept) throws NetworkException {
 
         if (this.sessionId == null) {
@@ -107,6 +108,7 @@ public class J2EENetworkManager implements NetworkManager {
     /**
      * @see NetworkManager#sendPacket(Packet)
      */
+    @Override
     public void sendPacket(Packet packet) {
         // Not in use
     }
@@ -117,6 +119,7 @@ public class J2EENetworkManager implements NetworkManager {
      *
      * @see NetworkManager#login(String, String)
      */
+    @Override
     public Long login(String userName, String password)
             throws NetworkException, InvalidLoginException {
 
@@ -149,6 +152,7 @@ public class J2EENetworkManager implements NetworkManager {
      *
      * @see NetworkManager#logout()
      */
+    @Override
     public void logout() throws NetworkException {
 
         try {
@@ -179,6 +183,7 @@ public class J2EENetworkManager implements NetworkManager {
      *
      * @see NetworkManager#signup(String, String, String)
      */
+    @Override
     public void signup(String userName, String password, String email)
             throws NetworkException {
 
@@ -200,6 +205,7 @@ public class J2EENetworkManager implements NetworkManager {
     /**
      * @see NetworkManager#getAvailablePlayers()
      */
+    @Override
     public List<OnlinePlayerModel> getAvailablePlayers() throws NetworkException {
         List<OnlinePlayerModel> playersModels = new ArrayList<OnlinePlayerModel>();
         try {
@@ -236,6 +242,7 @@ public class J2EENetworkManager implements NetworkManager {
      *
      * @see NetworkManager#handlePacket(Packet)
      */
+    @Override
     public void handlePacket(Packet packet) {
 
         if (packet instanceof JMSInvitationPacket) {
@@ -298,6 +305,7 @@ public class J2EENetworkManager implements NetworkManager {
     /**
      * @see NetworkManager#sendInvitationReply(InvitationPacket, boolean)
      */
+    @Override
     public void sendInvitationReply(InvitationPacket originalInvitation,
                                     boolean accepted) throws NetworkException {
 
@@ -345,6 +353,7 @@ public class J2EENetworkManager implements NetworkManager {
      * @param    destinationId Session id of the target user
      * @see NetworkManager#sendInvitation(Long)
      */
+    @Override
     public void sendInvitation(Long destinationId)
             throws NetworkException {
 
@@ -370,6 +379,7 @@ public class J2EENetworkManager implements NetworkManager {
      *
      * @see NetworkManager#cancelInvitation()
      */
+    @Override
     public void cancelInvitation() throws NetworkException {
 
         JMSInvitationPacket cancelInvitation = new JMSInvitationPacket(
@@ -415,6 +425,7 @@ public class J2EENetworkManager implements NetworkManager {
      * Returns a new <code>J2EEGameNetworkManager</code> to manage
      * the network in the running game.
      */
+    @Override
     public GameNetworkManager getGameNetworkManager() {
         return new J2EEGameNetworkManager(
                 jmsGameMessageHandler, getSenderId(),
@@ -424,6 +435,7 @@ public class J2EENetworkManager implements NetworkManager {
     /**
      * @see NetworkManager#getSenderId()
      */
+    @Override
     public Long getSenderId() {
         return this.sessionId;
     }
@@ -431,6 +443,7 @@ public class J2EENetworkManager implements NetworkManager {
     /**
      * @see NetworkManager#getReceiverId()
      */
+    @Override
     public Long getReceiverId() {
         return this.receiverId;
     }
@@ -438,6 +451,7 @@ public class J2EENetworkManager implements NetworkManager {
     /**
      * @see NetworkManager#isInviter()
      */
+    @Override
     public boolean isInviter() {
         return this.inviter;
     }
@@ -447,6 +461,7 @@ public class J2EENetworkManager implements NetworkManager {
      *
      * @see NetworkManager#postHighScore(HighScore)
      */
+    @Override
     public void postHighScore(HighScore score) throws NetworkException {
         try {
             HighScoresHome highScoresHome = (HighScoresHome)
@@ -467,6 +482,7 @@ public class J2EENetworkManager implements NetworkManager {
     /**
      * @see NetworkManager#getTopTenScores()
      */
+    @Override
     public HighScore[] getTopTenScores() throws NetworkException {
 
         return getHighScores(1, 10);
@@ -476,6 +492,7 @@ public class J2EENetworkManager implements NetworkManager {
     /**
      * @see NetworkManager#getHighScores(int, int)
      */
+    @Override
     public HighScore[] getHighScores(int fromRank, int toRank)
             throws NetworkException {
         try {

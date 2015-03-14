@@ -67,6 +67,7 @@ public class WeaponUpgrade extends Bonus {
     /**
      * Create a <code>WeaponUpgradePacket</code> to send over the net.
      */
+    @Override
     public void createPacket(GameNetworkManager netManager) {
 
         // Prepare the PowerUpPacket

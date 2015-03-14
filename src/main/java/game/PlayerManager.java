@@ -361,6 +361,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      * Inherited from <code>ShipContainer</code> interface.
      * Not in use for the <code>PlayerManager</code>
      */
+    @Override
     public void addShip(Ship ship) {
     }
 
@@ -369,6 +370,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      *
      * @param shot Shot to add.
      */
+    @Override
     public void addShot(Bullet shot) {
         shots.add(shot);
     }
@@ -376,6 +378,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
     /**
      * Returns true if this macine is the controller.
      */
+    @Override
     public boolean isController() {
         return gameLoop.isController();
     }
@@ -383,6 +386,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
     /**
      * Return true if this is a network game.
      */
+    @Override
     public boolean isNetworkGame() {
         return gameLoop.isNetworkGame();
     }
@@ -391,6 +395,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      * Returns the game network manager. Null if this is not
      * a network game.
      */
+    @Override
     public GameNetworkManager getNetworkManager() {
         return gameLoop.getGameNetworkManager();
     }
@@ -398,6 +403,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
     /**
      * Returns the network handler id of this object.
      */
+    @Override
     public int getHandlerId() {
         return this.handlerID;
     }
@@ -409,6 +415,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      *
      * @param packet Packet to handle
      */
+    @Override
     public void handlePacket(Packet packet) {
 
         if (packet instanceof BulletPacket) {
@@ -449,6 +456,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
     /**
      * Currently this object doesn't creates it's own packets
      */
+    @Override
     public void createPacket(GameNetworkManager netManager) {
 
     }
@@ -463,6 +471,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
     /**
      * Player ship doesn't release bonuses
      */
+    @Override
     public void addBonus(Bonus bonus) {
         // Player ship doesn't release bonuses
     }

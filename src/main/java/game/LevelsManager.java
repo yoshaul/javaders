@@ -241,6 +241,7 @@ public class LevelsManager {
 
     private class LevelsEntityResolver implements EntityResolver {
 
+        @Override
         public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
             if (systemId.endsWith("levels.dtd")) {
                 return new InputSource(ResourceManager.getResourceAsStream(

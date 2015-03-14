@@ -181,6 +181,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      * Returns true if this ship collide with the rectangle
      * (x0, y0), (x1, y1) (top-left and bottom-right respectively)
      */
+    @Override
     public boolean isCollision(int x0, int y0, int x1, int y1) {
 
         if (state == STATE_DESTROYED) {
@@ -206,6 +207,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      *
      * @param damage Amount of damage the hit cause
      */
+    @Override
     public void hit(long damage) {
         if (state == STATE_NORMAL) {
 
@@ -224,6 +226,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      * If the owner of the bullet is a player ship we add
      * score to the owner ship.
      */
+    @Override
     public void hit(Bullet bullet) {
         if (state == STATE_NORMAL) {
             long damage = bullet.getDamage();
@@ -250,6 +253,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     /**
      * Render the ship.
      */
+    @Override
     public void render(Graphics g) {
         if (isActive()) {
             super.render(g);
@@ -368,6 +372,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      * Called by the <code>ShipContainer</code> according to the ship
      * network id.
      */
+    @Override
     public void handlePacket(Packet packet) {
 
         if (packet instanceof ShipPacket) {
@@ -389,6 +394,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     /**
      * Generates and sends a packet with the details of this ship.
      */
+    @Override
     public void createPacket(GameNetworkManager netManager) {
 
         ShipState shipState = getShipState();
@@ -406,6 +412,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      *
      * @return Network handler id
      */
+    @Override
     public int getHandlerId() {
         return this.objectId;
     }

@@ -23,41 +23,49 @@ import game.network.packet.Packet;
 
 public class NullGameNetworkManager implements GameNetworkManager {
 
+    @Override
     public void gatherInput(GameState gameState) {
         // TODO Auto-generated method stub
 
     }
 
+    @Override
     public void sendPacket(Packet packet) {
         // TODO Auto-generated method stub
 
     }
 
+    @Override
     public void handlePacket(Packet packet) {
         // TODO Auto-generated method stub
 
     }
 
+    @Override
     public Packet getNextPacket() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public Long getSenderId() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public Long getReceiverId() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public boolean isInviter() {
         // TODO Auto-generated method stub
         return false;
     }
 
+    @Override
     public void cleanup() {
         // TODO Auto-generated method stub
 

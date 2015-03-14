@@ -44,6 +44,7 @@ public class FireCannon extends AbstractWeapon {
     /**
      * Fire a new bullet(s).
      */
+    @Override
     public void fire(float x, float y) {
 
         long now = System.currentTimeMillis();
@@ -147,6 +148,7 @@ public class FireCannon extends AbstractWeapon {
     /**
      * Add one to the weapon level.
      */
+    @Override
     public void upgradeWeapon() {
         super.upgradeWeapon();
         updateFiringRate();

@@ -147,6 +147,7 @@ public class PostHighScoreDialog extends InGameDialog {
     /**
      * Hanlde the user input.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == noButton) {

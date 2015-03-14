@@ -122,6 +122,7 @@ public class ScreenManager {
         try {
             EventQueue.invokeAndWait(
                     new Runnable() {
+                        @Override
                         public void run() {
                             gameFrame.createBufferStrategy(2);
                         }

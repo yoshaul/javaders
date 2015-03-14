@@ -36,15 +36,19 @@ public class SignInBean implements SessionBean {
 
 	/* SessionBean interface implementation */
 
+    @Override
     public void ejbActivate() {
     }
 
+    @Override
     public void ejbPassivate() {
     }
 
+    @Override
     public void ejbRemove() {
     }
 
+    @Override
     public void setSessionContext(SessionContext sessionContext) {
 
         this.sessionContext = sessionContext;

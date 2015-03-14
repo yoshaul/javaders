@@ -90,10 +90,12 @@ public class OnlinePlayerBean implements EntityBean {
         // nothing to do
     }
 
+    @Override
     public void ejbActivate() throws EJBException, RemoteException {
         this.sessionId = (Long) entityContext.getPrimaryKey();
     }
 
+    @Override
     public void ejbPassivate() throws EJBException, RemoteException {
         sessionId = null;
     }
@@ -101,6 +103,7 @@ public class OnlinePlayerBean implements EntityBean {
     /**
      * Load the online player's details from the database.
      */
+    @Override
     public void ejbLoad() throws EJBException, RemoteException {
 
         Connection connection = null;
@@ -144,6 +147,7 @@ public class OnlinePlayerBean implements EntityBean {
      * Removes the online player from the database.
      * Should be called when the player logs out or quits the game.
      */
+    @Override
     public void ejbRemove() throws
             RemoveException, EJBException, RemoteException {
 
@@ -174,6 +178,7 @@ public class OnlinePlayerBean implements EntityBean {
     /**
      * Store the details to the database.
      */
+    @Override
     public void ejbStore() throws EJBException, RemoteException {
 
         Connection connection = null;
@@ -203,6 +208,7 @@ public class OnlinePlayerBean implements EntityBean {
 
     }
 
+    @Override
     public void setEntityContext(EntityContext entityContext)
             throws EJBException, RemoteException {
 
@@ -210,6 +216,7 @@ public class OnlinePlayerBean implements EntityBean {
 
     }
 
+    @Override
     public void unsetEntityContext() throws EJBException, RemoteException {
 
         entityContext = null;

@@ -129,6 +129,7 @@ public class GameLoop implements Runnable {
      * The main loop iterates while the game is not finished and
      * calls the current state methods.
      */
+    @Override
     public void run() {
 
         long prevFrameTime = System.currentTimeMillis();

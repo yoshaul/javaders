@@ -82,6 +82,7 @@ public class PowerUp extends Bonus {
     /**
      * Create a <code>PowerUpPacket</code> to send over the net.
      */
+    @Override
     public void createPacket(GameNetworkManager netManager) {
 
         // Prepare the PowerUpPacket

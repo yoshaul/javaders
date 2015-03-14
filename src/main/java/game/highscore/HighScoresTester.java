@@ -134,6 +134,7 @@ public class HighScoresTester extends JFrame implements ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == add) {
             addScore();

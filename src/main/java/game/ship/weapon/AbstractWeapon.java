@@ -59,6 +59,7 @@ public abstract class AbstractWeapon implements Weapon {
     /**
      * Sets the ship owning the weapon.
      */
+    @Override
     public void setOwner(Ship owner) {
         this.owner = owner;
     }
@@ -66,6 +67,7 @@ public abstract class AbstractWeapon implements Weapon {
     /**
      * Get the ship owning the weapon.
      */
+    @Override
     public Ship getOwner() {
         return this.owner;
     }
@@ -73,6 +75,7 @@ public abstract class AbstractWeapon implements Weapon {
     /**
      * Add one to the weapon level.
      */
+    @Override
     public void upgradeWeapon() {
         this.weaponLevel++;
     }
@@ -80,6 +83,7 @@ public abstract class AbstractWeapon implements Weapon {
     /**
      * Returns the weapon type.
      */
+    @Override
     public int getWeaponType() {
         return this.weaponType;
     }
@@ -87,6 +91,7 @@ public abstract class AbstractWeapon implements Weapon {
     /**
      * Returns the weapon level.
      */
+    @Override
     public int getWeaponLevel() {
         return this.weaponLevel;
     }

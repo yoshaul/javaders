@@ -146,6 +146,7 @@ public class InputManager implements KeyListener {
      * Find the GameAction for the key and if found call
      * its <code>press</code> method.
      */
+    @Override
     public void keyPressed(KeyEvent event) {
         int keyCode = event.getKeyCode();
         GameAction gameAction = keyCodeToGameAction.get(keyCode);
@@ -162,6 +163,7 @@ public class InputManager implements KeyListener {
      * Find the GameAction for the key and if found call
      * its <code>release</code> method.
      */
+    @Override
     public void keyReleased(KeyEvent event) {
 
         int keyCode = event.getKeyCode();
@@ -178,6 +180,7 @@ public class InputManager implements KeyListener {
     /**
      * Ignore the key typed events
      */
+    @Override
     public void keyTyped(KeyEvent event) {
         event.consume();
     }

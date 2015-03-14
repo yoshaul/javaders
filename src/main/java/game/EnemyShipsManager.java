@@ -112,6 +112,7 @@ public class EnemyShipsManager implements Renderable,
      *
      * @param ship Ship to add.
      */
+    @Override
     public void addShip(Ship ship) {
         ship.setShipContainer(this);
         enemyShips.put(ship.getHandlerId(), ship);
@@ -122,6 +123,7 @@ public class EnemyShipsManager implements Renderable,
      *
      * @param bonus Bonus to add.
      */
+    @Override
     public void addBonus(Bonus bonus) {
         bonuses.add(bonus);
     }
@@ -131,6 +133,7 @@ public class EnemyShipsManager implements Renderable,
      *
      * @param shot Shot to add.
      */
+    @Override
     public void addShot(Bullet shot) {
         shots.add(shot);
     }
@@ -253,6 +256,7 @@ public class EnemyShipsManager implements Renderable,
     /**
      * Renders all relevant objects and data (ships, shots, etc.)
      */
+    @Override
     public void render(Graphics g) {
         // Render ships
         for (Ship ship : enemyShips.values()) {
@@ -299,6 +303,7 @@ public class EnemyShipsManager implements Renderable,
     /**
      * Returns true if this macine is the controller.
      */
+    @Override
     public boolean isController() {
         return gameLoop.isController();
     }
@@ -306,6 +311,7 @@ public class EnemyShipsManager implements Renderable,
     /**
      * Return true if this is a network game.
      */
+    @Override
     public boolean isNetworkGame() {
         return gameLoop.isNetworkGame();
     }
@@ -314,6 +320,7 @@ public class EnemyShipsManager implements Renderable,
      * Returns the game network manager. Null if this is not
      * a network game.
      */
+    @Override
     public GameNetworkManager getNetworkManager() {
         return gameLoop.getGameNetworkManager();
     }
@@ -325,6 +332,7 @@ public class EnemyShipsManager implements Renderable,
      *
      * @param packet Packet to handle
      */
+    @Override
     public void handlePacket(Packet packet) {
 
         if (packet instanceof BulletPacket) {
@@ -373,6 +381,7 @@ public class EnemyShipsManager implements Renderable,
     /**
      * Currently this object doesn't creates it's own packets
      */
+    @Override
     public void createPacket(GameNetworkManager netManager) {
         // Currently this object doesn't creates it's own packets
     }
@@ -380,6 +389,7 @@ public class EnemyShipsManager implements Renderable,
     /**
      * Returns the network handler id of this object.
      */
+    @Override
     public int getHandlerId() {
         return this.handlerID;
     }

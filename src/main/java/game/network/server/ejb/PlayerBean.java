@@ -108,6 +108,7 @@ public class PlayerBean implements EntityBean {
     /**
      * Set the primary key.
      */
+    @Override
     public void ejbActivate() throws EJBException, RemoteException {
         userName = (String) entityContext.getPrimaryKey();
     }
@@ -115,6 +116,7 @@ public class PlayerBean implements EntityBean {
     /**
      * Unset the primary key.
      */
+    @Override
     public void ejbPassivate() throws EJBException, RemoteException {
         userName = null;
     }
@@ -122,6 +124,7 @@ public class PlayerBean implements EntityBean {
     /**
      * Load the details from the database.
      */
+    @Override
     public void ejbLoad() throws EJBException, RemoteException {
 
         Connection connection = null;
@@ -161,6 +164,7 @@ public class PlayerBean implements EntityBean {
     /**
      * Remove the player from the database.
      */
+    @Override
     public void ejbRemove() throws RemoveException, EJBException,
             RemoteException {
 
@@ -192,6 +196,7 @@ public class PlayerBean implements EntityBean {
     /**
      * Store the details to the database.
      */
+    @Override
     public void ejbStore() throws EJBException, RemoteException {
 
         Connection connection = null;
@@ -221,12 +226,14 @@ public class PlayerBean implements EntityBean {
 
     }
 
+    @Override
     public void setEntityContext(EntityContext entityContext)
             throws EJBException, RemoteException {
 
         this.entityContext = entityContext;
     }
 
+    @Override
     public void unsetEntityContext() throws EJBException, RemoteException {
 
         entityContext = null;

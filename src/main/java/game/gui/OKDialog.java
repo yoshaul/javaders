@@ -47,6 +47,7 @@ public class OKDialog extends GameDialog {
     /**
      * Create the dialog UI.
      */
+    @Override
     public void createGUI() {
 
         Container contentPane = this.getContentPane();
@@ -80,20 +81,24 @@ public class OKDialog extends GameDialog {
     /**
      * Hides the dialog and clears the text.
      */
+    @Override
     public void hideDialog() {
         super.hideDialog();
         textLabel.setText("");
     }
 
+    @Override
     public void popDialog() {
         this.pack();
         super.popDialog();
     }
 
+    @Override
     public Dimension getMinimumSize() {
         return getPreferredSize();
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return new Dimension(200, 200);
     }
@@ -101,6 +106,7 @@ public class OKDialog extends GameDialog {
     /**
      * Clicked on ok button, hide the dialog
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         hideDialog();
     }

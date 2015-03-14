@@ -56,6 +56,7 @@ public class InvitationDialog extends GameDialog {
 
         this.addWindowListener(
                 new WindowAdapter() {
+                    @Override
                     public void windowClosing(WindowEvent e) {
                         // Cancell the invitation if one exists
                         sendReply(false);
@@ -68,6 +69,7 @@ public class InvitationDialog extends GameDialog {
     /**
      * Create the dialog UI.
      */
+    @Override
     public void createGUI() {
 
         Container contentPane = this.getContentPane();
@@ -142,6 +144,7 @@ public class InvitationDialog extends GameDialog {
     /**
      * Hides the dialog.
      */
+    @Override
     public void hideDialog() {
         text.setText("");
         super.hideDialog();
@@ -150,6 +153,7 @@ public class InvitationDialog extends GameDialog {
     /**
      * Respond to user input.
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
 
         if (event.getSource() == okButton) {

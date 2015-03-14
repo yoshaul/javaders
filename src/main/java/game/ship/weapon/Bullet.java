@@ -146,6 +146,7 @@ public abstract class Bullet extends Sprite implements PacketHandler {
     /**
      * Create and send bullet packet.
      */
+    @Override
     public void createPacket(GameNetworkManager netManager) {
         // Prepare the bullet model
         BulletModel model = new BulletModel(this.getClass(),
@@ -159,6 +160,7 @@ public abstract class Bullet extends Sprite implements PacketHandler {
 
     }
 
+    @Override
     public void handlePacket(Packet packet) {
         // Bullet is not handling any packets
     }
@@ -167,6 +169,7 @@ public abstract class Bullet extends Sprite implements PacketHandler {
      * Returns the network handler id. The handler of bullet
      * packets is the ship container of the firing ship.
      */
+    @Override
     public int getHandlerId() {
         return owner.getShipContainer().getHandlerId();
     }

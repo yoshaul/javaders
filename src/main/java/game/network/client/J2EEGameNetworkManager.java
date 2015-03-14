@@ -79,6 +79,7 @@ public class J2EEGameNetworkManager implements GameNetworkManager {
      * We remove the packet only if it's consumed since it might
      * happen that the packet is for the next state.
      */
+    @Override
     public void gatherInput(GameState gameState) {
 
         // Synchronize on the input queue
@@ -100,6 +101,7 @@ public class J2EEGameNetworkManager implements GameNetworkManager {
      * @return First packet in the input queue and removes the packet.
      * Null if no packet in the input queue.
      */
+    @Override
     public Packet getNextPacket() {
         Packet ret = null;
         synchronized (inputQueue) {
@@ -116,6 +118,7 @@ public class J2EEGameNetworkManager implements GameNetworkManager {
      * Add the packet to the output queue and notify the thread
      * waiting on the output queue monitor.
      */
+    @Override
     public void sendPacket(Packet packet) {
 
         synchronized (outputQueue) {
@@ -130,6 +133,7 @@ public class J2EEGameNetworkManager implements GameNetworkManager {
      * Add message to the input queue to be proccessed by the
      * game state when gather input is called.
      */
+    @Override
     public void handlePacket(Packet packet) {
         synchronized (inputQueue) {
             inputQueue.add(packet);
@@ -139,6 +143,7 @@ public class J2EEGameNetworkManager implements GameNetworkManager {
     /**
      * Returns the user session id.
      */
+    @Override
     public Long getSenderId() {
         return this.senderId;
     }
@@ -146,6 +151,7 @@ public class J2EEGameNetworkManager implements GameNetworkManager {
     /**
      * Returns the network user session id.
      */
+    @Override
     public Long getReceiverId() {
         return this.receiverId;
     }
@@ -153,6 +159,7 @@ public class J2EEGameNetworkManager implements GameNetworkManager {
     /**
      * Returns true if this machine initialized the network game.
      */
+    @Override
     public boolean isInviter() {
         return this.inviter;
     }
@@ -161,6 +168,7 @@ public class J2EEGameNetworkManager implements GameNetworkManager {
      * Clean and release resources. Send quit packet to the other
      * player if game is in progress.
      */
+    @Override
     public void cleanup() {
 
         // Stop the sender thread

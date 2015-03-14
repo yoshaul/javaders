@@ -81,6 +81,7 @@ public class QuitDialog extends InGameDialog {
     /**
      * Handle the user input.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == noButton) {

@@ -28,6 +28,7 @@ import javax.sound.sampled.LineListener;
  */
 public class SimpleLineListener implements LineListener {
 
+    @Override
     public void update(LineEvent event) {
         if (event.getType() == LineEvent.Type.STOP) {
             Line line = event.getLine();

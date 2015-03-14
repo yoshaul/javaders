@@ -67,6 +67,7 @@ public class GameRunningState implements GameState {
     /**
      * Initialize state.
      */
+    @Override
     public void init() {
         // Nothing to initialize
     }
@@ -77,6 +78,7 @@ public class GameRunningState implements GameState {
      *
      * @see game.gamestate.GameState init method
      */
+    @Override
     public void start() {
         finished = false;
         screenManager.showCursor(false);
@@ -86,6 +88,7 @@ public class GameRunningState implements GameState {
     /**
      * Gather input from the player and from the network.
      */
+    @Override
     public void gatherInput(GameLoop gameLoop, long elapsedTime) {
 
         inputManager.gatherInput();
@@ -103,6 +106,7 @@ public class GameRunningState implements GameState {
      * Most of the game logic starts from here. We call the ships
      * managers update methods.
      */
+    @Override
     public void update(GameLoop gameLoop, long elapsedTime) {
         if (!inputManager.isPaused()) {
             timeInState += elapsedTime;
@@ -130,6 +134,7 @@ public class GameRunningState implements GameState {
     /**
      * Render the game state.
      */
+    @Override
     public void render(GameLoop gameLoop) {
         Graphics g = screenManager.getGraphics();
 
@@ -149,6 +154,7 @@ public class GameRunningState implements GameState {
      * from the <code>GameNetworkManager</code> in the input
      * gathering part.
      */
+    @Override
     public void handlePacket(Packet packet) {
         enemyShipsManager.handlePacket(packet);
         playerManager.handlePacket(packet);
@@ -159,6 +165,7 @@ public class GameRunningState implements GameState {
      *
      * @return True if the current state is finished
      */
+    @Override
     public boolean isFinished() {
         return finished;
     }
@@ -168,6 +175,7 @@ public class GameRunningState implements GameState {
      *
      * @return Next game state.
      */
+    @Override
     public int getNextGameState() {
         return nextGameState;
     }
@@ -177,6 +185,7 @@ public class GameRunningState implements GameState {
      *
      * @return Id of this game state
      */
+    @Override
     public int getGameStateId() {
         return GameState.GAME_STATE_RUNNING;
     }

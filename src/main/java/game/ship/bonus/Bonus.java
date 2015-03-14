@@ -43,6 +43,7 @@ public abstract class Bonus extends Sprite implements PacketHandler {
 
     // Implement some of the PacketHandler methods
 
+    @Override
     public void handlePacket(Packet packet) {
         // Bonuses don't handle incoming packets
     }
@@ -51,6 +52,7 @@ public abstract class Bonus extends Sprite implements PacketHandler {
      * The packet handler for all bonuses is the enemy
      * ships manager object.
      */
+    @Override
     public int getHandlerId() {
         return GameConstants.ENEMY_MANAGER_ID;
     }
