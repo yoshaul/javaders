@@ -130,7 +130,7 @@ public class HighScoresDialog extends GameDialog {
             try {
                 highScoresManager.saveHighScores();
             } catch (IOException ioe) {
-                ioe.printStackTrace();
+                Logger.exception(ioe);
             }
             repaint();
         } else if (event.getSource() == localScoresButton) {

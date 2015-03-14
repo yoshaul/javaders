@@ -21,6 +21,7 @@ package game.highscore;
 import game.GameConstants;
 import game.network.client.NetworkException;
 import game.network.client.NetworkManager;
+import game.util.Logger;
 
 import java.io.*;
 
@@ -52,14 +53,9 @@ public class HighScoresManager {
 
         try {
             loadHighScores(false);
-        } catch (IOException ioe) {
-            System.err.println("Unable to read the high scores file");
-            ioe.printStackTrace();
-        } catch (ClassNotFoundException cnfe) {
-            System.err.println("Unable to read the high scores file");
-            cnfe.printStackTrace();
+        } catch (Exception e) {
+            Logger.error("Unable to read the high scores file", e);
         }
-
     }
 
     /**
@@ -124,8 +120,7 @@ public class HighScoresManager {
                 try {
                     saveHighScores();
                 } catch (IOException ioe) {
-                    System.err.println("Unable to save the high scores file");
-                    ioe.printStackTrace();
+                    Logger.error("Unable to save the high scores file", ioe);
                 }
             }
 

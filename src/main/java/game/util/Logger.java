@@ -20,6 +20,7 @@ package game.util;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Level;
 
 /**
  * The <code>Logger</code> class is a simple logging helper.
@@ -27,6 +28,7 @@ import java.awt.*;
  * It also handles the command line parameters.
  */
 public class Logger {
+    private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger("javaders");
 
     private static boolean debug;    // debug mode flag
     private static boolean invulnerable; // player ships vulnerability
@@ -59,12 +61,21 @@ public class Logger {
     }
 
     /**
+     * Print the error and the exception to the console.
+     *
+     * @param error Error message to display.
+     */
+    public static void error(String error, Exception t) {
+        log.log(Level.SEVERE, error, t);
+    }
+
+    /**
      * Print the error to the screen.
      *
      * @param error Error message to display.
      */
     public static void error(String error) {
-        System.err.println(error);
+        log.severe(error);
     }
 
     /**
@@ -73,7 +84,7 @@ public class Logger {
      * @param e Exception to print.
      */
     public static void exception(Exception e) {
-        e.printStackTrace();
+        log.log(Level.SEVERE, e.getMessage(), e);
     }
 
     /**
@@ -83,10 +94,8 @@ public class Logger {
      * @param message Message to display.
      */
     public static void showErrorDialog(Component parent, String message) {
-
         JOptionPane.showMessageDialog(parent, message,
                 "Error", JOptionPane.ERROR_MESSAGE);
-
     }
 
     /**

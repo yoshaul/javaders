@@ -192,7 +192,7 @@ public class J2EENetworkManager implements NetworkManager {
             signIn.addUser(userName, password, email);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.exception(e);
             throw new NetworkException(e.getMessage());
         }
     }

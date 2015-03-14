@@ -18,6 +18,8 @@
 
 package game.highscore;
 
+import game.util.Logger;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -42,11 +44,8 @@ public class HighScoresTester extends JFrame implements ActionListener {
     }
 
     public HighScoresTester() {
-
         highScoresManager = new HighScoresManager(4);
-
         setupGUI();
-
     }
 
     private void setupGUI() {
@@ -100,7 +99,6 @@ public class HighScoresTester extends JFrame implements ActionListener {
 
         pack();
         setVisible(true);
-
     }
 
 
@@ -124,25 +122,19 @@ public class HighScoresTester extends JFrame implements ActionListener {
         try {
             highScoresManager.saveHighScores();
         } catch (IOException ioe) {
-            System.err.println("Unable to save high scores to file");
-            ioe.printStackTrace();
+            Logger.error("Unable to save high scores to file", ioe);
         }
     }
 
     private void load() {
         try {
             highScoresManager.loadHighScores(true);
-        } catch (IOException ioe) {
-            System.err.println("Unable to load high scores from file");
-            ioe.printStackTrace();
-        } catch (ClassNotFoundException cnfe) {
-            System.err.println("Unable to load high scores from file");
-            cnfe.printStackTrace();
+        } catch (Exception e) {
+            Logger.error("Unable to load high scores from file", e);
         }
     }
 
     public void actionPerformed(ActionEvent event) {
-
         if (event.getSource() == add) {
             addScore();
         } else if (event.getSource() == show) {

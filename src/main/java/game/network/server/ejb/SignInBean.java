@@ -19,6 +19,7 @@
 package game.network.server.ejb;
 
 import game.network.InvalidLoginException;
+import game.util.Logger;
 
 import javax.ejb.*;
 
@@ -138,7 +139,7 @@ public class SignInBean implements SessionBean {
             throw new EJBException("Can't create user " + userName + ".\n"
                     + ce.getMessage());
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Logger.exception(exception);
             throw new EJBException(exception);
         }
 
