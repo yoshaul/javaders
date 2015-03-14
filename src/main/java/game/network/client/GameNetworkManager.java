@@ -1,3 +1,20 @@
+/*
+ * This file is part of Javaders.
+ * Copyright (c) Yossi Shaul
+ *
+ * Javaders is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Javaders is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Javaders.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package game.network.client;
 
@@ -15,26 +32,29 @@ public interface GameNetworkManager {
 
     /**
      * Gather network input relevant to the game state.
-     * The network manager should callback the game 
+     * The network manager should callback the game
      * state's <code>gatherInput</code> method.
-     * @param gameState	Current game state.
+     *
+     * @param gameState Current game state.
      */
     public void gatherInput(GameState gameState);
-    
+
     /**
      * Send packet to the network player.
-     * @param packet	Packet to send.
+     *
+     * @param packet Packet to send.
      */
     public void sendPacket(Packet packet);
-    
+
     /**
      * Handle incoming packet. The implementing manager usually
-     * queue the incoming packets to be processed by the 
-     * <code>GameState</code> in the gather input stage. 
+     * queue the incoming packets to be processed by the
+     * <code>GameState</code> in the gather input stage.
+     *
      * @param packet
      */
     public void handlePacket(Packet packet);
-    
+
     /**
      * Returns the first packet in the incomig packets queue
      * and remove it from the queue.
@@ -56,10 +76,10 @@ public interface GameNetworkManager {
      * the invitation to play).
      */
     public boolean isInviter();
-    
+
     /**
      * Do some cleanup before exiting.
      */
     public void cleanup();
-    
+
 }

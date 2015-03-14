@@ -1,9 +1,27 @@
+/*
+ * This file is part of Javaders.
+ * Copyright (c) Yossi Shaul
+ *
+ * Javaders is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Javaders is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Javaders.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package game.ship.weapon;
 
 import game.ship.Ship;
 
 /**
- * The <code>AbstractWeapon</code> class implements some of 
+ * The <code>AbstractWeapon</code> class implements some of
  * the <code>Weapon</code> interface methods and defines some
  * common attributes for weapons.
  */
@@ -12,64 +30,65 @@ public abstract class AbstractWeapon implements Weapon {
     // Type of the weapon 
     // (the various types are defined in the WeaponFactory class)
     protected final int weaponType;
-    
+
     // Firing rate of the weapon
     protected long firingRate;
-    
+
     protected Ship owner;
     protected int direction;
     protected int weaponLevel;
 
     /**
      * Abstract weapon constructor
-     * @param direction		General horizontal direction of the bullets
-     * fired by this weapon.
-     * @param weaponLevel	Level of the weapon
-     * @param weaponType	Type of the weapon
-     * @param firingRate	Firing rate of the weapon
+     *
+     * @param direction   General horizontal direction of the bullets
+     *                    fired by this weapon.
+     * @param weaponLevel Level of the weapon
+     * @param weaponType  Type of the weapon
+     * @param firingRate  Firing rate of the weapon
      */
-    public AbstractWeapon (int direction, int weaponLevel,
-            int weaponType, long firingRate) {
+    public AbstractWeapon(int direction, int weaponLevel,
+                          int weaponType, long firingRate) {
         this.direction = direction;
         this.weaponLevel = weaponLevel;
         this.weaponType = weaponType;
         this.firingRate = firingRate;
     }
-    
-    
+
+
     /**
      * Sets the ship owning the weapon.
      */
     public void setOwner(Ship owner) {
         this.owner = owner;
     }
-    
+
     /**
      * Get the ship owning the weapon.
      */
     public Ship getOwner() {
         return this.owner;
     }
-    
+
     /**
      * Add one to the weapon level.
      */
     public void upgradeWeapon() {
         this.weaponLevel++;
     }
-    
+
     /**
      * Returns the weapon type.
      */
     public int getWeaponType() {
         return this.weaponType;
     }
-    
+
     /**
      * Returns the weapon level.
      */
     public int getWeaponLevel() {
         return this.weaponLevel;
     }
-    
+
 }

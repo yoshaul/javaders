@@ -1,3 +1,20 @@
+/*
+ * This file is part of Javaders.
+ * Copyright (c) Yossi Shaul
+ *
+ * Javaders is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Javaders is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Javaders.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package game.ship;
 
@@ -14,7 +31,7 @@ public class AIState {
     public static final int AI_TYPE_AGGRESIVE = 1;
     public static final int AI_TYPE_NORMAL = 2;
     public static final int AI_TYPE_COWARD = 3;
-    
+
     // State chances (each state chances should sum to 1.0)
     public static final float AGGRESIVE_ATTACK_CHANCE = 0.6f;
     public static final float AGGRESIVE_NORMAL_CHANCE = 0.3f;
@@ -23,36 +40,38 @@ public class AIState {
     public static final float COWARD_FLEE_CHANCE = 0.55f;
     public static final float COWARD_NORMAL_CHANCE = 0.30f;
     public static final float COWARD_ATTACK_CHANCE = 0.15f;
-    
-    public static final AIState AI_STATE_ATTACK = 
-        new AIState(AI_TYPE_AGGRESIVE, 0.3f, 0.8f);
-    public static final AIState AI_STATE_NORMAL = 
-        new AIState(AI_TYPE_NORMAL, 0.5f, 0.5f);
-    public static final AIState AI_STATE_FLEE = 
-        new AIState(AI_TYPE_COWARD, 0.7f, 0.2f);
-    
+
+    public static final AIState AI_STATE_ATTACK =
+            new AIState(AI_TYPE_AGGRESIVE, 0.3f, 0.8f);
+    public static final AIState AI_STATE_NORMAL =
+            new AIState(AI_TYPE_NORMAL, 0.5f, 0.5f);
+    public static final AIState AI_STATE_FLEE =
+            new AIState(AI_TYPE_COWARD, 0.7f, 0.2f);
+
     private float moveChance;
     private float fireChance;
     private int aiType;
-    
+
     private Random rand;
-    
+
     /**
      * Construct a new AIState.
-     * @param moveChance	Chance for making a movement.
-     * @param fireChance	Chance for firing.
+     *
+     * @param moveChance Chance for making a movement.
+     * @param fireChance Chance for firing.
      */
     public AIState(int type, float moveChance, float fireChance) {
         this.aiType = type;
         this.moveChance = moveChance;
         this.fireChance = fireChance;
-        
+
         rand = new Random();
     }
-    
+
     /**
      * Randomly update the ship according to the events chances.
-     * @param ship	Enemy ship to update
+     *
+     * @param ship Enemy ship to update
      */
     public void update(EnemyShip ship) {
 
@@ -61,14 +80,14 @@ public class AIState {
         }
         if (rand.nextFloat() < moveChance) {
             int direction = (rand.nextFloat() > 0.5) ? -1 : 1;
-            ship.setDx(direction*(rand.nextFloat()*ship.getMaxDX())); 
+            ship.setDx(direction * (rand.nextFloat() * ship.getMaxDX()));
         }
         if (rand.nextFloat() < moveChance) {
             int direction = (rand.nextFloat() > 0.5) ? -1 : 1;
-            ship.setDy(direction*(rand.nextFloat()*ship.getMaxDX()));
+            ship.setDy(direction * (rand.nextFloat() * ship.getMaxDX()));
         }
     }
-    
+
     /**
      * Randomly selects the next AI state. The current state has
      * some affect on the probability of the next state.
@@ -80,29 +99,25 @@ public class AIState {
             case AI_TYPE_AGGRESIVE:
                 if (rand < AGGRESIVE_ATTACK_CHANCE) {
                     nextState = AI_STATE_ATTACK;
-                }
-                else if (rand < (AGGRESIVE_ATTACK_CHANCE + AGGRESIVE_NORMAL_CHANCE)) {
+                } else if (rand < (AGGRESIVE_ATTACK_CHANCE + AGGRESIVE_NORMAL_CHANCE)) {
                     nextState = AI_STATE_NORMAL;
-                }
-                else {
+                } else {
                     nextState = AI_STATE_FLEE;
                 }
                 break;
             case AI_TYPE_COWARD:
                 if (rand < COWARD_FLEE_CHANCE) {
                     nextState = AI_STATE_FLEE;
-                }
-                else if (rand < (AGGRESIVE_ATTACK_CHANCE + COWARD_NORMAL_CHANCE)) {
+                } else if (rand < (AGGRESIVE_ATTACK_CHANCE + COWARD_NORMAL_CHANCE)) {
                     nextState = AI_STATE_NORMAL;
-                }
-                else {
+                } else {
                     nextState = AI_STATE_ATTACK;
                 }
                 break;
         }
-        
+
         return nextState;
-        
+
     }
-    
+
 }

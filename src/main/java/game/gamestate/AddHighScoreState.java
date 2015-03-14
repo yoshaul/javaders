@@ -1,6 +1,22 @@
-package game.gamestate;
+/*
+ * This file is part of Javaders.
+ * Copyright (c) Yossi Shaul
+ *
+ * Javaders is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Javaders is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Javaders.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.awt.Graphics;
+package game.gamestate;
 
 import game.GUIManager;
 import game.GameLoop;
@@ -9,6 +25,8 @@ import game.gui.PostHighScoreDialog;
 import game.highscore.HighScore;
 import game.highscore.HighScoresManager;
 import game.network.packet.Packet;
+
+import java.awt.*;
 
 /**
  * The <code>AddHighScoreState</code> is the last state before the control
@@ -19,7 +37,7 @@ public class AddHighScoreState implements GameState {
 
     private final static int INTERNAL_STATE_ADD_HIGH_SCORE = 1;
     private final static int INTERNAL_STATE_POST_SCORE = 2;
-    
+
     private GameLoop gameLoop;
     private AddHighScoreDialog addHighScoreDialog;
     private PostHighScoreDialog postScoreDialog;
@@ -32,55 +50,56 @@ public class AddHighScoreState implements GameState {
     private long playerScore;
     private int level;
     private boolean finished;
-    
+
     /**
      * Construct the game state.
-     * @param gameLoop	Reference to the game loop.
+     *
+     * @param gameLoop Reference to the game loop.
      */
     public AddHighScoreState(GameLoop gameLoop) {
         this.gameLoop = gameLoop;
         this.highScoresManager = gameLoop.getHighScoresManager();
         this.guiManager = gameLoop.getGUIManager();
     }
-    
+
     /**
      * Initialize state; create the state dialogs.
      */
     public void init() {
-        
-        addHighScoreDialog = new AddHighScoreDialog(gameLoop, this, 
+
+        addHighScoreDialog = new AddHighScoreDialog(gameLoop, this,
                 highScoresManager);
 
         guiManager.addDialog(addHighScoreDialog);
-        
-        postScoreDialog = new PostHighScoreDialog(gameLoop, 
+
+        postScoreDialog = new PostHighScoreDialog(gameLoop,
                 highScoresManager);
-        
+
         guiManager.addDialog(postScoreDialog);
     }
 
     /**
-     * This method is called once when this state is set to be 
+     * This method is called once when this state is set to be
      * the active state.
+     *
      * @see game.gamestate.GameState init method
      */
     public void start() {
         timeInState = 0;
         gameLoop.getScreenManager().showCursor(true);
         finished = false;
-        
-        playerScore = 
-            gameLoop.getPlayerManager().getLocalPlayerShip().getScore();
-        
+
+        playerScore =
+                gameLoop.getPlayerManager().getLocalPlayerShip().getScore();
+
         level = gameLoop.getLevelsManager().getCurrentLevel();
-        
+
         if (highScoresManager.isHighScore(playerScore, level)) {
-            
+
             internalState = INTERNAL_STATE_ADD_HIGH_SCORE;
 
             popAddHighScoreDialog(playerScore, level);
-        }
-        else {
+        } else {
             internalState = INTERNAL_STATE_POST_SCORE;
             popPostScoreDialog(new HighScore(playerName, playerScore, level));
         }
@@ -94,13 +113,13 @@ public class AddHighScoreState implements GameState {
     }
 
     /**
-     * Update the state. If this state is finished the game is 
+     * Update the state. If this state is finished the game is
      * over and we exit the game loop.
      */
     public void update(GameLoop gameLoop, long elapsedTime) {
 
         timeInState += elapsedTime;
-        
+
         if (internalState == INTERNAL_STATE_ADD_HIGH_SCORE &&
                 addHighScoreDialog.isFinished()) {
 
@@ -108,17 +127,16 @@ public class AddHighScoreState implements GameState {
                 internalState = INTERNAL_STATE_POST_SCORE;
                 popPostScoreDialog(
                         new HighScore(playerName, playerScore, level));
-            }
-            else {
+            } else {
                 gameLoop.getInputManager().setQuit(true);
             }
         }
-        
+
         if (internalState == INTERNAL_STATE_POST_SCORE &&
                 postScoreDialog.isFinished()) {
-            
+
             gameLoop.getInputManager().setQuit(true);
-            
+
         }
 
     }
@@ -127,9 +145,9 @@ public class AddHighScoreState implements GameState {
      * Render the state data.
      */
     public void render(GameLoop gameLoop) {
-        
+
         Graphics g = gameLoop.getScreenManager().getGraphics();
-        
+
         gameLoop.getStaticObjectsManager().render(g);
         gameLoop.getEnemyShipsManager().render(g);
         gameLoop.getGUIManager().render(g);
@@ -137,7 +155,7 @@ public class AddHighScoreState implements GameState {
         g.dispose();
 
         gameLoop.getScreenManager().show();
-        
+
     }
 
     /**
@@ -146,14 +164,14 @@ public class AddHighScoreState implements GameState {
     public void handlePacket(Packet packet) {
         // No packets to handle in this state
     }
-    
+
     /**
      * Returns true if this level is finished.
      */
     public boolean isFinished() {
         return finished;
     }
-    
+
     /**
      * Returns the next game state after this state is finished.
      */
@@ -167,28 +185,31 @@ public class AddHighScoreState implements GameState {
     public int getGameStateId() {
         return GameState.GAME_STATE_HIGH_SCORE;
     }
-    
+
     /**
      * Callback method from the <code>AddHighScoreDialog</code>
      * to store the player name for the next dialog.
-     * @param playerName	Name of the player.
+     *
+     * @param playerName Name of the player.
      */
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
     }
-    
+
     /**
      * Show the dialog to add high score.
-     * @param score	New score to add.
-     * @param level	Level reached by the player.
+     *
+     * @param score New score to add.
+     * @param level Level reached by the player.
      */
     private void popAddHighScoreDialog(long score, int level) {
         addHighScoreDialog.addHighScore(score, level);
     }
-    
+
     /**
-     * Show the dialog for posting a high score. 
-     * @param score	HighScore object to send to the server.
+     * Show the dialog for posting a high score.
+     *
+     * @param score HighScore object to send to the server.
      */
     private void popPostScoreDialog(HighScore score) {
         postScoreDialog.popPostHighScore(score);

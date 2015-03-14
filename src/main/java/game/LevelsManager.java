@@ -1,21 +1,39 @@
+/*
+ * This file is part of Javaders.
+ * Copyright (c) Yossi Shaul
+ *
+ * Javaders is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Javaders is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Javaders.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package game;
 
-import java.awt.Dimension;
-import java.util.*;
-import java.io.IOException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
+import game.ship.EnemyShip;
+import game.ship.Ship;
+import game.ship.ShipProperties;
+import game.util.Logger;
+import game.util.ResourceManager;
 import org.w3c.dom.*;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import game.ship.*;
-import game.util.Logger;
-import game.util.ResourceManager;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.awt.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The <code>LevelsManager</code> class is used to load the levels
@@ -32,7 +50,8 @@ public class LevelsManager {
 
     /**
      * Construct a LevelManager and load the levels xml file.
-     * @param gameLoop	Reference to the game loop
+     *
+     * @param gameLoop Reference to the game loop
      */
     public LevelsManager(GameLoop gameLoop) {
         this.gameLoop = gameLoop;
@@ -41,6 +60,7 @@ public class LevelsManager {
 
     /**
      * Returns the current level in the game.
+     *
      * @return The current level in the game.
      */
     public int getCurrentLevel() {
@@ -49,7 +69,8 @@ public class LevelsManager {
 
     /**
      * Returns true if the current level is the last one.
-     * @return	True if the current level is the last level.
+     *
+     * @return True if the current level is the last level.
      */
     public boolean isLastLevel() {
         return lastLevel == currentLevel;
@@ -68,7 +89,8 @@ public class LevelsManager {
     /**
      * Loads the next level from the xml file and returns the enemy
      * ships map.
-     * @return	Map with the enemy ships for the level.
+     *
+     * @return Map with the enemy ships for the level.
      */
     public Map<Integer, Ship> loadNextLevel() {
         currentLevel++;
@@ -78,8 +100,9 @@ public class LevelsManager {
     /**
      * Loads the level number <code>levelNumber</code> from the
      * levels xml file.
-     * @param levelNumber	Number of the level to load.
-     * @return	Map of enemy ships
+     *
+     * @param levelNumber Number of the level to load.
+     * @return Map of enemy ships
      */
     public Map<Integer, Ship> loadLevel(int levelNumber) {
 
@@ -97,7 +120,7 @@ public class LevelsManager {
         loadLevelBGImage(level);
 
         Dimension screenDimention =
-            gameLoop.getScreenManager().getScreenDimension();
+                gameLoop.getScreenManager().getScreenDimension();
 
         // Get and create the ship types and ammount for the level
         NodeList ships = level.getElementsByTagName("enemyShips");
@@ -105,9 +128,9 @@ public class LevelsManager {
 
             Element enemyShipsNode = (Element) ships.item(i);
             Node shipTypeNode =
-                enemyShipsNode.getElementsByTagName("shipType").item(0);
+                    enemyShipsNode.getElementsByTagName("shipType").item(0);
             Node numOfShipsNode =
-                enemyShipsNode.getElementsByTagName("numberOfShips").item(0);
+                    enemyShipsNode.getElementsByTagName("numberOfShips").item(0);
 
             String typeStr = shipTypeNode.getFirstChild().getNodeValue();
             String numShipsStr = numOfShipsNode.getFirstChild().getNodeValue();
@@ -118,22 +141,23 @@ public class LevelsManager {
             // Create the ship objects
             for (int j = 0; j < numOfShips; j++, curObjectID++) {
                 enemyShips.put(curObjectID,
-                  new EnemyShip(curObjectID, shipType,
-                          (float)(50+Math.random()*(screenDimention.width-50)),
-                          (float)(50+Math.random()*screenDimention.height/2),
-                      ShipProperties.getShipProperties(shipType)));
+                        new EnemyShip(curObjectID, shipType,
+                                (float) (50 + Math.random() * (screenDimention.width - 50)),
+                                (float) (50 + Math.random() * screenDimention.height / 2),
+                                ShipProperties.getShipProperties(shipType)));
             }
 
         }
 
         return enemyShips;
 
-    }	// end method loadLevel
+    }    // end method loadLevel
 
     /**
      * Finds and returns the requested level node from the xml file.
-     * @param levelNumber	Level to load.
-     * @return	Element with the level details. Null if not found.
+     *
+     * @param levelNumber Level to load.
+     * @return Element with the level details. Null if not found.
      */
     public Element getLevelElement(int levelNumber) {
         Element level = null;
@@ -142,7 +166,7 @@ public class LevelsManager {
         NodeList levels = xmlDocument.getElementsByTagName("level");
 
         // Find the level node with id equals to levelNumber
-        for(int i = 0; i < levels.getLength() && !levelFound; i++) {
+        for (int i = 0; i < levels.getLength() && !levelFound; i++) {
 
             level = (Element) levels.item(i);
             // Get the attributes list
@@ -160,21 +184,23 @@ public class LevelsManager {
     /**
      * Search for the backgroung image in the level element.
      * If exists, set the game backgroung image.
-     * @param level	Elment with the level info
+     *
+     * @param level Elment with the level info
      */
     public void loadLevelBGImage(Element level) {
         Node bgImage = level.getElementsByTagName("backgroundImage").item(0);
         if (bgImage != null) {
             String bgImageName = bgImage.getFirstChild().getNodeValue();
             gameLoop.getStaticObjectsManager().
-            	setBackgroundImage(bgImageName);
+                    setBackgroundImage(bgImageName);
         }
     }
 
     /**
      * Loads data needed for the local not controller machine in a
      * network game.
-     * @param levelNumber	Number of the level
+     *
+     * @param levelNumber Number of the level
      */
     public void loadLocalLevelData(int levelNumber) {
         Element level = getLevelElement(levelNumber);
@@ -192,22 +218,21 @@ public class LevelsManager {
     private void loadXMLFile() {
         try {
             DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
+                    DocumentBuilderFactory.newInstance();
             factory.setValidating(false);
             DocumentBuilder builder = factory.newDocumentBuilder();
             // we must special entity resolver to find the dtd inside the jar
             builder.setEntityResolver(new LevelsEntityResolver());
             this.xmlDocument = builder.parse(
-            		ResourceManager.getResourceAsStream(
-            				GameConstants.CONFIG_DIR + "/levels.xml"));
+                    ResourceManager.getResourceAsStream(
+                            GameConstants.CONFIG_DIR + "/levels.xml"));
 
             Element root = xmlDocument.getDocumentElement();
 
             Node lastLevelNode = root.getElementsByTagName("lastLevel").item(0);
             lastLevel = Integer.parseInt(
-            		lastLevelNode.getAttributes().getNamedItem("levelNum").getNodeValue());
-        }
-        catch (Exception e) {
+                    lastLevelNode.getAttributes().getNamedItem("levelNum").getNodeValue());
+        } catch (Exception e) {
             // If any exception occures during the parsing exit the game
             Logger.exception(e);
             System.exit(-1);
@@ -219,7 +244,7 @@ public class LevelsManager {
         public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
             if (systemId.endsWith("levels.dtd")) {
                 return new InputSource(ResourceManager.getResourceAsStream(
-                                GameConstants.CONFIG_DIR + "/levels.dtd"));
+                        GameConstants.CONFIG_DIR + "/levels.dtd"));
             }
 
             throw new IllegalArgumentException("Unknown systemId " + systemId);

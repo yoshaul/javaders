@@ -1,22 +1,40 @@
-package game.gamestate;
+/*
+ * This file is part of Javaders.
+ * Copyright (c) Yossi Shaul
+ *
+ * Javaders is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Javaders is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Javaders.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.awt.Graphics;
+package game.gamestate;
 
 import game.*;
 import game.input.InputManager;
 import game.network.client.GameNetworkManager;
 import game.network.packet.Packet;
 
+import java.awt.*;
+
 /**
  * The <code>GameRunningState</code> is the central game state. In this
  * state the game is in running mode, meaning the player is able to play
- * and game logic is running through the various manager objects. 
+ * and game logic is running through the various manager objects.
  */
 public class GameRunningState implements GameState {
 
     private final static int INTERNAL_STATE_NORMAL = 1;
     private final static int INTERNAL_STATE_LEVEL_CLEARED = 2;
-    
+
     private int nextGameState;
     private ScreenManager screenManager;
     private GUIManager guiManager;
@@ -32,7 +50,8 @@ public class GameRunningState implements GameState {
 
     /**
      * Construct the game state.
-     * @param gameLoop	Reference to the game loop.
+     *
+     * @param gameLoop Reference to the game loop.
      */
     public GameRunningState(GameLoop gameLoop) {
         this.screenManager = gameLoop.getScreenManager();
@@ -44,7 +63,7 @@ public class GameRunningState implements GameState {
         this.playerManager = gameLoop.getPlayerManager();
         this.networkGame = gameLoop.isNetworkGame();
     }
-    
+
     /**
      * Initialize state.
      */
@@ -53,8 +72,9 @@ public class GameRunningState implements GameState {
     }
 
     /**
-     * This method is called once when this state is set to be 
+     * This method is called once when this state is set to be
      * the active state.
+     *
      * @see game.gamestate.GameState init method
      */
     public void start() {
@@ -67,21 +87,21 @@ public class GameRunningState implements GameState {
      * Gather input from the player and from the network.
      */
     public void gatherInput(GameLoop gameLoop, long elapsedTime) {
-        
+
         inputManager.gatherInput();
         if (!inputManager.isPaused()) {
             playerManager.gatherInput();
         }
         if (networkGame) {
-            gameNetworkManager.gatherInput(this);    
+            gameNetworkManager.gatherInput(this);
         }
 
     }
 
     /**
      * Update the game state.
-     * Most of the game logic starts from here. We call the ships 
-     * managers update methods. 
+     * Most of the game logic starts from here. We call the ships
+     * managers update methods.
      */
     public void update(GameLoop gameLoop, long elapsedTime) {
         if (!inputManager.isPaused()) {
@@ -89,12 +109,11 @@ public class GameRunningState implements GameState {
             enemyShipsManager.update(elapsedTime);
             playerManager.update(elapsedTime);
         }
-        
-        if (!(internalState == INTERNAL_STATE_LEVEL_CLEARED) && 
+
+        if (!(internalState == INTERNAL_STATE_LEVEL_CLEARED) &&
                 enemyShipsManager.isLevelFinished()) {
             setInternalState(INTERNAL_STATE_LEVEL_CLEARED);
-        }
-        else if (playerManager.isGameOver()) {
+        } else if (playerManager.isGameOver()) {
             finished = true;
             inputManager.setPaused(true);
 
@@ -105,7 +124,7 @@ public class GameRunningState implements GameState {
             finished = true;
             nextGameState = GAME_STATE_LOADING;
         }
-        
+
     }
 
     /**
@@ -134,35 +153,39 @@ public class GameRunningState implements GameState {
         enemyShipsManager.handlePacket(packet);
         playerManager.handlePacket(packet);
     }
-    
+
     /**
      * Returns true if the current game state is finished.
-     * @return	True if the current state is finished
+     *
+     * @return True if the current state is finished
      */
     public boolean isFinished() {
         return finished;
     }
-    
+
     /**
      * Returns the next game state after the current game state is finished.
+     *
      * @return Next game state.
      */
     public int getNextGameState() {
         return nextGameState;
     }
-    
+
     /**
      * Returns the id of this game state
-     * @return	Id of this game state
+     *
+     * @return Id of this game state
      */
     public int getGameStateId() {
         return GameState.GAME_STATE_RUNNING;
     }
-    
+
     /**
      * Sets the internal state to the new state and sets the time
      * in state to 0.
-     * @param state	New internal state
+     *
+     * @param state New internal state
      */
     private void setInternalState(int state) {
         this.internalState = state;

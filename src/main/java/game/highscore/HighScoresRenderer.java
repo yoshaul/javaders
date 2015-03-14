@@ -1,3 +1,20 @@
+/*
+ * This file is part of Javaders.
+ * Copyright (c) Yossi Shaul
+ *
+ * Javaders is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Javaders is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Javaders.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package game.highscore;
 
@@ -13,17 +30,18 @@ public class HighScoresRenderer {
 
     /**
      * Render the input high scores using the gtaphic device.
-     * @param g	Graphics object
-     * @param highScores	High scores array
+     *
+     * @param g          Graphics object
+     * @param highScores High scores array
      */
-    public static void render(Graphics g, Rectangle bounds, 
-            HighScore[] highScores) {
-        
+    public static void render(Graphics g, Rectangle bounds,
+                              HighScore[] highScores) {
+
         if (highScores == null) {
             // Create empty high scores array
             highScores = new HighScore[1];
         }
-        
+
         // Get the number of occupied high scores
         int numberOfHighScores = 0;
         if (highScores[0] != null) {
@@ -33,11 +51,11 @@ public class HighScoresRenderer {
             }
             numberOfHighScores = i;
         }
-    
+
         final int numColumns = 4;
-        final int leftMargins = 10;	// 10 pixels from the left
-        final int topMargins = 20;	// 20 pixels from the top
-        
+        final int leftMargins = 10;    // 10 pixels from the left
+        final int topMargins = 20;    // 20 pixels from the top
+
         int columnWidth = bounds.width / numColumns;
 
         // Each column takes different percentage of the screen width
@@ -45,36 +63,36 @@ public class HighScoresRenderer {
         int rankWidth = Math.round(bounds.width * 0.15f);
         int nameWidth = Math.round(bounds.width * 0.35f);
         int scoreWidth = Math.round(bounds.width * 0.30f);
-        
+
         // Calculate the columns places
         int rankPlace = leftMargins;
         int namePlace = rankPlace + rankWidth;
         int scorePlace = namePlace + nameWidth;
         int levelPlace = scorePlace + scoreWidth;
-        
+
         FontMetrics fm = g.getFontMetrics();
         int fontHeight = fm.getHeight();
         int horizontalSpace = fontHeight + 5;
-        
+
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, bounds.width, bounds.height);
-        
+
         g.setColor(Color.BLUE);
-        
+
         g.setFont(ResourceManager.getFont(Font.BOLD, 16));
         // Draw headline
-        g.drawString("Rank", 	rankPlace,  topMargins);
-        g.drawString("Player", 	namePlace,  topMargins);
-        g.drawString("Score", 	scorePlace, topMargins);
-        g.drawString("Level", 	levelPlace, topMargins);
-        
+        g.drawString("Rank", rankPlace, topMargins);
+        g.drawString("Player", namePlace, topMargins);
+        g.drawString("Score", scorePlace, topMargins);
+        g.drawString("Level", levelPlace, topMargins);
+
         g.setFont(ResourceManager.getFont(Font.PLAIN, 14));
         for (int i = 0; i < numberOfHighScores; i++) {
-            
+
             // Draw the high score rank
-            g.drawString((i+1)+"", rankPlace,
-                    topMargins + horizontalSpace*(i+1));
-            
+            g.drawString((i + 1) + "", rankPlace,
+                    topMargins + horizontalSpace * (i + 1));
+
             // Draw player name
             String playerName = highScores[i].getPlayerName();
             if (fm.stringWidth(playerName) > columnWidth) {
@@ -82,18 +100,18 @@ public class HighScoresRenderer {
                 // and add three dots
                 playerName = playerName.substring(0, 7) + "...";
             }
-            g.drawString(playerName, namePlace, 
-                    topMargins + horizontalSpace*(i+1));
-            
+            g.drawString(playerName, namePlace,
+                    topMargins + horizontalSpace * (i + 1));
+
             // Draw score
-            g.drawString(highScores[i].getScore()+"", scorePlace, 
-                    topMargins + horizontalSpace*(i+1));
-            
+            g.drawString(highScores[i].getScore() + "", scorePlace,
+                    topMargins + horizontalSpace * (i + 1));
+
             // Draw level
-            g.drawString(highScores[i].getLevel()+"", levelPlace, 
-                    topMargins + horizontalSpace*(i+1));
+            g.drawString(highScores[i].getLevel() + "", levelPlace,
+                    topMargins + horizontalSpace * (i + 1));
         }
-        
+
     }
-    
+
 }

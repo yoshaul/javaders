@@ -1,3 +1,21 @@
+/*
+ * This file is part of Javaders.
+ * Copyright (c) Yossi Shaul
+ *
+ * Javaders is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Javaders is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Javaders.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package game.ship.weapon;
 
 import java.io.Serializable;
@@ -12,20 +30,21 @@ public class BulletModel implements Serializable {
     public int ownerId;
     public float x, y, dx, dy;
     public long damage;
-    
+
     /**
      * Construct a new BulletModel.
-     * @param bulletClass	Class of the bullet
-     * @param ownerId		Id of the ship that fired the bullet
-     * @param x				Vertical ocation
-     * @param y				Horizontal location
-     * @param dx			Vertival velocity
-     * @param dy			Horizontal velocity
-     * @param damage		Damage this bullet cause
+     *
+     * @param bulletClass Class of the bullet
+     * @param ownerId     Id of the ship that fired the bullet
+     * @param x           Vertical ocation
+     * @param y           Horizontal location
+     * @param dx          Vertival velocity
+     * @param dy          Horizontal velocity
+     * @param damage      Damage this bullet cause
      */
-    public BulletModel(Class bulletClass, int ownerId, float x, float y, 
-            float dx, float dy, long damage) {
-        
+    public BulletModel(Class bulletClass, int ownerId, float x, float y,
+                       float dx, float dy, long damage) {
+
         this.bulletClass = bulletClass;
         this.ownerId = ownerId;
         this.x = x;
@@ -34,5 +53,5 @@ public class BulletModel implements Serializable {
         this.dy = dy;
         this.damage = damage;
     }
-    
+
 }
