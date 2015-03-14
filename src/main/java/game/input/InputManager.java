@@ -32,18 +32,18 @@ import java.util.Map;
  */
 public class InputManager implements KeyListener {
 
-    private GameLoop gameLoop;
-    private QuitDialog quitDialog;
+    private final GameLoop gameLoop;
+    private final QuitDialog quitDialog;
 
     // Game actions
     private GameAction exit;
     private GameAction pause;
-    public GameAction moveLeft;
-    public GameAction moveRight;
-    public GameAction moveUp;
-    public GameAction moveDown;
-    public GameAction fireBullet;
-    public GameAction fireMissile;
+    private GameAction moveLeft;
+    private GameAction moveRight;
+    private GameAction moveUp;
+    private GameAction moveDown;
+    private GameAction fireBullet;
+    private GameAction fireMissile;
 
     private boolean paused = false;
     private boolean quit = false;
@@ -199,7 +199,7 @@ public class InputManager implements KeyListener {
         fireBullet = new GameAction();
         fireMissile = new GameAction();
 
-        keyCodeToGameAction = new HashMap<Integer, GameAction>();
+        keyCodeToGameAction = new HashMap<>();
 
         keyCodeToGameAction.put(KeyEvent.VK_ESCAPE, exit);
         keyCodeToGameAction.put(KeyEvent.VK_P, pause);
@@ -210,5 +210,25 @@ public class InputManager implements KeyListener {
         keyCodeToGameAction.put(KeyEvent.VK_SPACE, fireBullet);
         keyCodeToGameAction.put(KeyEvent.VK_CONTROL, fireMissile);
 
+    }
+
+    public GameAction getMoveLeft() {
+        return moveLeft;
+    }
+
+    public GameAction getMoveRight() {
+        return moveRight;
+    }
+
+    public GameAction getMoveUp() {
+        return moveUp;
+    }
+
+    public GameAction getMoveDown() {
+        return moveDown;
+    }
+
+    public GameAction getFireBullet() {
+        return fireBullet;
     }
 }

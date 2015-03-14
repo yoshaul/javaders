@@ -24,7 +24,7 @@ package game.ship;
  */
 public class PlayerShipState extends ShipState {
 
-    public long score;    // The player's score
+    private final long score;    // The player's score
 
     /**
      * Construct a new ship state.
@@ -37,11 +37,12 @@ public class PlayerShipState extends ShipState {
      * @param state Current ship's state.
      * @param score The player's score
      */
-    public PlayerShipState(float x, float y, float dx, float dy, long armor,
-                           int state, long score) {
+    public PlayerShipState(float x, float y, float dx, float dy, long armor, int state, long score) {
         super(x, y, dx, dy, armor, state);
         this.score = score;
-
     }
 
+    public long getScore() {
+        return score;
+    }
 }

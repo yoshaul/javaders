@@ -26,8 +26,9 @@ import java.io.Serializable;
  */
 public class ShipModel implements Serializable {
 
-    public int objectId, shipType;
-    public float x, y, dx, dy;
+    private final int objectId;
+    private final int shipType;
+    private final float x, y, dx, dy;
 
     /**
      * Construct a new ship model.
@@ -39,9 +40,7 @@ public class ShipModel implements Serializable {
      * @param dx       Max vertical velocity (pixels/sec)
      * @param dy       Max horizontal velocity (pixels/sec)
      */
-    public ShipModel(int objectId, int shipType,
-                     float x, float y, float dx, float dy) {
-
+    public ShipModel(int objectId, int shipType, float x, float y, float dx, float dy) {
         this.objectId = objectId;
         this.shipType = shipType;
         this.x = x;
@@ -50,4 +49,27 @@ public class ShipModel implements Serializable {
         this.dy = dy;
     }
 
+    public int getObjectId() {
+        return objectId;
+    }
+
+    public int getShipType() {
+        return shipType;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getDx() {
+        return dx;
+    }
+
+    public float getDy() {
+        return dy;
+    }
 }

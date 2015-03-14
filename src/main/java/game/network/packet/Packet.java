@@ -26,11 +26,11 @@ import java.io.Serializable;
  */
 public abstract class Packet implements Serializable {
 
-    public Long senderId;        // Session id of the sender
-    public Long receiverId;        // Session id of the target
+    private final Long senderId;        // Session id of the sender
+    private final Long receiverId;      // Session id of the target
 
     // Id of the game object who should handle this packet
-    public int handlerId;
+    private final int handlerId;
     private boolean consumed = false;    // Is this packet consumed
 
     /**
@@ -77,9 +77,19 @@ public abstract class Packet implements Serializable {
     }
 
     public String toString() {
-
         return "Class: " + getClass() + " SenderID: " + senderId +
                 " ReceiverID: " + receiverId;
     }
 
+    public Long getSenderId() {
+        return senderId;
+    }
+
+    public Long getReceiverId() {
+        return receiverId;
+    }
+
+    public int getHandlerId() {
+        return handlerId;
+    }
 }

@@ -98,7 +98,7 @@ public class JMSMessageHandler implements MessageListener {
                     // Set the reply to destination before delivering to
                     // the network manager
                     JMSInvitationPacket invitation = (JMSInvitationPacket) packet;
-                    invitation.replyToDestination = message.getJMSReplyTo();
+                    invitation.setReplyToDestination(message.getJMSReplyTo());
 
                 }
 
@@ -122,14 +122,14 @@ public class JMSMessageHandler implements MessageListener {
             Message message = session.createObjectMessage(packet);
 
             // Add the receiver id for the jms message selector
-            message.setStringProperty("ReceiverID", packet.receiverId.toString());
+            message.setStringProperty("ReceiverID", packet.getReceiverId().toString());
 
             messageProducer.send(message);
 
         } catch (JMSException jmsException) {
             Logger.exception(jmsException);
             throw new NetworkException("Error while trying to send packet to " +
-                    packet.receiverId);
+                    packet.getReceiverId());
         }
     }
 
@@ -143,10 +143,10 @@ public class JMSMessageHandler implements MessageListener {
         Message message = session.createObjectMessage(packet);
 
         // Add the receiver id for the jms message selector
-        message.setStringProperty("ReceiverID", packet.receiverId.toString());
+        message.setStringProperty("ReceiverID", packet.getReceiverId().toString());
 
         // Set the reply to destination
-        message.setJMSReplyTo(packet.replyToDestination);
+        message.setJMSReplyTo(packet.getReplyToDestination());
 
         messageProducer.send(message);
     }
@@ -162,10 +162,10 @@ public class JMSMessageHandler implements MessageListener {
         Message message = session.createObjectMessage(packet);
 
         // Add the receiver id for the jms message selector
-        message.setStringProperty("ReceiverID", packet.receiverId.toString());
+        message.setStringProperty("ReceiverID", packet.getReceiverId().toString());
 
-        if (packet.accepted) {
-            message.setJMSReplyTo(packet.replyToDestination);
+        if (packet.isAccepted()) {
+            message.setJMSReplyTo(packet.getReplyToDestination());
         }
 
         messageProducer.send(message);

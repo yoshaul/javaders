@@ -26,19 +26,19 @@ import java.io.Serializable;
  */
 public class BulletModel implements Serializable {
 
-    public Class bulletClass;
-    public int ownerId;
-    public float x, y, dx, dy;
-    public long damage;
+    private final Class bulletClass;
+    private final int ownerId;
+    private final float x, y, dx, dy;
+    private final long damage;
 
     /**
      * Construct a new BulletModel.
      *
      * @param bulletClass Class of the bullet
      * @param ownerId     Id of the ship that fired the bullet
-     * @param x           Vertical ocation
+     * @param x           Vertical location
      * @param y           Horizontal location
-     * @param dx          Vertival velocity
+     * @param dx          Vertical velocity
      * @param dy          Horizontal velocity
      * @param damage      Damage this bullet cause
      */
@@ -54,4 +54,27 @@ public class BulletModel implements Serializable {
         this.damage = damage;
     }
 
+    public Class getBulletClass() {
+        return bulletClass;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getDx() {
+        return dx;
+    }
+
+    public float getDy() {
+        return dy;
+    }
+
+    public long getDamage() {
+        return damage;
+    }
 }

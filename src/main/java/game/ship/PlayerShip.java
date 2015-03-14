@@ -51,12 +51,12 @@ public class PlayerShip extends Ship {
     public PlayerShip(int objectId, int shipType,
                       float x, float y, ShipProperties prop) {
 
-        super(objectId, shipType, x, y, prop.maxDX, prop.maxDY,
-                prop.image, WeaponFactory.getWeapon(
-                        prop.weaponType, prop.weaponLevel,
-                        prop.weaponDirection),
-                prop.armor, prop.damage,
-                prop.hitScoreValue, prop.destroyScoreValue);
+        super(objectId, shipType, x, y, prop.getMaxDX(), prop.getMaxDY(),
+                prop.getImage(), WeaponFactory.getWeapon(
+                        prop.getWeaponType(), prop.getWeaponLevel(),
+                        prop.getWeaponDirection()),
+                prop.getArmor(), prop.getDamage(),
+                prop.getHitScoreValue(), prop.getDestroyScoreValue());
 
         if (Logger.isInvulnerable()) {
             vulnerable = false;
@@ -235,7 +235,7 @@ public class PlayerShip extends Ship {
             ShipPacket shipPacket = (ShipPacket) packet;
             PlayerShipState shipState =
                     (PlayerShipState) shipPacket.getShipState();
-            this.score = shipState.score;
+            this.score = shipState.getScore();
         }
 
     }

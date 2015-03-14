@@ -260,9 +260,9 @@ public class J2EENetworkManager implements NetworkManager {
      */
     private void handleInvitation(JMSInvitationPacket invitation) {
 
-        if (invitation.cancelled) {
+        if (invitation.isCancelled()) {
             gameMenu.invitationCancelled();
-        } else if (invitation.isReply) {
+        } else if (invitation.isReply()) {
             // It is a reply to previously sent invitation sent by this user
 
             if (receiverId == null) {
@@ -271,21 +271,21 @@ public class J2EENetworkManager implements NetworkManager {
                 return;
             }
             try {
-                if (invitation.accepted) {
+                if (invitation.isAccepted()) {
 
                     // Set the destination of the jms handler to be the private
                     // destination of the invitee
                     jmsGameMessageHandler.setDestination(
-                            invitation.replyToDestination);
+                            invitation.getReplyToDestination());
 
                     // Set the receiver id
-                    this.receiverId = invitation.senderId;
+                    this.receiverId = invitation.getSenderId();
                     // Mark the user as the inviter
                     this.inviter = true;
 
                 }
 
-                gameMenu.invitationAccepted(invitation.accepted, invitation.userName);
+                gameMenu.invitationAccepted(invitation.isAccepted(), invitation.getUserName());
             } catch (JMSException jmse) {
                 Logger.exception(jmse);
                 Logger.showErrorDialog(gameMenu, "Unable to proccess " +
@@ -316,25 +316,25 @@ public class J2EENetworkManager implements NetworkManager {
             // Create a new JMSInvitationPacket with the reply to address
             // of the jms gameMenu listener queue
             JMSInvitationPacket invitationReply = new JMSInvitationPacket(
-                    this.sessionId, invitation.senderId, this.userName,
+                    this.sessionId, invitation.getSenderId(), this.userName,
                     jmsGameMessageHandler.getPrivateQueue());
 
-            invitationReply.isReply = true;
+            invitationReply.setReply(true);
 
             if (accepted) {
                 // user accepted the invitation
-                invitationReply.accepted = true;
+                invitationReply.setAccepted(true);
 
                 // Set the JMSGameListener's destination for the online gameMenu
                 // to the private queue of the network player
-                jmsGameMessageHandler.setDestination(invitation.replyToDestination);
+                jmsGameMessageHandler.setDestination(invitation.getReplyToDestination());
 
-                this.receiverId = invitation.senderId;
+                this.receiverId = invitation.getSenderId();
                 // Mark this user as invitee
                 this.inviter = false;
 
             } else {
-                invitationReply.accepted = false;
+                invitationReply.setAccepted(false);
             }
 
             jmsInvitationManager.sendInvitationReply(invitationReply);
@@ -384,7 +384,7 @@ public class J2EENetworkManager implements NetworkManager {
 
         JMSInvitationPacket cancelInvitation = new JMSInvitationPacket(
                 this.sessionId, receiverId, this.userName, null);
-        cancelInvitation.cancelled = true;
+        cancelInvitation.setCancelled(true);
 
         this.receiverId = null;
 

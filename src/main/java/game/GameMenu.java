@@ -195,7 +195,8 @@ public class GameMenu extends JFrame implements ActionListener {
         GameLoop gameLoop = new GameLoop(networkGame, controller,
                 highScoresManager, gnm);
 
-        Thread gameThread = new Thread(gameLoop).start();
+        Thread gameThread = new Thread(gameLoop);
+        gameThread.start();
         try {
             // Join the game loop and wait until it's finished
             gameThread.join();

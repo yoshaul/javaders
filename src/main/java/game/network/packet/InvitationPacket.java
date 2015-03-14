@@ -24,13 +24,13 @@ package game.network.packet;
  */
 public class InvitationPacket extends Packet {
 
-    public String userName;     // User name of the sender
-    public boolean isReply;  // Is it a reply to invitation
-    public boolean accepted; // Is the invitation accepted
-    public boolean cancelled; // Is the invitation cancelled
+    private final String userName;     // User name of the sender
+    private boolean isReply;  // Is it a reply to invitation
+    private boolean accepted; // Is the invitation accepted
+    private boolean cancelled; // Is the invitation cancelled
 
     /**
-     * Construct a new <code>InvitationPackat</code>
+     * Construct a new <code>InvitationPacket</code>
      *
      * @param senderId   Session id of the inviter
      * @param receiverId Session id of the invitee
@@ -50,4 +50,31 @@ public class InvitationPacket extends Packet {
                 " cancelled: " + cancelled;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public boolean isReply() {
+        return isReply;
+    }
+
+    public void setReply(boolean isReply) {
+        this.isReply = isReply;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 }

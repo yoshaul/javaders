@@ -24,8 +24,8 @@ package game.network.packet;
  */
 public class PowerUpPacket extends Packet {
 
-    public float x, y;    // Location of the powerup sprite
-    public int powerUp;    // How much armor the bonus adds to the ship
+    private final float x, y;    // Location of the powerup sprite
+    private final int powerUp;    // How much armor the bonus adds to the ship
 
     /**
      * Constructs a new <code>BulletPacket</code>.
@@ -34,12 +34,22 @@ public class PowerUpPacket extends Packet {
      * @param receiverId Session id of the target user
      * @param handlerId  Id of the network handler
      */
-    public PowerUpPacket(Long senderId, Long receiverId,
-                         int handlerId, float x, float y, int powerUp) {
-
+    public PowerUpPacket(Long senderId, Long receiverId, int handlerId, float x, float y, int powerUp) {
         super(senderId, receiverId, handlerId);
         this.x = x;
         this.y = y;
         this.powerUp = powerUp;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public int getPowerUp() {
+        return powerUp;
     }
 }

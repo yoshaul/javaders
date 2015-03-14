@@ -102,22 +102,22 @@ public class WeaponFactory {
      */
     public static Bullet getBullet(BulletModel model, Ship owner) {
         Bullet bullet = null;
-        Class bulletClass = model.bulletClass;
+        Class bulletClass = model.getBulletClass();
         if (bulletClass == LaserBeam.class) {
             bullet = new LaserBeam(
-                    owner, model.x, model.y, model.dx, model.dy);
+                    owner, model.getX(), model.getY(), model.getDx(), model.getDy());
         } else if (bulletClass == FireBullet.class) {
             bullet = new FireBullet(
-                    owner, model.x, model.y, model.dx, model.dy);
+                    owner, model.getX(), model.getY(), model.getDx(), model.getDy());
         } else if (bulletClass == BlueLaser.class) {
             bullet = new BlueLaser(
-                    owner, model.x, model.y, model.dx, model.dy);
+                    owner, model.getX(), model.getY(), model.getDx(), model.getDy());
         } else if (bulletClass == BallBullet.class) {
             bullet = new BallBullet(
-                    owner, model.x, model.y, model.dx, model.dy);
+                    owner, model.getX(), model.getY(), model.getDx(), model.getDy());
         } else if (bulletClass == BigBallBullet.class) {
             bullet = new BigBallBullet(
-                    owner, model.x, model.y, model.dx, model.dy);
+                    owner, model.getX(), model.getY(), model.getDx(), model.getDy());
         }
 
         return bullet;

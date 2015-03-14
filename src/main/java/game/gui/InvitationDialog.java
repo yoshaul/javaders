@@ -104,7 +104,7 @@ public class InvitationDialog extends GameDialog {
 
         this.invitationPacket = invitationPacket;
         text.setText("<html>Invitation yo play arrived from " +
-                invitationPacket.userName + ".<br>Do you want to accept?" +
+                invitationPacket.getUserName() + ".<br>Do you want to accept?" +
                 "</html>");
         super.popDialog();
 

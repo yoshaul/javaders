@@ -24,8 +24,8 @@ package game.network.packet;
  */
 public class WeaponUpgradePacket extends Packet {
 
-    public float x, y;    // Location of the sprite
-    public int weaponType;
+    private final float x, y;    // Location of the sprite
+    private final int weaponType;
 
     /**
      * Constructs a new <code>BulletPacket</code>.
@@ -35,12 +35,22 @@ public class WeaponUpgradePacket extends Packet {
      * @param handlerId  Id of the network handler
      * @param weaponType Type of the weapon
      */
-    public WeaponUpgradePacket(Long senderId, Long receiverId,
-                               int handlerId, float x, float y, int weaponType) {
-
+    public WeaponUpgradePacket(Long senderId, Long receiverId, int handlerId, float x, float y, int weaponType) {
         super(senderId, receiverId, handlerId);
         this.x = x;
         this.y = y;
         this.weaponType = weaponType;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public int getWeaponType() {
+        return weaponType;
     }
 }

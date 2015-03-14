@@ -194,16 +194,16 @@ public class PlayerManager implements ShipContainer, PacketHandler {
         float velocityX = 0;
         float velocityY = 0;
 
-        if (inputManager.moveLeft.isPressed()) {
+        if (inputManager.getMoveLeft().isPressed()) {
             velocityX -= localPlayer.getMaxDX();
         }
-        if (inputManager.moveRight.isPressed()) {
+        if (inputManager.getMoveRight().isPressed()) {
             velocityX += localPlayer.getMaxDX();
         }
-        if (inputManager.moveUp.isPressed()) {
+        if (inputManager.getMoveUp().isPressed()) {
             velocityY -= localPlayer.getMaxDY();
         }
-        if (inputManager.moveDown.isPressed()) {
+        if (inputManager.getMoveDown().isPressed()) {
             velocityY += localPlayer.getMaxDY();
         }
 
@@ -216,7 +216,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
             }
         }
 
-        if (inputManager.fireBullet.isPressed()) {
+        if (inputManager.getFireBullet().isPressed()) {
             localPlayer.shoot();
         }
     }
@@ -423,7 +423,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
 
             BulletModel model = bulletPacket.getBulletModel();
 
-            if (packet.handlerId == getNetworkPlayerShip().getHandlerId()) {
+            if (packet.getHandlerId() == getNetworkPlayerShip().getHandlerId()) {
 
                 Bullet bullet = WeaponFactory.getBullet(model,
                         getNetworkPlayerShip());
@@ -446,7 +446,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
 
         } else {
             // Let the ship handle it
-            if (packet.handlerId == networkPlayer.getHandlerId()) {
+            if (packet.getHandlerId() == networkPlayer.getHandlerId()) {
                 getNetworkPlayerShip().handlePacket(packet);
             }
         }

@@ -38,10 +38,6 @@ public class ShipProperties {
     public static final int SHIP_TYPE_2 = 2;
     public static final int SHIP_TYPE_3 = 3;
     public static final int SHIP_TYPE_4 = 4;
-    public static final int SHIP_TYPE_5 = 5;
-    public static final int SHIP_TYPE_6 = 6;
-    public static final int SHIP_TYPE_7 = 7;
-    public static final int SHIP_TYPE_8 = 8;
 
     public static final int ROBO_SHIP_TYPE_1 = 21;
     public static final int ROBO_SHIP_TYPE_2 = 22;
@@ -56,7 +52,6 @@ public class ShipProperties {
     public static final int CARDROM_SHIP_TYPE_3 = 43;
     public static final int CARDROM_SHIP_TYPE_4 = 44;
     public static final int CARDROM_SHIP_TYPE_5 = 45;
-    public static final int CARDROM_SHIP_TYPE_6 = 46;
 
     public static final int COLOR_SHIP_TYPE_1 = 61;
     public static final int COLOR_SHIP_TYPE_2 = 62;
@@ -72,18 +67,18 @@ public class ShipProperties {
     public static final int BOSS_SHIP_TYPE_4 = 204;
     public static final int BOSS_SHIP_TYPE_5 = 205;
 
-    public static Map<Integer, ShipProperties> shipsProperties = initShipsProperties();
+    private final static Map<Integer, ShipProperties> shipsProperties = initShipsProperties();
 
-    public float maxDX, maxDY;
-    public long armor;
-    public long damage;
-    public long hitScoreValue;
-    public long destroyScoreValue;
-    public Image image;
-    public String imageName;
-    public int weaponType;
-    public int weaponLevel;
-    public int weaponDirection;
+    private final float maxDX;
+    private final float maxDY;
+    private final long armor;
+    private final long damage;
+    private final long hitScoreValue;
+    private final long destroyScoreValue;
+    private final Image image;
+    private final int weaponType;
+    private final int weaponLevel;
+    private final int weaponDirection;
 
     /**
      * Initialize the <code>ShipProperties</code> for the various ships.
@@ -302,4 +297,43 @@ public class ShipProperties {
         return shipsProperties.get(shipType);
     }
 
+    public float getMaxDX() {
+        return maxDX;
+    }
+
+    public float getMaxDY() {
+        return maxDY;
+    }
+
+    public long getArmor() {
+        return armor;
+    }
+
+    public long getDamage() {
+        return damage;
+    }
+
+    public long getHitScoreValue() {
+        return hitScoreValue;
+    }
+
+    public long getDestroyScoreValue() {
+        return destroyScoreValue;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public int getWeaponType() {
+        return weaponType;
+    }
+
+    public int getWeaponLevel() {
+        return weaponLevel;
+    }
+
+    public int getWeaponDirection() {
+        return weaponDirection;
+    }
 }

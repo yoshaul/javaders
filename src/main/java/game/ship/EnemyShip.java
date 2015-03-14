@@ -53,12 +53,12 @@ public class EnemyShip extends Ship {
     public EnemyShip(int objectId, int shipType,
                      float x, float y, ShipProperties prop) {
 
-        super(objectId, shipType, x, y, prop.maxDX, prop.maxDY,
-                prop.image, WeaponFactory.getWeapon(
-                        prop.weaponType, prop.weaponLevel,
-                        prop.weaponDirection),
-                prop.armor, prop.damage,
-                prop.hitScoreValue, prop.destroyScoreValue);
+        super(objectId, shipType, x, y, prop.getMaxDX(), prop.getMaxDY(),
+                prop.getImage(), WeaponFactory.getWeapon(
+                        prop.getWeaponType(), prop.getWeaponLevel(),
+                        prop.getWeaponDirection()),
+                prop.getArmor(), prop.getDamage(),
+                prop.getHitScoreValue(), prop.getDestroyScoreValue());
 
         this.initArmor = armor;
         aiState = AIState.AI_STATE_NORMAL;
@@ -74,8 +74,8 @@ public class EnemyShip extends Ship {
      * @see Ship#Ship(ShipModel)
      */
     public EnemyShip(ShipModel model) {
-        this(model.objectId, model.shipType, model.x, model.y,
-                ShipProperties.getShipProperties(model.shipType));
+        this(model.getObjectId(), model.getShipType(), model.getX(), model.getY(),
+                ShipProperties.getShipProperties(model.getShipType()));
     }
 
     /**

@@ -341,7 +341,7 @@ public class EnemyShipsManager implements Renderable,
             BulletModel model = bulletPacket.getBulletModel();
 
             Ship owningShip = enemyShips.get(
-                    packet.handlerId);
+                    packet.getHandlerId());
 
             if (owningShip != null) { // The ship might be destroyed
 
@@ -355,21 +355,21 @@ public class EnemyShipsManager implements Renderable,
 
         } else if (packet instanceof PowerUpPacket) {
             PowerUpPacket powerPacket = (PowerUpPacket) packet;
-            Bonus powerUp = new PowerUp(powerPacket.x,
-                    powerPacket.y, powerPacket.powerUp);
+            Bonus powerUp = new PowerUp(powerPacket.getX(),
+                    powerPacket.getY(), powerPacket.getPowerUp());
 
             addBonus(powerUp);
             packet.setConsumed(true);
         } else if (packet instanceof WeaponUpgradePacket) {
             WeaponUpgradePacket wuPacket = (WeaponUpgradePacket) packet;
-            Bonus weaponUpgrade = new WeaponUpgrade(wuPacket.x,
-                    wuPacket.y, wuPacket.weaponType);
+            Bonus weaponUpgrade = new WeaponUpgrade(wuPacket.getX(),
+                    wuPacket.getY(), wuPacket.getWeaponType());
 
             addBonus(weaponUpgrade);
             packet.setConsumed(true);
         } else {
             // Check if one of the ships can handle it
-            Integer handlerID = packet.handlerId;
+            Integer handlerID = packet.getHandlerId();
             Ship ship = enemyShips.get(handlerID);
             if (ship != null) {
                 ship.handlePacket(packet);
