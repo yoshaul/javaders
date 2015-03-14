@@ -24,7 +24,7 @@ import java.io.Serializable;
  * The <code>HighScore</code> class encapsulates a player
  * score details.
  */
-public class HighScore implements Serializable, Comparable {
+public class HighScore implements Serializable, Comparable<HighScore> {
 
     private String playerName;
     private long score;
@@ -104,10 +104,8 @@ public class HighScore implements Serializable, Comparable {
      *
      * @see java.lang.Comparable
      */
-    public int compareTo(Object obj) {
-
-        HighScore score = (HighScore) obj;
-
+    @Override
+    public int compareTo(HighScore score) {
         if (this.score < score.score) {
             return -1;
         } else if (this.score > score.score) {
