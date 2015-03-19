@@ -167,7 +167,7 @@ public class LoadingLevelState implements GameState {
             Collection<ShipModel> enemyShipsModels = newLevel.getEnemyShipsModels();
 
             // Build Ships from the models
-            Map<Integer, Ship> enemyShips = new HashMap<Integer, Ship>();
+            Map<Integer, Ship> enemyShips = new HashMap<>();
             for (ShipModel enemyShipsModel : enemyShipsModels) {
                 EnemyShip ship = new EnemyShip(enemyShipsModel);
                 enemyShips.put(ship.getHandlerId(), ship);
@@ -308,7 +308,7 @@ public class LoadingLevelState implements GameState {
                 if (gameLoop.isNetworkGame()) {
 
                     // Build ship models collection
-                    Collection<ShipModel> enemyShipsModels = new ArrayList<ShipModel>(enemyShips.size());
+                    Collection<ShipModel> enemyShipsModels = new ArrayList<>(enemyShips.size());
                     for (Object o : enemyShips.values()) {
                         Ship ship = (Ship) o;
                         ShipModel model = ship.getShipModel();

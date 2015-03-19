@@ -268,7 +268,7 @@ public class OnlinePlayerBean implements EntityBean {
     public Collection ejbFindByAcceptInvitations()
             throws FinderException {
 
-        Collection<Long> result = new ArrayList<Long>();
+        Collection<Long> result = new ArrayList<>();
 
         Connection connection = null;
         try {

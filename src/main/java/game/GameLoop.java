@@ -102,7 +102,7 @@ public class GameLoop implements Runnable {
 
         // Create the various game states and add them to the game
         // states list
-        gameStatesById = new HashMap<Integer, GameState>();
+        gameStatesById = new HashMap<>();
         GameState loadingState = new LoadingLevelState(this);
         gameStatesById.put(loadingState.getGameStateId(),
                 loadingState);

@@ -107,7 +107,7 @@ public class LevelsManager {
     public Map<Integer, Ship> loadLevel(int levelNumber) {
 
         int curObjectID = GameConstants.FIRST_ENEMY_SHIP_ID;
-        Map<Integer, Ship> enemyShips = new HashMap<Integer, Ship>();
+        Map<Integer, Ship> enemyShips = new HashMap<>();
 
         Element level = getLevelElement(levelNumber);
 

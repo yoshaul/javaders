@@ -207,7 +207,7 @@ public class J2EENetworkManager implements NetworkManager {
      */
     @Override
     public List<OnlinePlayerModel> getAvailablePlayers() throws NetworkException {
-        List<OnlinePlayerModel> playersModels = new ArrayList<OnlinePlayerModel>();
+        List<OnlinePlayerModel> playersModels = new ArrayList<>();
         try {
 
             OnlinePlayerHome onlinePlayerHome = (OnlinePlayerHome)

@@ -72,7 +72,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
 
         this.gameLoop = gameLoop;
         this.inputManager = gameLoop.getInputManager();
-        this.shots = new ArrayList<Bullet>();
+        this.shots = new ArrayList<>();
         this.targets = new ArrayList();
         this.gameOver = false;
 

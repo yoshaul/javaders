@@ -69,10 +69,10 @@ public class EnemyShipsManager implements Renderable,
      */
     public EnemyShipsManager(GameLoop gameLoop) {
         this.gameLoop = gameLoop;
-        enemyShips = new HashMap<Integer, Ship>();
-        shots = new ArrayList<Bullet>();
-        bonuses = new ArrayList<Bonus>();
-        targets = new ArrayList<Target>();
+        enemyShips = new HashMap<>();
+        shots = new ArrayList<>();
+        bonuses = new ArrayList<>();
+        targets = new ArrayList<>();
     }
 
     /**
