@@ -1,0 +1,14 @@
+sudo: false
+language: java
+addons:
+  sonarqube:
+    token:
+      secure: "ijy0e9tlpuv+0zjQMcZYLtI+90qpsDeM5XatQBkBdvHGTT0a7k/SlmEnSXY/nFl34Otni0l4Q29rGwcTDQGv6zVS9F1pumaZ3N2pjsPckuzpO2r7+vmehOrfEA9ukbQ57SVGDUPzon9S73A2BC3dLalM+cWx/N4QPUKJ/mBsExk="
+jdk:
+  - oraclejdk8
+script:
+  - mvn install sonar:sonar
+cache:
+  directories:
+  - "$HOME/.m2"
+  - "$HOME/.sonar/cache"
