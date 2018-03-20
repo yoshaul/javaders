@@ -173,7 +173,7 @@ public class J2EEGameNetworkManager implements GameNetworkManager {
 
         // Stop the sender thread
         sender.stopSending();
-        /** TODO: check if we need this check */
+        /* TODO: check if we need this check */
 //        if (gameInProgress) {
         // Send player quit packet
         System.out.println("\nSending playerQuitPacket\n");

@@ -120,18 +120,9 @@ public class ScreenManager {
         // The invokeAndWait cannot be called from event dispatcher
         // thread meaning, not as an action of the AWT/Swing
         try {
-            EventQueue.invokeAndWait(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            gameFrame.createBufferStrategy(2);
-                        }
-                    }
-            );
-        } catch (InterruptedException ie) {
+            EventQueue.invokeAndWait(() -> gameFrame.createBufferStrategy(2));
+        } catch (InterruptedException | InvocationTargetException ie) {
             Logger.exception(ie);
-        } catch (InvocationTargetException ite) {
-            Logger.exception(ite);
         }
 
     }
@@ -160,7 +151,7 @@ public class ScreenManager {
                 gd.setDisplayMode(oldDM);
             }
 
-            /** TODO: why is this throwing error? */
+            /* TODO: why is this throwing error? */
             Window window = gd.getFullScreenWindow();
             if (window != null) {
                 window.dispose();

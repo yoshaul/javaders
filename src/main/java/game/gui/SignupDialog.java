@@ -137,7 +137,7 @@ public class SignupDialog extends GameDialog {
         super.hideDialog();
     }
 
-    /** TODO: handle the case where user already exists here and in the bean */
+    /* TODO: handle the case where user already exists here and in the bean */
     /**
      * Sign up for a new account and login afterwards.
      */

@@ -65,17 +65,8 @@ public class GUIManager {
         // Use the EventQueue.invokeAndWait to prevent deadlocks
         if (!SwingUtilities.isEventDispatchThread()) {
             try {
-                EventQueue.invokeAndWait(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                gameFrame.getLayeredPane().paintComponents(g);
-                            }
-                        }
-                );
-            } catch (InterruptedException ex) {
-                // Ignore
-            } catch (InvocationTargetException ex) {
+                EventQueue.invokeAndWait(() -> gameFrame.getLayeredPane().paintComponents(g));
+            } catch (InterruptedException | InvocationTargetException ex) {
                 // Ignore
             }
         } else {
