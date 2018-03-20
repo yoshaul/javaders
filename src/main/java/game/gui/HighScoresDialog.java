@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 /**
- * The <code>HighScoresDialog<code> displays the game high scores.
+ * The <code>HighScoresDialog</code> displays the game high scores.
  * It can display the local high scores or the high scores from
  * the server. We can also clear the local high scores.
  */

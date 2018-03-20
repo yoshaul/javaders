@@ -64,7 +64,7 @@ public class WeaponFactory {
     }
 
     /**
-     * Returns a <code>Weapon</object>.
+     * Returns a <code>Weapon</code>.
      *
      * @param weaponType  Type of the weapon
      * @param weaponLevel Weapon level

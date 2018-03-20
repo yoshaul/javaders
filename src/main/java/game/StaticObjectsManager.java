@@ -26,7 +26,7 @@ import java.awt.*;
 /**
  * The <code>StaticObjectsManager</code> handles the static objects
  * that needs to be rendered on the screen (except for the game menus
- * which the <code>GUIManager</code> handles>
+ * which the <code>GUIManager</code> handles
  */
 public class StaticObjectsManager {
 

@@ -27,7 +27,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * The <code>GameDialog</cdoe> class extends <code>JDialog</code> and
+ * The <code>GameDialog</code> class extends <code>JDialog</code> and
  * serves as the base class for all the game menu dialogs (
  * the dialogs before starting a game).
  *
@@ -183,7 +183,7 @@ public abstract class GameDialog extends JDialog
     }
 
     /**
-     * Returns a <code>JPanel/<code> with black background.
+     * Returns a <code>JPanel</code> with black background.
      *
      * @param lm Layout manager for the panel.
      */
