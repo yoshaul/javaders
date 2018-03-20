@@ -41,7 +41,7 @@ public class PlayerShip extends Ship {
     private final long MAX_TIME_BETWEEN_PACKETS = 1000;
 
     private long score;            // Score the player made
-    private boolean vulnerable = true;    // True if the player is vulnurable
+    private boolean vulnerable = true;    // True if the player is vulnerable
 
     /**
      * Construct a new player ship.
@@ -84,12 +84,10 @@ public class PlayerShip extends Ship {
     }
 
     /**
-     * Override the render methos. Call the super method and
-     * render some more data.
+     * Override the render method. Call the super method and render some more data.
      */
     @Override
     public void render(Graphics g) {
-
         if (isActive()) {
             super.render(g);
 
@@ -114,29 +112,10 @@ public class PlayerShip extends Ship {
      * is vulnerable.
      */
     @Override
-    public void processCollisions(Collection targets) {
-
+    public void processCollisions(Collection<Target> targets) {
         if (vulnerable) {
             super.processCollisions(targets);
         }
-    }
-
-    /**
-     * Returns true if the player ship is vulnerable.
-     *
-     * @return True if the player ship is vulnerable.
-     */
-    public boolean isVulnerable() {
-        return vulnerable;
-    }
-
-    /**
-     * Sets the vulnerable state of the ship.
-     *
-     * @param vulnerable True if ship vulnerable.
-     */
-    public void setVulnerable(boolean vulnerable) {
-        this.vulnerable = vulnerable;
     }
 
     /**
@@ -228,16 +207,13 @@ public class PlayerShip extends Ship {
      */
     @Override
     public void handlePacket(Packet packet) {
-
         super.handlePacket(packet);
-
         if (packet instanceof ShipPacket) {
             ShipPacket shipPacket = (ShipPacket) packet;
             PlayerShipState shipState =
                     (PlayerShipState) shipPacket.getShipState();
             this.score = shipState.getScore();
         }
-
     }
 
     /**
@@ -250,5 +226,4 @@ public class PlayerShip extends Ship {
         // to force the sending of a ship packet
         timeSinceLastPacket = MAX_TIME_BETWEEN_PACKETS;
     }
-
 }

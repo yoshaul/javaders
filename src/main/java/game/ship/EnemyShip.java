@@ -50,9 +50,7 @@ public class EnemyShip extends Ship {
      * @see ShipProperties
      * @see Ship#Ship(int, int, float, float, ShipProperties)
      */
-    public EnemyShip(int objectId, int shipType,
-                     float x, float y, ShipProperties prop) {
-
+    public EnemyShip(int objectId, int shipType, float x, float y, ShipProperties prop) {
         super(objectId, shipType, x, y, prop.getMaxDX(), prop.getMaxDY(),
                 prop.getImage(), WeaponFactory.getWeapon(
                         prop.getWeaponType(), prop.getWeaponLevel(),
@@ -63,7 +61,6 @@ public class EnemyShip extends Ship {
         this.initArmor = armor;
         aiState = AIState.AI_STATE_NORMAL;
         timeInAIState = maxDecisionTime;    // force state change
-
     }
 
     /**
@@ -87,12 +84,10 @@ public class EnemyShip extends Ship {
     @Override
     public void render(Graphics g) {
         super.render(g);
-
         if (isActive()) {
             // Draw the armor left to this ship in percents
-
             float armorLeft = (float) this.armor / this.initArmor;
-            int armorPrecent = (int) (armorLeft * 100);
+            int armorPercent = (int) (armorLeft * 100);
 
             g.setFont(ResourceManager.getFont(Font.BOLD, 10));
 
@@ -100,7 +95,7 @@ public class EnemyShip extends Ship {
             g.setColor(new Color(1 - armorLeft, armorLeft, 0.0f));
 
 
-            g.drawString(armorPrecent + "%",
+            g.drawString(armorPercent + "%",
                     Math.round(this.getX()),
                     Math.round(this.getY()) + 10);
         }
@@ -114,7 +109,6 @@ public class EnemyShip extends Ship {
      */
     @Override
     public void update(long elapsedTime) {
-
         super.update(elapsedTime);
 
         timeInAIState += elapsedTime;
@@ -219,5 +213,4 @@ public class EnemyShip extends Ship {
             createPacket(getShipContainer().getNetworkManager());
         }
     }
-
 }

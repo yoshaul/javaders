@@ -159,22 +159,78 @@ public class EnemyShipsManager implements Renderable,
      */
     public void update(long elapsedTime) {
 
-        Dimension screenDimension =
-                gameLoop.getScreenManager().getScreenDimension();
+        Dimension screenDimension = gameLoop.getScreenManager().getScreenDimension();
 
-        Insets insets =
-                gameLoop.getScreenManager().getScreenInsets();
+        Insets insets = gameLoop.getScreenManager().getScreenInsets();
 
-        // Update ships
+        updateShips(elapsedTime, screenDimension, insets);
+
+        updateShots(elapsedTime);
+
+        updateBonuses(elapsedTime);
+
+        ////////////////////////
+        // Process Collisions //
+        ////////////////////////
+
+        // Process ship-to-ship collisions 
         Iterator<Ship> shipsItr = enemyShips.values().iterator();
         while (shipsItr.hasNext()) {
             Ship ship = shipsItr.next();
+            ship.processCollisions(targets);
+        }
 
+        // Process shots to player ship(s) collisions
+        Iterator<Bullet> shotsItr = shots.iterator();
+        while (shotsItr.hasNext()) {
+            Bullet shot = shotsItr.next();
+            shot.processCollisions(targets);
+            if (shot.isHit()) {
+                shotsItr.remove();
+            }
+        }
+
+        // Process bonuses to player ship(s) collisions
+        Iterator<Bonus> bonusesItr = bonuses.iterator();
+        while (bonusesItr.hasNext()) {
+            Bonus bonus = bonusesItr.next();
+            bonus.processCollisions(targets);
+            if (bonus.isHit()) {
+                bonusesItr.remove();
+            }
+        }
+    }
+
+    private void updateBonuses(long elapsedTime) {
+        Iterator<Bonus> bonusesItr = bonuses.iterator();
+        while (bonusesItr.hasNext()) {
+            Bonus bonus = bonusesItr.next();
+            bonus.updatePosition(elapsedTime);
+            if (isOutOfScreen(bonus)) {
+                bonusesItr.remove();
+            }
+        }
+    }
+
+    private void updateShots(long elapsedTime) {
+        Iterator<Bullet> shotsItr = shots.iterator();
+        while (shotsItr.hasNext()) {
+            Bullet shot = shotsItr.next();
+            shot.updatePosition(elapsedTime);
+            if (isOutOfScreen(shot)) {
+                shotsItr.remove();
+            }
+        }
+    }
+
+    private void updateShips(long elapsedTime, Dimension screenDimension, Insets insets) {
+        Iterator<Ship> shipsItr = enemyShips.values().iterator();
+        while (shipsItr.hasNext()) {
+            Ship ship = shipsItr.next();
             if (ship.isDestroyed()) {
                 // Remove the destroyed ship
                 shipsItr.remove();
             } else {
-
                 ship.update(elapsedTime);
 
                 // If the ship exits the screen and still in the wrong
@@ -195,62 +251,8 @@ public class EnemyShipsManager implements Renderable,
                         && ship.getDy() > 0) {
                     ship.setDy(-ship.getDy());
                 }
-
             }
         }
-
-        // Update shots
-        Iterator<Bullet> shotsItr = shots.iterator();
-        while (shotsItr.hasNext()) {
-            Bullet shot = shotsItr.next();
-            shot.updatePosition(elapsedTime);
-            if (isOutOfScreen(shot)) {
-                shotsItr.remove();
-            }
-        }
-
-        // Update bonuses
-        Iterator<Bonus> bonusesItr = bonuses.iterator();
-        while (bonusesItr.hasNext()) {
-            Bonus bonus = bonusesItr.next();
-            bonus.updatePosition(elapsedTime);
-            if (isOutOfScreen(bonus)) {
-                bonusesItr.remove();
-            }
-        }
-
-        ////////////////////////
-        // Process Collisions //
-        ////////////////////////
-
-        // Process ship-to-ship collisions 
-        shipsItr = enemyShips.values().iterator();
-        while (shipsItr.hasNext()) {
-            Ship ship = shipsItr.next();
-            ship.processCollisions(targets);
-        }
-
-        // Process shots to player ship(s) collisions
-        shotsItr = shots.iterator();
-        while (shotsItr.hasNext()) {
-            Bullet shot = shotsItr.next();
-            shot.processCollisions(targets);
-            if (shot.isHit()) {
-                shotsItr.remove();
-            }
-
-        }
-
-        // Process bonuses to player ship(s) collisions
-        bonusesItr = bonuses.iterator();
-        while (bonusesItr.hasNext()) {
-            Bonus bonus = bonusesItr.next();
-            bonus.processCollisions(targets);
-            if (bonus.isHit()) {
-                bonusesItr.remove();
-            }
-        }
-
     }
 
     /**
@@ -277,7 +279,7 @@ public class EnemyShipsManager implements Renderable,
     /**
      * Return true if the sprite is off the screen bounds.
      *
-     * @param sprite Sptite to test.
+     * @param sprite Sprite to test.
      * @return True if the sprite is off the screen bounds
      */
     private boolean isOutOfScreen(Sprite sprite) {
@@ -301,7 +303,7 @@ public class EnemyShipsManager implements Renderable,
     }
 
     /**
-     * Returns true if this macine is the controller.
+     * Returns true if this machine is the controller.
      */
     @Override
     public boolean isController() {

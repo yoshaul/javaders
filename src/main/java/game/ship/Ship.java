@@ -37,7 +37,6 @@ import java.util.Collection;
 public abstract class Ship extends Sprite implements Target, PacketHandler {
 
     private final static int STATE_NORMAL = 0;
-    private final static int STATE_EXPLODING = 1;
     private final static int STATE_DESTROYED = 2;
 
     ShipContainer shipContainer;
@@ -55,7 +54,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      */
     long armor;
     /**
-     * The damage the ship causes when colliding with a traget
+     * The damage the ship causes when colliding with a target
      */
     private long damage;
 
@@ -113,7 +112,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
 
 
     /**
-     * Costruct a new ship from ship type.
+     * Construct a new ship from ship type.
      *
      * @param objectId Network handler id of the ship
      * @param shipType Type of the ship as defined in ShipProperties
@@ -160,22 +159,14 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      * @param targets Collection of target ships.
      */
     public void processCollisions(Collection<Target> targets) {
+        if (active) {
+            int x0 = Math.round(getX());
+            int y0 = Math.round(getY());
+            int x1 = x0 + getWidth();
+            int y1 = y0 + getHeight();
 
-        if (!active) {
-            return;
+            targets.parallelStream().filter(t -> t.isCollision(x0, y0, x1, y1)).forEach(t -> t.hit(getDamage()));
         }
-
-        int x0 = Math.round(this.getX());
-        int y0 = Math.round(this.getY());
-        int x1 = x0 + this.getWidth();
-        int y1 = y0 + this.getHeight();
-
-        for (Target target : targets) {
-            if (target.isCollision(x0, y0, x1, y1)) {
-                target.hit(this.getDamage());
-            }
-        }
-
     }
 
     /**
@@ -184,11 +175,9 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      */
     @Override
     public boolean isCollision(int x0, int y0, int x1, int y1) {
-
         if (state == STATE_DESTROYED) {
             return false;
         } else {
-
             // get the pixel location of this ship
             int s2x = Math.round(this.getX());
             int s2y = Math.round(this.getY());
@@ -290,7 +279,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     }
 
     /**
-     * Returns the ship armot (hit points).
+     * Returns the ship armor (hit points).
      *
      * @return The ship armor.
      */
@@ -330,15 +319,6 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     }
 
     /**
-     * Returns true if this ship state is exploding.
-     *
-     * @return True if this ship is exploding.
-     */
-    public boolean isExploding() {
-        return state == STATE_EXPLODING;
-    }
-
-    /**
      * Returns true if this ship state is destroyed.
      *
      * @return True if this ship is destroyed.
@@ -354,8 +334,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      * @see game.ship.ShipModel
      */
     public ShipModel getShipModel() {
-        return new ShipModel(objectId, shipType,
-                getX(), getY(), getDx(), getDy());
+        return new ShipModel(objectId, shipType, getX(), getY(), getDx(), getDy());
     }
 
     /**
@@ -375,7 +354,6 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      */
     @Override
     public void handlePacket(Packet packet) {
-
         if (packet instanceof ShipPacket) {
             ShipPacket shipPacket = (ShipPacket) packet;
             ShipState shipState = shipPacket.getShipState();
@@ -389,7 +367,6 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
 
             packet.setConsumed(true);
         }
-
     }
 
     /**
@@ -397,7 +374,6 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      */
     @Override
     public void createPacket(GameNetworkManager netManager) {
-
         ShipState shipState = getShipState();
 
         Packet shipPacket = new ShipPacket(netManager.getSenderId(),
