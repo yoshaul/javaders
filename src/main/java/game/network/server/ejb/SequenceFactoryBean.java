@@ -21,7 +21,6 @@ package game.network.server.ejb;
 import game.network.server.DBHelper;
 
 import javax.ejb.*;
-import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +30,7 @@ import java.sql.SQLException;
  * The <code>SequenceFactory</code> is used to generate unique
  * sequence id for each table name (or any name).
  */
-public class SequenceFactoryBean implements EntityBean {
+class SequenceFactoryBean implements EntityBean {
 
     private EntityContext entityContext;
 
@@ -83,7 +82,7 @@ public class SequenceFactoryBean implements EntityBean {
      * Set the primary key.
      */
     @Override
-    public void ejbActivate() throws EJBException, RemoteException {
+    public void ejbActivate() throws EJBException {
         this.tableName = (String) entityContext.getPrimaryKey();
     }
 
@@ -91,7 +90,7 @@ public class SequenceFactoryBean implements EntityBean {
      * Unset the primary key.
      */
     @Override
-    public void ejbPassivate() throws EJBException, RemoteException {
+    public void ejbPassivate() throws EJBException {
         this.tableName = null;
     }
 
@@ -99,7 +98,7 @@ public class SequenceFactoryBean implements EntityBean {
      * Load the details from the database.
      */
     @Override
-    public void ejbLoad() throws EJBException, RemoteException {
+    public void ejbLoad() throws EJBException {
         Connection connection = null;
         try {
             String tableName = (String) entityContext.getPrimaryKey();
@@ -136,8 +135,7 @@ public class SequenceFactoryBean implements EntityBean {
      * Remove from the database.
      */
     @Override
-    public void ejbRemove() throws RemoveException, EJBException,
-            RemoteException {
+    public void ejbRemove() throws RemoveException, EJBException {
 
         Connection connection = null;
         try {
@@ -166,7 +164,7 @@ public class SequenceFactoryBean implements EntityBean {
      * Store details to the database.
      */
     @Override
-    public void ejbStore() throws EJBException, RemoteException {
+    public void ejbStore() throws EJBException {
         Connection connection = null;
         try {
             connection = DBHelper.getConnection();
@@ -192,12 +190,12 @@ public class SequenceFactoryBean implements EntityBean {
 
     @Override
     public void setEntityContext(EntityContext entityContext)
-            throws EJBException, RemoteException {
+            throws EJBException {
         this.entityContext = entityContext;
     }
 
     @Override
-    public void unsetEntityContext() throws EJBException, RemoteException {
+    public void unsetEntityContext() throws EJBException {
         this.entityContext = null;
 
     }

@@ -26,12 +26,10 @@ import game.util.ResourceManager;
 import org.w3c.dom.*;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,7 +102,7 @@ public class LevelsManager {
      * @param levelNumber Number of the level to load.
      * @return Map of enemy ships
      */
-    public Map<Integer, Ship> loadLevel(int levelNumber) {
+    private Map<Integer, Ship> loadLevel(int levelNumber) {
 
         int curObjectID = GameConstants.FIRST_ENEMY_SHIP_ID;
         Map<Integer, Ship> enemyShips = new HashMap<>();
@@ -159,7 +157,7 @@ public class LevelsManager {
      * @param levelNumber Level to load.
      * @return Element with the level details. Null if not found.
      */
-    public Element getLevelElement(int levelNumber) {
+    private Element getLevelElement(int levelNumber) {
         Element level = null;
         boolean levelFound = false;
         // Get all the level nodes 
@@ -187,7 +185,7 @@ public class LevelsManager {
      *
      * @param level Elment with the level info
      */
-    public void loadLevelBGImage(Element level) {
+    private void loadLevelBGImage(Element level) {
         Node bgImage = level.getElementsByTagName("backgroundImage").item(0);
         if (bgImage != null) {
             String bgImageName = bgImage.getFirstChild().getNodeValue();
@@ -242,7 +240,7 @@ public class LevelsManager {
     private class LevelsEntityResolver implements EntityResolver {
 
         @Override
-        public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+        public InputSource resolveEntity(String publicId, String systemId) {
             if (systemId.endsWith("levels.dtd")) {
                 return new InputSource(ResourceManager.getResourceAsStream(
                         GameConstants.CONFIG_DIR + "/levels.dtd"));

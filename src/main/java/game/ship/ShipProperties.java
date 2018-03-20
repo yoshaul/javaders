@@ -34,38 +34,38 @@ import java.util.Map;
 public class ShipProperties {
 
     // Various ship types
-    public static final int SHIP_TYPE_1 = 1;
-    public static final int SHIP_TYPE_2 = 2;
-    public static final int SHIP_TYPE_3 = 3;
-    public static final int SHIP_TYPE_4 = 4;
+    private static final int SHIP_TYPE_1 = 1;
+    private static final int SHIP_TYPE_2 = 2;
+    private static final int SHIP_TYPE_3 = 3;
+    private static final int SHIP_TYPE_4 = 4;
 
-    public static final int ROBO_SHIP_TYPE_1 = 21;
-    public static final int ROBO_SHIP_TYPE_2 = 22;
-    public static final int ROBO_SHIP_TYPE_3 = 23;
-    public static final int ROBO_SHIP_TYPE_4 = 24;
-    public static final int ROBO_SHIP_TYPE_5 = 25;
-    public static final int ROBO_SHIP_TYPE_6 = 26;
-    public static final int ROBO_SHIP_TYPE_7 = 27;
+    private static final int ROBO_SHIP_TYPE_1 = 21;
+    private static final int ROBO_SHIP_TYPE_2 = 22;
+    private static final int ROBO_SHIP_TYPE_3 = 23;
+    private static final int ROBO_SHIP_TYPE_4 = 24;
+    private static final int ROBO_SHIP_TYPE_5 = 25;
+    private static final int ROBO_SHIP_TYPE_6 = 26;
+    private static final int ROBO_SHIP_TYPE_7 = 27;
 
-    public static final int CARDROM_SHIP_TYPE_1 = 41;
-    public static final int CARDROM_SHIP_TYPE_2 = 42;
-    public static final int CARDROM_SHIP_TYPE_3 = 43;
-    public static final int CARDROM_SHIP_TYPE_4 = 44;
-    public static final int CARDROM_SHIP_TYPE_5 = 45;
+    private static final int CARDROM_SHIP_TYPE_1 = 41;
+    private static final int CARDROM_SHIP_TYPE_2 = 42;
+    private static final int CARDROM_SHIP_TYPE_3 = 43;
+    private static final int CARDROM_SHIP_TYPE_4 = 44;
+    private static final int CARDROM_SHIP_TYPE_5 = 45;
 
-    public static final int COLOR_SHIP_TYPE_1 = 61;
-    public static final int COLOR_SHIP_TYPE_2 = 62;
-    public static final int COLOR_SHIP_TYPE_3 = 63;
-    public static final int COLOR_SHIP_TYPE_4 = 64;
+    private static final int COLOR_SHIP_TYPE_1 = 61;
+    private static final int COLOR_SHIP_TYPE_2 = 62;
+    private static final int COLOR_SHIP_TYPE_3 = 63;
+    private static final int COLOR_SHIP_TYPE_4 = 64;
 
     public static final int PLAYER_SHIP_TYPE_1 = 100;
     public static final int PLAYER_SHIP_TYPE_2 = 101;
 
-    public static final int BOSS_SHIP_TYPE_1 = 201;
-    public static final int BOSS_SHIP_TYPE_2 = 202;
-    public static final int BOSS_SHIP_TYPE_3 = 203;
-    public static final int BOSS_SHIP_TYPE_4 = 204;
-    public static final int BOSS_SHIP_TYPE_5 = 205;
+    private static final int BOSS_SHIP_TYPE_1 = 201;
+    private static final int BOSS_SHIP_TYPE_2 = 202;
+    private static final int BOSS_SHIP_TYPE_3 = 203;
+    private static final int BOSS_SHIP_TYPE_4 = 204;
+    private static final int BOSS_SHIP_TYPE_5 = 205;
 
     private final static Map<Integer, ShipProperties> shipsProperties = initShipsProperties();
 

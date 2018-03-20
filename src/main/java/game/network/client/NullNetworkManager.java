@@ -20,7 +20,6 @@ package game.network.client;
 
 import game.GameMenu;
 import game.highscore.HighScore;
-import game.network.InvalidLoginException;
 import game.network.packet.InvitationPacket;
 import game.network.packet.Packet;
 import game.network.server.ejb.OnlinePlayerModel;
@@ -46,52 +45,50 @@ public class NullNetworkManager implements NetworkManager {
     }
 
     @Override
-    public Long login(String user, String password) throws NetworkException,
-            InvalidLoginException {
+    public Long login(String user, String password) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void logout() throws NetworkException {
+    public void logout() {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void signup(String user, String password, String email)
-            throws NetworkException {
+    public void signup(String user, String password, String email) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void sendInvitation(Long sessionId) throws NetworkException {
+    public void sendInvitation(Long sessionId) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void cancelInvitation() throws NetworkException {
+    public void cancelInvitation() {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void acceptInvitations(boolean accept) throws NetworkException {
+    public void acceptInvitations(boolean accept) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
     public void sendInvitationReply(InvitationPacket originalInvitation,
-                                    boolean accepted) throws NetworkException {
+            boolean accepted) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public List<OnlinePlayerModel> getAvailablePlayers() throws NetworkException {
+    public List<OnlinePlayerModel> getAvailablePlayers() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -115,26 +112,25 @@ public class NullNetworkManager implements NetworkManager {
     }
 
     @Override
-    public void postHighScore(HighScore score) throws NetworkException {
+    public void postHighScore(HighScore score) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public HighScore[] getTopTenScores() throws NetworkException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public HighScore[] getHighScores(int fromRank, int toRank)
-            throws NetworkException {
+    public HighScore[] getTopTenScores() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public GameNetworkManager getGameNetworkManager() throws NetworkException {
+    public HighScore[] getHighScores(int fromRank, int toRank) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public GameNetworkManager getGameNetworkManager() {
         // TODO Auto-generated method stub
         return null;
     }

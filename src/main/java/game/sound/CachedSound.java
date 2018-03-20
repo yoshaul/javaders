@@ -24,7 +24,7 @@ import javax.sound.sampled.AudioFormat;
  * The <code>CachedSound</code> is used to cache
  * sound file bytes.
  */
-public class CachedSound {
+class CachedSound {
 
     private byte[] samples;
     private AudioFormat audioFormat;

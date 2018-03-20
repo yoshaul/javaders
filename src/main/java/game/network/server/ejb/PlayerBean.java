@@ -21,7 +21,6 @@ package game.network.server.ejb;
 import game.network.server.DBHelper;
 
 import javax.ejb.*;
-import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,7 +29,7 @@ import java.sql.SQLException;
 /**
  * The <code>Player</code> EJB holds the data of a registered player.
  */
-public class PlayerBean implements EntityBean {
+class PlayerBean implements EntityBean {
 
     private EntityContext entityContext;
 //    private Connection connection;
@@ -56,15 +55,14 @@ public class PlayerBean implements EntityBean {
     /**
      * For the ejbCreate(String, String)
      */
-    public void ejbPostCreate(String userName, String password)
-            throws CreateException {
+    public void ejbPostCreate(String userName, String password) {
         // do nothing
     }
 
     /**
      * @see PlayerHome#create(String, String, String)
      */
-    public String ejbCreate(String userName, String password, String email)
+    private String ejbCreate(String userName, String password, String email)
             throws CreateException {
 
         this.userName = userName;
@@ -101,7 +99,7 @@ public class PlayerBean implements EntityBean {
      * For the ejbCreate(String, String, String)
      */
     public void ejbPostCreate(String userName, String password,
-                              String email) throws CreateException {
+            String email) {
         // do nothing
     }
 
@@ -109,7 +107,7 @@ public class PlayerBean implements EntityBean {
      * Set the primary key.
      */
     @Override
-    public void ejbActivate() throws EJBException, RemoteException {
+    public void ejbActivate() throws EJBException {
         userName = (String) entityContext.getPrimaryKey();
     }
 
@@ -117,7 +115,7 @@ public class PlayerBean implements EntityBean {
      * Unset the primary key.
      */
     @Override
-    public void ejbPassivate() throws EJBException, RemoteException {
+    public void ejbPassivate() throws EJBException {
         userName = null;
     }
 
@@ -125,7 +123,7 @@ public class PlayerBean implements EntityBean {
      * Load the details from the database.
      */
     @Override
-    public void ejbLoad() throws EJBException, RemoteException {
+    public void ejbLoad() throws EJBException {
 
         Connection connection = null;
         try {
@@ -165,8 +163,7 @@ public class PlayerBean implements EntityBean {
      * Remove the player from the database.
      */
     @Override
-    public void ejbRemove() throws RemoveException, EJBException,
-            RemoteException {
+    public void ejbRemove() throws RemoveException, EJBException {
 
         Connection connection = null;
         try {
@@ -197,7 +194,7 @@ public class PlayerBean implements EntityBean {
      * Store the details to the database.
      */
     @Override
-    public void ejbStore() throws EJBException, RemoteException {
+    public void ejbStore() throws EJBException {
 
         Connection connection = null;
         try {
@@ -228,13 +225,13 @@ public class PlayerBean implements EntityBean {
 
     @Override
     public void setEntityContext(EntityContext entityContext)
-            throws EJBException, RemoteException {
+            throws EJBException {
 
         this.entityContext = entityContext;
     }
 
     @Override
-    public void unsetEntityContext() throws EJBException, RemoteException {
+    public void unsetEntityContext() throws EJBException {
 
         entityContext = null;
 

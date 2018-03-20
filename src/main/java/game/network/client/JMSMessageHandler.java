@@ -31,7 +31,7 @@ import javax.naming.NamingException;
  * The <code>JMSMessageHandler</code> handles JMS communication
  * for the network manager.
  */
-public class JMSMessageHandler implements MessageListener {
+class JMSMessageHandler implements MessageListener {
 
     // JMS variables
     private Session session;

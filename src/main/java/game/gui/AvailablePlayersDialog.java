@@ -194,8 +194,7 @@ public class AvailablePlayersDialog extends GameDialog {
             int selectedRow = playersTable.getSelectedRow();
             if (selectedRow > -1) {
                 // Get the player's session id and send invitation
-                OnlinePlayerModel selectedPlayer = (OnlinePlayerModel)
-                        availablePlayers.get(selectedRow);
+                OnlinePlayerModel selectedPlayer = availablePlayers.get(selectedRow);
 
                 Long sessionId = selectedPlayer.getSessionId();
                 gameMenu.getNetworkManager().sendInvitation(sessionId);
@@ -219,7 +218,7 @@ public class AvailablePlayersDialog extends GameDialog {
      * Cancel a previously sent invitation by changing the status
      * and sending cancellation packet.
      */
-    public void cancelInvitation() {
+    private void cancelInvitation() {
         try {
             gameMenu.getNetworkManager().cancelInvitation();
             reset();
@@ -272,7 +271,7 @@ public class AvailablePlayersDialog extends GameDialog {
      */
     private class MyTableModel extends DefaultTableModel {
 
-        public MyTableModel(String[] columnNames, int rowCount) {
+        MyTableModel(String[] columnNames, int rowCount) {
             super(columnNames, rowCount);
         }
 

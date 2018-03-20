@@ -31,14 +31,14 @@ public interface PacketHandler {
      *
      * @param netManager Network manager.
      */
-    public void createPacket(GameNetworkManager netManager);
+    void createPacket(GameNetworkManager netManager);
 
     /**
      * Handle the incoming packet.
      *
      * @param packet Incoming packet.
      */
-    public void handlePacket(Packet packet);
+    void handlePacket(Packet packet);
 
     /**
      * Returns the object network handler id that handles
@@ -48,6 +48,6 @@ public interface PacketHandler {
      * @return Id of the packet handlet that should handle
      * incoming packets.
      */
-    public int getHandlerId();
+    int getHandlerId();
 
 }

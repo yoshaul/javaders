@@ -107,7 +107,7 @@ public class GUIManager {
      */
     private class NullRepaintManager extends RepaintManager {
 
-        public NullRepaintManager() {
+        NullRepaintManager() {
             setDoubleBufferingEnabled(false);
         }
 

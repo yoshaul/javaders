@@ -21,11 +21,9 @@ package game.network.server.ejb;
 import game.highscore.HighScore;
 import game.network.server.DBHelper;
 
-import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
-import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +33,7 @@ import java.sql.SQLException;
  * The <code>HighScores</code> EJB manages the scores
  * posted by the game players.
  */
-public class HighScoresBean implements SessionBean {
+class HighScoresBean implements SessionBean {
 
     private SessionContext sessionContext;
 
@@ -46,17 +44,17 @@ public class HighScoresBean implements SessionBean {
 	/* SessionBean implementation */
 
     @Override
-    public void ejbActivate() throws EJBException, RemoteException {
+    public void ejbActivate() throws EJBException {
         // Not in use in stateless session beans
     }
 
     @Override
-    public void ejbPassivate() throws EJBException, RemoteException {
+    public void ejbPassivate() throws EJBException {
         // Not in use in stateless session beans
     }
 
     @Override
-    public void ejbRemove() throws EJBException, RemoteException {
+    public void ejbRemove() throws EJBException {
 
     }
 
@@ -69,7 +67,7 @@ public class HighScoresBean implements SessionBean {
 	
 	/* Home interface implementation */
 
-    public void ejbCreate() throws CreateException {
+    public void ejbCreate() {
 
     }
 
@@ -122,7 +120,7 @@ public class HighScoresBean implements SessionBean {
     /**
      * @see HighScores#getHighScores(int, int)
      */
-    public HighScore[] getHighScores(int fromRank, int toRank)
+    private HighScore[] getHighScores(int fromRank, int toRank)
             throws EJBException {
 
         Connection connection = null;

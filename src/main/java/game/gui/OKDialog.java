@@ -48,7 +48,7 @@ public class OKDialog extends GameDialog {
      * Create the dialog UI.
      */
     @Override
-    public void createGUI() {
+    protected void createGUI() {
 
         Container contentPane = this.getContentPane();
         contentPane.setLayout(new BorderLayout());

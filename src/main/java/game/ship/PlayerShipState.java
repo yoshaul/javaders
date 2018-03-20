@@ -22,7 +22,7 @@ package game.ship;
  * The player ship state adds some more data needed for a
  * player ship.
  */
-public class PlayerShipState extends ShipState {
+class PlayerShipState extends ShipState {
 
     private final long score;    // The player's score
 

@@ -28,9 +28,9 @@ public final class GameConstants {
 
     public final static String RESOURCES = "resources";
 
-    public final static String IMAGES = "images";
+    private final static String IMAGES = "images";
 
-    public final static String SOUNDS = "sounds";
+    private final static String SOUNDS = "sounds";
 
     public final static String IMAGES_DIR = RESOURCES + "/" + IMAGES + "/";
 

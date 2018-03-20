@@ -26,7 +26,7 @@ import javax.ejb.*;
 /**
  * The signin bean is used for users validation, logout and signups.
  */
-public class SignInBean implements SessionBean {
+class SignInBean implements SessionBean {
 
     private SessionContext sessionContext;
 
@@ -57,7 +57,7 @@ public class SignInBean implements SessionBean {
 	
 	/* SignInHome interface implementation */
 
-    public void ejbCreate() throws CreateException {
+    public void ejbCreate() {
 
     }
 

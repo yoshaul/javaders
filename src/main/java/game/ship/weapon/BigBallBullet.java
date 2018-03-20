@@ -23,7 +23,7 @@ import game.ship.Ship;
 /**
  * Bullet that looks like a ball. Very damaging bullet.
  */
-public class BigBallBullet extends Bullet {
+class BigBallBullet extends Bullet {
 
     private final static String imageName = "red_ball.png";
     private final static long damage = 20;

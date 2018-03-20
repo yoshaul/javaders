@@ -38,27 +38,27 @@ public interface Target {
      * @return True if this objects collides with the rectangle
      * represented by the point
      */
-    public boolean isCollision(int x0, int y0, int x1, int y1);
+    boolean isCollision(int x0, int y0, int x1, int y1);
 
     /**
      * Hit the target and cause some damage.
      *
      * @param damage Damage to cause.
      */
-    public void hit(long damage);
+    void hit(long damage);
 
     /**
      * Hit the target with the bullet.
      *
      * @param bullet Bullet object.
      */
-    public void hit(Bullet bullet);
+    void hit(Bullet bullet);
 
     /**
      * Hit the target with the bonus.
      *
      * @param bonus Bonus object.
      */
-    public void hit(Bonus bonus);
+    void hit(Bonus bonus);
 
 }

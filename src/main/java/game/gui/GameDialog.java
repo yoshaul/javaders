@@ -37,7 +37,7 @@ public abstract class GameDialog extends JDialog
         implements ActionListener {
 
     public static final String BTN_BIG_IMAGE = "button_green.png";
-    public static final String BTN_SMALL_IMAGE = "btn_small_green.png";
+    static final String BTN_SMALL_IMAGE = "btn_small_green.png";
 
     /**
      * Constructs a ew <code>GameDialog</code>
@@ -45,7 +45,7 @@ public abstract class GameDialog extends JDialog
      * @param owner Owner frame.
      * @param modal True if it's a modal dialog.
      */
-    public GameDialog(JFrame owner, boolean modal) {
+    GameDialog(JFrame owner, boolean modal) {
         // Set owner dialog and set modal
         super(owner, modal);
         getContentPane().setBackground(Color.BLACK);
@@ -63,7 +63,7 @@ public abstract class GameDialog extends JDialog
      * Centers the dialog on the screen. This method should be
      * called only after setting the size of the dialog.
      */
-    protected void centralizeOnScreen() {
+    void centralizeOnScreen() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension dialogSize = this.getSize();
         this.setLocation(
@@ -81,7 +81,7 @@ public abstract class GameDialog extends JDialog
     /**
      * Hides the dialog.
      */
-    public void hideDialog() {
+    void hideDialog() {
         this.setVisible(false);
     }
 
@@ -94,8 +94,8 @@ public abstract class GameDialog extends JDialog
      * @param buttonImage Name of the button image.
      * @return Customized button.
      */
-    public JButton createButton(String buttonText,
-                                String toolTipText, String buttonImage) {
+    JButton createButton(String buttonText,
+            String toolTipText, String buttonImage) {
         JButton button = new JButton();
         button.setToolTipText(toolTipText);
 
@@ -113,8 +113,8 @@ public abstract class GameDialog extends JDialog
      * @param buttonText  Text for the button
      * @param buttonImage Image for the button
      */
-    protected void customizeButton(JButton button, String buttonText,
-                                   String buttonImage) {
+    void customizeButton(JButton button, String buttonText,
+            String buttonImage) {
 
         // Load the base image for the button
         Image srcImage = ResourceManager.loadImage(
@@ -187,7 +187,7 @@ public abstract class GameDialog extends JDialog
      *
      * @param lm Layout manager for the panel.
      */
-    protected JPanel createPanel(LayoutManager lm) {
+    JPanel createPanel(LayoutManager lm) {
         JPanel panel = new JPanel(lm);
         panel.setBackground(Color.BLACK);
         return panel;
@@ -198,7 +198,7 @@ public abstract class GameDialog extends JDialog
      *
      * @param text Text for the label
      */
-    protected JLabel createLabel(String text) {
+    JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(Color.WHITE);
         label.setFont(ResourceManager.getFont(12));
@@ -209,7 +209,7 @@ public abstract class GameDialog extends JDialog
      * Returns <code>JTextField</code> with black background
      * and white foreground.
      */
-    protected JTextField createTextField() {
+    JTextField createTextField() {
         JTextField textField = new JTextField();
         textField.setBackground(Color.BLACK);
         textField.setForeground(Color.WHITE);
@@ -220,7 +220,7 @@ public abstract class GameDialog extends JDialog
      * Returns <code>JPasswordField</code> with black background
      * and white foreground.
      */
-    protected JPasswordField createPasswordField() {
+    JPasswordField createPasswordField() {
         JPasswordField passField = new JPasswordField();
         passField.setBackground(Color.BLACK);
         passField.setForeground(Color.WHITE);

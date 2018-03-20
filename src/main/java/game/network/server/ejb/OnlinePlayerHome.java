@@ -29,13 +29,13 @@ public interface OnlinePlayerHome extends EJBHome {
     /**
      * Find online player by primary key (session id).
      */
-    public OnlinePlayer findByPrimaryKey(Long pk)
+    OnlinePlayer findByPrimaryKey(Long pk)
             throws RemoteException, FinderException;
 
     /**
      * Find all the online players that accepts invitations.
      */
-    public Collection findByAcceptInvitations()
+    Collection findByAcceptInvitations()
             throws RemoteException, FinderException;
 
     /**
@@ -44,7 +44,7 @@ public interface OnlinePlayerHome extends EJBHome {
      *
      * @param userName User name of the online player.
      */
-    public OnlinePlayer create(String userName)
+    OnlinePlayer create(String userName)
             throws RemoteException, CreateException;
 
 }

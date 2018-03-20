@@ -36,7 +36,7 @@ public abstract class Sprite implements Movable, Renderable {
     protected float dx;        // Vertical velocity (pixels/sec)
     protected float dy;        // Horizontal velocity (pixels/sec)
 
-    protected boolean active = true;
+    boolean active = true;
 
     private Image spriteImage;
 
@@ -47,7 +47,7 @@ public abstract class Sprite implements Movable, Renderable {
      * @param dy    Max horizontal velocity (pixels/sec)
      * @param image Sprite's image
      */
-    public Sprite(float x, float y, float dx, float dy, Image image) {
+    Sprite(float x, float y, float dx, float dy, Image image) {
         this(x, y, dx, dy);
         this.spriteImage = image;
     }
@@ -159,18 +159,18 @@ public abstract class Sprite implements Movable, Renderable {
         return spriteImage.getHeight(null);
     }
 
-    public float getCenterX() {
+    float getCenterX() {
         return x + (float) (getWidth() / 2);
     }
 
-    public float getCenterY() {
+    float getCenterY() {
         return y + (float) (getHeight() / 2);
     }
 
     /**
      * @param active
      */
-    public void setActive(boolean active) {
+    void setActive(boolean active) {
         this.active = active;
     }
 

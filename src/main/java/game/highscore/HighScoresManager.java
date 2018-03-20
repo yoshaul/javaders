@@ -140,7 +140,7 @@ public class HighScoresManager {
      * Returns true if the input high score has place in the
      * high scores list.
      */
-    public boolean isHighScore(HighScore score) {
+    private boolean isHighScore(HighScore score) {
         return score.getScore() > 0 &&
                 (highScores[numOfHighScores - 1] == null ||
                         highScores[numOfHighScores - 1].compareTo(score) < 0);

@@ -29,14 +29,14 @@ public abstract class AbstractWeapon implements Weapon {
 
     // Type of the weapon 
     // (the various types are defined in the WeaponFactory class)
-    protected final int weaponType;
+    private final int weaponType;
 
     // Firing rate of the weapon
-    protected long firingRate;
+    long firingRate;
 
-    protected Ship owner;
-    protected int direction;
-    protected int weaponLevel;
+    Ship owner;
+    int direction;
+    int weaponLevel;
 
     /**
      * Abstract weapon constructor
@@ -47,8 +47,8 @@ public abstract class AbstractWeapon implements Weapon {
      * @param weaponType  Type of the weapon
      * @param firingRate  Firing rate of the weapon
      */
-    public AbstractWeapon(int direction, int weaponLevel,
-                          int weaponType, long firingRate) {
+    AbstractWeapon(int direction, int weaponLevel,
+            int weaponType, long firingRate) {
         this.direction = direction;
         this.weaponLevel = weaponLevel;
         this.weaponType = weaponType;

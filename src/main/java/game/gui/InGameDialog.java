@@ -34,13 +34,13 @@ import java.awt.event.ActionListener;
  * This class extends <code>JPanel</code> and uses a customized look -
  * image as background, special buttons, border, etc.
  */
-public abstract class InGameDialog extends JPanel implements ActionListener {
+abstract class InGameDialog extends JPanel implements ActionListener {
 
-    public static final String DEFAULT_BG_IMAGE = "indialogbg.jpg";
-    public static final String DEFAULT_BTN_IMAGE = "indialogbtn1.png";
+    static final String DEFAULT_BG_IMAGE = "indialogbg.jpg";
+    static final String DEFAULT_BTN_IMAGE = "indialogbtn1.png";
 
-    protected ScreenManager screenManager;
-    protected Image bgImage;
+    ScreenManager screenManager;
+    private Image bgImage;
 
     /**
      * Construct a new dialog.
@@ -48,7 +48,7 @@ public abstract class InGameDialog extends JPanel implements ActionListener {
      * @param screenManager A screen manager
      * @param imageName     Name of the background image for the dialog.
      */
-    public InGameDialog(ScreenManager screenManager, String imageName) {
+    InGameDialog(ScreenManager screenManager, String imageName) {
         this.screenManager = screenManager;
 
         if (imageName != null && !imageName.equals("")) {
@@ -62,7 +62,7 @@ public abstract class InGameDialog extends JPanel implements ActionListener {
     /**
      * Init the dialog properties.
      */
-    protected void initDialog() {
+    private void initDialog() {
 
         this.setLayout(new BorderLayout());
         this.setVisible(false);
@@ -78,7 +78,7 @@ public abstract class InGameDialog extends JPanel implements ActionListener {
      * @param imageName  Name of the button image.
      * @return Customized button.
      */
-    protected JButton createButton(String buttonText, String imageName) {
+    JButton createButton(String buttonText, String imageName) {
         JButton button = new JButton();
 
         // Load the image for the button
@@ -136,7 +136,7 @@ public abstract class InGameDialog extends JPanel implements ActionListener {
     /**
      * Center the dialog on the game frame.
      */
-    protected void centralizeOnScreen() {
+    void centralizeOnScreen() {
         Dimension screenSize =
                 screenManager.getScreenDimension();
         Dimension dialogSize = this.getSize();

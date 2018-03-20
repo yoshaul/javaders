@@ -26,7 +26,7 @@ import javax.sound.sampled.LineListener;
  * This class is used as sound line listener. When a stop
  * line event arrives the line is closed.
  */
-public class SimpleLineListener implements LineListener {
+class SimpleLineListener implements LineListener {
 
     @Override
     public void update(LineEvent event) {

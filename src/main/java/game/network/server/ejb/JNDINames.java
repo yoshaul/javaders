@@ -24,19 +24,19 @@ package game.network.server.ejb;
  */
 public interface JNDINames {
 
-    public final static String DBName =
+    String DBName =
             "java:comp/env/jdbc/gameDB";
 
-    public final static String PLAYER_BEAN =
+    String PLAYER_BEAN =
             "java:comp/env/ejb/Player";
 
-    public final static String ONLINE_PLAYER_BEAN =
+    String ONLINE_PLAYER_BEAN =
             "java:comp/env/ejb/OnlinePlayer";
 
-    public final static String HIGH_SCORES_BEAN =
+    String HIGH_SCORES_BEAN =
             "java:comp/env/ejb/HighScores";
 
-    public final static String SEQUENCE_FACTORY_BEAN =
+    String SEQUENCE_FACTORY_BEAN =
             "java:comp/env/ejb/SequenceFactory";
 
 }

@@ -30,6 +30,6 @@ public interface SignInHome extends EJBHome {
     /**
      * Create a bean instance.
      */
-    public SignIn create() throws RemoteException, CreateException;
+    SignIn create() throws RemoteException, CreateException;
 
 }

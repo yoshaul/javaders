@@ -37,14 +37,14 @@ public interface GameNetworkManager {
      *
      * @param gameState Current game state.
      */
-    public void gatherInput(GameState gameState);
+    void gatherInput(GameState gameState);
 
     /**
      * Send packet to the network player.
      *
      * @param packet Packet to send.
      */
-    public void sendPacket(Packet packet);
+    void sendPacket(Packet packet);
 
     /**
      * Handle incoming packet. The implementing manager usually
@@ -53,33 +53,33 @@ public interface GameNetworkManager {
      *
      * @param packet
      */
-    public void handlePacket(Packet packet);
+    void handlePacket(Packet packet);
 
     /**
      * Returns the first packet in the incomig packets queue
      * and remove it from the queue.
      */
-    public Packet getNextPacket();
+    Packet getNextPacket();
 
     /**
      * Returns this player session id.
      */
-    public Long getSenderId();
+    Long getSenderId();
 
     /**
      * Returns the network player session id.
      */
-    public Long getReceiverId();
+    Long getReceiverId();
 
     /**
      * Returns true if this user initiated the network game (i.e., sent
      * the invitation to play).
      */
-    public boolean isInviter();
+    boolean isInviter();
 
     /**
      * Do some cleanup before exiting.
      */
-    public void cleanup();
+    void cleanup();
 
 }

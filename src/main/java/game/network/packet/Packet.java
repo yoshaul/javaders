@@ -40,7 +40,7 @@ public abstract class Packet implements Serializable {
      * @param senderId   Session id of the sender
      * @param receiverId Session id of the target user
      */
-    public Packet(Long senderId, Long receiverId) {
+    Packet(Long senderId, Long receiverId) {
         this(senderId, receiverId, -1);
     }
 
@@ -51,7 +51,7 @@ public abstract class Packet implements Serializable {
      * @param receiverId Session id of the target user
      * @param handlerId  Id of the object that should handle this packet
      */
-    public Packet(Long senderId, Long receiverId, int handlerId) {
+    Packet(Long senderId, Long receiverId, int handlerId) {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.handlerId = handlerId;

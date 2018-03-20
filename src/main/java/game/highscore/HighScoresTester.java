@@ -43,7 +43,7 @@ public class HighScoresTester extends JFrame implements ActionListener {
         tester.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public HighScoresTester() {
+    private HighScoresTester() {
         highScoresManager = new HighScoresManager(4);
         setupGUI();
     }

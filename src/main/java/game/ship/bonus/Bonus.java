@@ -36,7 +36,7 @@ public abstract class Bonus extends Sprite implements PacketHandler {
     private static final float dx = 0.0f;    // Vertical velocity
     private static final float dy = 0.2f;    // Hotizontal velocity
 
-    public Bonus(float x, float y) {
+    Bonus(float x, float y) {
 
         super(x, y, dx, dy);
     }

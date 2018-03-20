@@ -28,24 +28,24 @@ import java.util.Random;
  */
 public class AIState {
 
-    public static final int AI_TYPE_AGGRESIVE = 1;
-    public static final int AI_TYPE_NORMAL = 2;
-    public static final int AI_TYPE_COWARD = 3;
+    private static final int AI_TYPE_AGGRESIVE = 1;
+    private static final int AI_TYPE_NORMAL = 2;
+    private static final int AI_TYPE_COWARD = 3;
 
     // State chances (each state chances should sum to 1.0)
-    public static final float AGGRESIVE_ATTACK_CHANCE = 0.6f;
-    public static final float AGGRESIVE_NORMAL_CHANCE = 0.3f;
+    private static final float AGGRESIVE_ATTACK_CHANCE = 0.6f;
+    private static final float AGGRESIVE_NORMAL_CHANCE = 0.3f;
     public static final float AGGRESIVE_FLEE_CHANCE = 0.1f;
 
-    public static final float COWARD_FLEE_CHANCE = 0.55f;
-    public static final float COWARD_NORMAL_CHANCE = 0.30f;
+    private static final float COWARD_FLEE_CHANCE = 0.55f;
+    private static final float COWARD_NORMAL_CHANCE = 0.30f;
     public static final float COWARD_ATTACK_CHANCE = 0.15f;
 
-    public static final AIState AI_STATE_ATTACK =
+    private static final AIState AI_STATE_ATTACK =
             new AIState(AI_TYPE_AGGRESIVE, 0.3f, 0.8f);
     public static final AIState AI_STATE_NORMAL =
             new AIState(AI_TYPE_NORMAL, 0.5f, 0.5f);
-    public static final AIState AI_STATE_FLEE =
+    private static final AIState AI_STATE_FLEE =
             new AIState(AI_TYPE_COWARD, 0.7f, 0.2f);
 
     private float moveChance;
@@ -60,7 +60,7 @@ public class AIState {
      * @param moveChance Chance for making a movement.
      * @param fireChance Chance for firing.
      */
-    public AIState(int type, float moveChance, float fireChance) {
+    private AIState(int type, float moveChance, float fireChance) {
         this.aiType = type;
         this.moveChance = moveChance;
         this.fireChance = fireChance;

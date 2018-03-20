@@ -78,7 +78,7 @@ public class GameMenu extends JFrame implements ActionListener {
     /**
      * Initialize the various objects and set up the GUI.
      */
-    public GameMenu() {
+    private GameMenu() {
 
         super("Super Game Menu");
 
@@ -125,7 +125,7 @@ public class GameMenu extends JFrame implements ActionListener {
      * Run in the loop until state changed to start
      * a new game or exit the game
      */
-    public void start() {
+    private void start() {
 
         while (!exited) {
             try {
@@ -148,7 +148,7 @@ public class GameMenu extends JFrame implements ActionListener {
     /**
      * Start a single player game.
      */
-    public void startSinglePlayerGame() {
+    private void startSinglePlayerGame() {
         startSingle = false;
         startGame(false, true);
     }
@@ -156,7 +156,7 @@ public class GameMenu extends JFrame implements ActionListener {
     /**
      * Start a network game.
      */
-    public void startNetworkGame() {
+    private void startNetworkGame() {
         startNetworkGame = false;
         // Start new network game. The inviter is the controller
         startGame(true, networkManager.isInviter());
@@ -169,7 +169,7 @@ public class GameMenu extends JFrame implements ActionListener {
      * @param networkGame True if starting a network game
      * @param controller  True is this machine is the controller
      */
-    public void startGame(boolean networkGame, boolean controller) {
+    private void startGame(boolean networkGame, boolean controller) {
         // Hide the game menu
         this.setVisible(false);
 
@@ -223,7 +223,7 @@ public class GameMenu extends JFrame implements ActionListener {
     /**
      * Setup the GUI for the game menu.
      */
-    public void createGUI() {
+    private void createGUI() {
 
         if (!Logger.isDebug()) {
             this.setUndecorated(true);

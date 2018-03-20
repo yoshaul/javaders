@@ -31,35 +31,35 @@ public interface Player extends EJBObject {
      *
      * @return The user name.
      */
-    public String getUserName() throws RemoteException;
+    String getUserName() throws RemoteException;
 
     /**
      * Returns the user's passsword.
      *
      * @return The user's passsword.
      */
-    public String getPassword() throws RemoteException;
+    String getPassword() throws RemoteException;
 
     /**
      * Sets the user's password.
      *
      * @param password Password to set.
      */
-    public void setPassword(String password) throws RemoteException;
+    void setPassword(String password) throws RemoteException;
 
     /**
      * Returns the user's email.
      *
      * @return The user's email.
      */
-    public String getEmail() throws RemoteException;
+    String getEmail() throws RemoteException;
 
     /**
      * Sets the user's email.
      *
      * @param email Email to set.
      */
-    public void setEmail(String email) throws RemoteException;
+    void setEmail(String email) throws RemoteException;
 
 
 }

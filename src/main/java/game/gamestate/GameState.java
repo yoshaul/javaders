@@ -31,22 +31,22 @@ import game.network.packet.Packet;
  */
 public interface GameState {
 
-    public static final int GAME_STATE_RUNNING = 1;
-    public static final int GAME_STATE_LOADING = 2;
-    public static final int GAME_STATE_HIGH_SCORE = 3;
+    int GAME_STATE_RUNNING = 1;
+    int GAME_STATE_LOADING = 2;
+    int GAME_STATE_HIGH_SCORE = 3;
 
     /**
      * This method is called once after the <code>GameState</code>
      * object is instantiated. Here all the one time initialization
      * procedures should be performed.
      */
-    public void init();
+    void init();
 
     /**
      * This method is called after a game state changes.
      * Performs any initializations before starting the state.
      */
-    public void start();
+    void start();
 
     /**
      * Gather relevant input (from the keyboard and network)
@@ -55,7 +55,7 @@ public interface GameState {
      * @param elapsedTime Time elapsed in milliseconds since the last call
      *                    to this method.
      */
-    public void gatherInput(GameLoop gameLoop, long elapsedTime);
+    void gatherInput(GameLoop gameLoop, long elapsedTime);
 
     /**
      * Updates the objects and checks for state changes.
@@ -64,14 +64,14 @@ public interface GameState {
      * @param elapsedTime Time elapsed in milliseconds since the last call
      *                    to this method.
      */
-    public void update(GameLoop gameLoop, long elapsedTime);
+    void update(GameLoop gameLoop, long elapsedTime);
 
     /**
      * Render on the screen
      *
      * @param gameLoop Reference to the <code>GameLoop</code> object
      */
-    public void render(GameLoop gameLoop);
+    void render(GameLoop gameLoop);
 
     /**
      * Handles a packet received from the network player. Usually passes
@@ -79,7 +79,7 @@ public interface GameState {
      *
      * @param packet A packet
      */
-    public void handlePacket(Packet packet);
+    void handlePacket(Packet packet);
 
     /**
      * Returns true if the current game state is finished. If so
@@ -87,21 +87,21 @@ public interface GameState {
      *
      * @return True if the current state is finished
      */
-    public boolean isFinished();
+    boolean isFinished();
 
     /**
      * Returns the next game state after the current game state is finished
      *
      * @return Next game state
      */
-    public int getNextGameState();
+    int getNextGameState();
 
     /**
      * Returns the id of the game state
      *
      * @return Id of the game state
      */
-    public int getGameStateId();
+    int getGameStateId();
 
 
 }

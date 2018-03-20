@@ -36,7 +36,7 @@ public class InvitationPacket extends Packet {
      * @param receiverId Session id of the invitee
      * @param userName   Username of the inviter
      */
-    public InvitationPacket(Long senderId, Long receiverId, String userName) {
+    InvitationPacket(Long senderId, Long receiverId, String userName) {
         super(senderId, receiverId);
         this.userName = userName;
         this.cancelled = false;

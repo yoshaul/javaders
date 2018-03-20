@@ -35,48 +35,48 @@ public interface ShipContainer {
      *
      * @param ship Ship to add.
      */
-    public void addShip(Ship ship);
+    void addShip(Ship ship);
 
     /**
      * Adds a shot to the ship container shot collection.
      *
      * @param shot Shot to add.
      */
-    public void addShot(Bullet shot);
+    void addShot(Bullet shot);
 
     /**
      * Adds a bonus to the ship container bonuses.
      *
      * @param bonus Bonus to add.
      */
-    public void addBonus(Bonus bonus);
+    void addBonus(Bonus bonus);
 
     /**
      * Returns the network manager of the game.
      *
      * @return Game network manager.
      */
-    public GameNetworkManager getNetworkManager();
+    GameNetworkManager getNetworkManager();
 
     /**
      * Returns the network handler id of the ship container.
      *
      * @return Network handler id of the ship container.
      */
-    public int getHandlerId();
+    int getHandlerId();
 
     /**
      * Returns true if the game is a network game.
      *
      * @return True if in network game.
      */
-    public boolean isNetworkGame();
+    boolean isNetworkGame();
 
     /**
      * Returns true if this machine is the controller machine.
      *
      * @return True if this machine is the controller machine.
      */
-    public boolean isController();
+    boolean isController();
 
 }

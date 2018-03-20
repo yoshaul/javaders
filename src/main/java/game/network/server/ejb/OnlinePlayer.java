@@ -36,7 +36,7 @@ public interface OnlinePlayer extends EJBObject {
      *
      * @param accept True to accept false not to.
      */
-    public void setAcceptInvitations(boolean accept)
+    void setAcceptInvitations(boolean accept)
             throws RemoteException;
 
     /**
@@ -46,7 +46,7 @@ public interface OnlinePlayer extends EJBObject {
      * @return OnlinePlayerModel of the player.
      * @see OnlinePlayerModel
      */
-    public OnlinePlayerModel getOnlinePlayerModel()
+    OnlinePlayerModel getOnlinePlayerModel()
             throws RemoteException;
 
 }

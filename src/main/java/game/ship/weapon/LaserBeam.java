@@ -23,7 +23,7 @@ import game.ship.Ship;
 /**
  * The laser beam is a laser bullet.
  */
-public class LaserBeam extends Bullet {
+class LaserBeam extends Bullet {
 
     private final static String imageName = "laserbeam.png";
     private final static long damage = 5;

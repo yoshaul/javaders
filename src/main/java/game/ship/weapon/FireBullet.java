@@ -23,7 +23,7 @@ import game.ship.Ship;
 /**
  * A bullet that looks like a fireball.
  */
-public class FireBullet extends Bullet {
+class FireBullet extends Bullet {
 
     private final static String imageName = "fireshot.gif";
     private final static long damage = 7;

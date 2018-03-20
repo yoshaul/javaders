@@ -40,20 +40,20 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     private final static int STATE_EXPLODING = 1;
     private final static int STATE_DESTROYED = 2;
 
-    protected ShipContainer shipContainer;
+    ShipContainer shipContainer;
 
     /**
      * Time passed since the last packet send
      */
-    protected long timeSinceLastPacket;
+    long timeSinceLastPacket;
 
-    protected int objectId;
+    private int objectId;
     private int shipType;
 
     /**
      * The ship's armor
      */
-    protected long armor;
+    long armor;
     /**
      * The damage the ship causes when colliding with a traget
      */
@@ -62,14 +62,15 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
     /**
      * Max vertical and horizontal velocity of the ship
      */
-    protected float maxDX, maxDY;
+    private float maxDX;
+    private float maxDY;
 
-    protected long damageScoreValue;
-    protected long destroyScoreValue;
+    long damageScoreValue;
+    long destroyScoreValue;
 
-    protected int state = STATE_NORMAL;
+    int state = STATE_NORMAL;
 
-    protected Weapon weapon;
+    Weapon weapon;
     //private Weapon secondWeapon;
 
     /**
@@ -88,10 +89,10 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      * @param hitScoreValue     Score the ship gives per 1 damage unit
      * @param destroyScoreValue Score the ship gives when destroyed
      */
-    public Ship(int objectId, int shipType,
-                float x, float y, float dx, float dy,
-                Image image, Weapon gun, long armor, long damage,
-                long hitScoreValue, long destroyScoreValue) {
+    Ship(int objectId, int shipType,
+            float x, float y, float dx, float dy,
+            Image image, Weapon gun, long armor, long damage,
+            long hitScoreValue, long destroyScoreValue) {
 
         super(x, y, dx, dy, image);
         this.objectId = objectId;
@@ -120,8 +121,8 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      * @param y        Horizontal location of the ship (from top)
      * @param prop     Properties of the ship
      */
-    public Ship(int objectId, int shipType, float x, float y,
-                ShipProperties prop) {
+    private Ship(int objectId, int shipType, float x, float y,
+            ShipProperties prop) {
 
         this(objectId, shipType, x, y, prop.getMaxDX(), prop.getMaxDY(),
                 prop.getImage(), WeaponFactory.getWeapon(prop.getWeaponType(),
@@ -274,7 +275,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      *
      * @param weapon New main weapon
      */
-    protected void setWeapon(Weapon weapon) {
+    void setWeapon(Weapon weapon) {
         this.weapon = weapon;
     }
 
@@ -284,7 +285,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      *
      * @return Damage caused by this ship.
      */
-    public long getDamage() {
+    private long getDamage() {
         return this.damage;
     }
 
@@ -324,7 +325,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      *
      * @return True if this ship is in normal state.
      */
-    public boolean isNormal() {
+    boolean isNormal() {
         return state == STATE_NORMAL;
     }
 
@@ -365,7 +366,7 @@ public abstract class Ship extends Sprite implements Target, PacketHandler {
      * @return ShipState object of this ship
      * @see game.ship.ShipState
      */
-    public abstract ShipState getShipState();
+    protected abstract ShipState getShipState();
 
     /**
      * Handle incoming packet.

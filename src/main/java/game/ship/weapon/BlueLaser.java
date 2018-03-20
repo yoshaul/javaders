@@ -23,7 +23,7 @@ import game.ship.Ship;
 /**
  * The blue laser beam is a kind of laser bullet.
  */
-public class BlueLaser extends Bullet {
+class BlueLaser extends Bullet {
 
     private final static String imageName = "bluelaser.png";
     private final static long damage = 10;

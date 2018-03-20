@@ -34,13 +34,13 @@ public interface HighScores extends EJBObject {
      *
      * @param score New score to add
      */
-    public void postHighScore(HighScore score) throws RemoteException;
+    void postHighScore(HighScore score) throws RemoteException;
 
     /**
      * @return Array of HighScore objects containing the top ten
      * high scores.
      */
-    public HighScore[] getTopTenScores() throws RemoteException;
+    HighScore[] getTopTenScores() throws RemoteException;
 
     /**
      * @return Array of HighScore objects containing the scores
@@ -48,7 +48,7 @@ public interface HighScores extends EJBObject {
      * @throws RemoteException if exception occurs or fromRank
      *                         is less then 1 or fromRank bigger than toRank.
      */
-    public HighScore[] getHighScores(int fromRank, int toRank)
+    HighScore[] getHighScores(int fromRank, int toRank)
             throws RemoteException;
 
 }

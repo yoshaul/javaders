@@ -28,14 +28,14 @@ import javax.jms.*;
  * <code>GameNetworkManager</code> to send and receive messages
  * from the JMS server.
  */
-public class JMSGameMessageHandler implements MessageListener {
+class JMSGameMessageHandler implements MessageListener {
 
-    Session session;        // JMS session
-    Queue privateQueue;        // Temporary private queue of the player
-    Destination destination;    // Network player destination queue
-    MessageConsumer gameConsumer;
-    MessageProducer gameProducer;
-    GameNetworkManager gameNetworkManager;
+    private Session session;        // JMS session
+    private Queue privateQueue;        // Temporary private queue of the player
+    private Destination destination;    // Network player destination queue
+    private MessageConsumer gameConsumer;
+    private MessageProducer gameProducer;
+    private GameNetworkManager gameNetworkManager;
 
     /**
      * Create the jms handler for the game.

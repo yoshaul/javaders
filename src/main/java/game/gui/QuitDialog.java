@@ -54,7 +54,7 @@ public class QuitDialog extends InGameDialog {
     /**
      * Set up the dialog GUI.
      */
-    protected void createGUI() {
+    private void createGUI() {
 
         JLabel label = new JLabel("Leaving so soon?", SwingConstants.CENTER);
         label.setFont(ResourceManager.getFont(Font.BOLD, 16));

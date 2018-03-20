@@ -27,7 +27,10 @@ import java.io.Serializable;
  */
 public class ShipState implements Serializable {
 
-    public final float x, y, dy, dx;
+    private final float x;
+    private final float y;
+    private final float dy;
+    private final float dx;
     private final long armor;
     private final int state;
 

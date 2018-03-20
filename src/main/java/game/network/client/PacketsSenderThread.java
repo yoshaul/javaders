@@ -29,7 +29,7 @@ import java.util.Iterator;
  * The packet sender thread is used to send game packets
  * in a different thread than the game loop thread.
  */
-public class PacketsSenderThread extends Thread {
+class PacketsSenderThread extends Thread {
 
     /**
      * Collection of outgoing packets

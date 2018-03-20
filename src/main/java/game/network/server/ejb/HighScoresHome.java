@@ -31,6 +31,6 @@ public interface HighScoresHome extends EJBHome {
     /**
      * Create a new high score.
      */
-    public HighScores create() throws RemoteException, CreateException;
+    HighScores create() throws RemoteException, CreateException;
 
 }

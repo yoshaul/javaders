@@ -62,7 +62,7 @@ public class ResourceManager {
 
     }
 
-    public static URL getResource(String resource) {
+    private static URL getResource(String resource) {
         return cl.getResource(resource);
     }
 

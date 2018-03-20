@@ -43,14 +43,14 @@ public interface NetworkManager {
      *
      * @param packet Packet to send.
      */
-    public void sendPacket(Packet packet);
+    void sendPacket(Packet packet);
 
     /**
      * Handle incoming packet.
      *
      * @param packet Incoming packet.
      */
-    public void handlePacket(Packet packet);
+    void handlePacket(Packet packet);
 
     /**
      * Login to the game server.
@@ -60,13 +60,13 @@ public interface NetworkManager {
      * @throws InvalidLoginException If details are wrong.
      * @return Session id of the player.
      */
-    public Long login(String user, String password)
+    Long login(String user, String password)
             throws NetworkException, InvalidLoginException;
 
     /**
      * Logout of the server.
      */
-    public void logout() throws NetworkException;
+    void logout() throws NetworkException;
 
     /**
      * Register to the game server.
@@ -75,7 +75,7 @@ public interface NetworkManager {
      * @param password Password
      * @param email    Email (optional)
      */
-    public void signup(String user, String password, String email)
+    void signup(String user, String password, String email)
             throws NetworkException;
 
     /**
@@ -83,19 +83,19 @@ public interface NetworkManager {
      *
      * @param sessionId Session id of the invitee.
      */
-    public void sendInvitation(Long sessionId) throws NetworkException;
+    void sendInvitation(Long sessionId) throws NetworkException;
 
     /**
      * Cancel the invitation to the last user.
      */
-    public void cancelInvitation() throws NetworkException;
+    void cancelInvitation() throws NetworkException;
 
     /**
      * Sets the accept invitations flag of the user in the server.
      *
      * @param accept True to accept, false to deny.
      */
-    public void acceptInvitations(boolean accept)
+    void acceptInvitations(boolean accept)
             throws NetworkException;
 
     /**
@@ -104,8 +104,8 @@ public interface NetworkManager {
      * @param originalInvitation The invitation packet
      * @param accepted           True if accepted, false otherwise.
      */
-    public void sendInvitationReply(InvitationPacket originalInvitation,
-                                    boolean accepted) throws NetworkException;
+    void sendInvitationReply(InvitationPacket originalInvitation,
+            boolean accepted) throws NetworkException;
 
     /**
      * Returns a list of <code>OnlinePlayerModel</code> with the
@@ -113,23 +113,23 @@ public interface NetworkManager {
      *
      * @return List of available players.
      */
-    public List<OnlinePlayerModel> getAvailablePlayers() throws NetworkException;
+    List<OnlinePlayerModel> getAvailablePlayers() throws NetworkException;
 
     /**
      * Returns the logged user session id.
      */
-    public Long getSenderId();
+    Long getSenderId();
 
     /**
      * Returns the destination user session id.
      */
-    public Long getReceiverId();
+    Long getReceiverId();
 
     /**
      * Returns true if this user initiated the network game (i.e., sent
      * the invitation to play).
      */
-    public boolean isInviter();
+    boolean isInviter();
 
     /**
      * Post the player score to the server.
@@ -137,12 +137,12 @@ public interface NetworkManager {
      * @param score
      * @throws NetworkException
      */
-    public void postHighScore(HighScore score) throws NetworkException;
+    void postHighScore(HighScore score) throws NetworkException;
 
     /**
      * Returns the top ten scores from the server.
      */
-    public HighScore[] getTopTenScores() throws NetworkException;
+    HighScore[] getTopTenScores() throws NetworkException;
 
     /**
      * Returns the high scores from place <code>fromRank</code>
@@ -151,13 +151,13 @@ public interface NetworkManager {
      * @param fromRank Starting rank.
      * @param toRank   Ending rank
      */
-    public HighScore[] getHighScores(int fromRank, int toRank)
+    HighScore[] getHighScores(int fromRank, int toRank)
             throws NetworkException;
 
     /**
      * Returns a network manager for the running game.
      */
-    public GameNetworkManager getGameNetworkManager()
+    GameNetworkManager getGameNetworkManager()
             throws NetworkException;
 }
 

@@ -59,7 +59,7 @@ public class PostHighScoreDialog extends InGameDialog {
     /**
      * Set up the GUI.
      */
-    protected void createGUI() {
+    private void createGUI() {
 
         JPanel labelPanel = new JPanel();
         labelPanel.setOpaque(false);

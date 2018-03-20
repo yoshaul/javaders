@@ -87,7 +87,7 @@ public class ScreenManager {
      *
      * @param displayMode Full screen display mode.
      */
-    public void setFullScreen(DisplayMode displayMode) {
+    private void setFullScreen(DisplayMode displayMode) {
 
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

@@ -36,7 +36,7 @@ public interface SignIn extends EJBObject {
      * @throws InvalidLoginException If the user or password are wrong.
      * @return Session id if logged in successfully
      */
-    public Long login(String userName, String password)
+    Long login(String userName, String password)
             throws RemoteException, InvalidLoginException;
 
     /**
@@ -44,7 +44,7 @@ public interface SignIn extends EJBObject {
      *
      * @param sessiondId Session id to finish.
      */
-    public void logout(Long sessiondId)
+    void logout(Long sessiondId)
             throws RemoteException;
 
     /**
@@ -55,7 +55,7 @@ public interface SignIn extends EJBObject {
      * @param email    Email of the user (may be empty).
      * @throws RemoteException
      */
-    public void addUser(String userName, String password, String email)
+    void addUser(String userName, String password, String email)
             throws RemoteException;
 
 }

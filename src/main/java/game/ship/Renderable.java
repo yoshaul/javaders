@@ -31,6 +31,6 @@ public interface Renderable {
      *
      * @param g A <code>Graphics</code> object.
      */
-    public void render(Graphics g);
+    void render(Graphics g);
 
 }

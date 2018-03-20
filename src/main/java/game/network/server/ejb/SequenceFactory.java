@@ -32,6 +32,6 @@ public interface SequenceFactory extends EJBObject {
      *
      * @return The ext sequence id.
      */
-    public Long getNextID() throws RemoteException;
+    Long getNextID() throws RemoteException;
 
 }

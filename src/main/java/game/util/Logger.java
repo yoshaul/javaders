@@ -56,7 +56,7 @@ public class Logger {
      *
      * @param message Message to display.
      */
-    public static void screen(String message) {
+    private static void screen(String message) {
         System.out.println(message);
     }
 

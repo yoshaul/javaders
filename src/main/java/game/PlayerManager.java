@@ -142,7 +142,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      *
      * @param targets Collection of Target objects.
      */
-    public void addTarget(Collection targets) {
+    private void addTarget(Collection targets) {
         this.targets.addAll(targets);
     }
 

@@ -67,7 +67,7 @@ public class AddHighScoreDialog extends InGameDialog {
     /**
      * Setup the GUI.
      */
-    protected void createGUI() {
+    private void createGUI() {
 
         JPanel inputPanel = new JPanel(new FlowLayout());
         inputPanel.setOpaque(false);

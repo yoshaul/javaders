@@ -54,8 +54,8 @@ public abstract class Bullet extends Sprite implements PacketHandler {
      * @param imageName Name of the bullet image
      * @param damage    Damage the bullet cause
      */
-    public Bullet(Ship owner, float x, float y, float dx, float dy,
-                  String imageName, long damage) {
+    Bullet(Ship owner, float x, float y, float dx, float dy,
+            String imageName, long damage) {
 
         super(x, y, dx, dy);
         Image image = ResourceManager.loadImage(GameConstants.IMAGES_DIR + imageName);

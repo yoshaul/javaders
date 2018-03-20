@@ -127,7 +127,7 @@ public class InvitationDialog extends GameDialog {
      * @param accepted True if user accepts the invitation. False
      *                 if the user rejected it or closed the dialog.
      */
-    public void sendReply(boolean accepted) {
+    private void sendReply(boolean accepted) {
         if (invitationPacket != null) {
             try {
                 networkManager.sendInvitationReply(

@@ -21,7 +21,6 @@ package game.network.server.ejb;
 import game.network.server.DBHelper;
 
 import javax.ejb.*;
-import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,7 +28,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class OnlinePlayerBean implements EntityBean {
+class OnlinePlayerBean implements EntityBean {
 
     private EntityContext entityContext;
 
@@ -91,12 +90,12 @@ public class OnlinePlayerBean implements EntityBean {
     }
 
     @Override
-    public void ejbActivate() throws EJBException, RemoteException {
+    public void ejbActivate() throws EJBException {
         this.sessionId = (Long) entityContext.getPrimaryKey();
     }
 
     @Override
-    public void ejbPassivate() throws EJBException, RemoteException {
+    public void ejbPassivate() throws EJBException {
         sessionId = null;
     }
 
@@ -104,7 +103,7 @@ public class OnlinePlayerBean implements EntityBean {
      * Load the online player's details from the database.
      */
     @Override
-    public void ejbLoad() throws EJBException, RemoteException {
+    public void ejbLoad() throws EJBException {
 
         Connection connection = null;
         try {
@@ -149,7 +148,7 @@ public class OnlinePlayerBean implements EntityBean {
      */
     @Override
     public void ejbRemove() throws
-            RemoveException, EJBException, RemoteException {
+            RemoveException, EJBException {
 
         Connection connection = null;
         try {
@@ -179,7 +178,7 @@ public class OnlinePlayerBean implements EntityBean {
      * Store the details to the database.
      */
     @Override
-    public void ejbStore() throws EJBException, RemoteException {
+    public void ejbStore() throws EJBException {
 
         Connection connection = null;
         try {
@@ -210,14 +209,14 @@ public class OnlinePlayerBean implements EntityBean {
 
     @Override
     public void setEntityContext(EntityContext entityContext)
-            throws EJBException, RemoteException {
+            throws EJBException {
 
         this.entityContext = entityContext;
 
     }
 
     @Override
-    public void unsetEntityContext() throws EJBException, RemoteException {
+    public void unsetEntityContext() throws EJBException {
 
         entityContext = null;
 
@@ -265,8 +264,7 @@ public class OnlinePlayerBean implements EntityBean {
     /**
      * @see OnlinePlayerHome#findByAcceptInvitations()
      */
-    public Collection ejbFindByAcceptInvitations()
-            throws FinderException {
+    public Collection ejbFindByAcceptInvitations() {
 
         Collection<Long> result = new ArrayList<>();
 
