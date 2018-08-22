@@ -267,7 +267,7 @@ public class HighScoresManager {
         File scoresFile = new File(HIGH_SCORES_FILE_NAME);
 
         if (!scoresFile.exists()) {
-            scoresFile.mkdirs();
+            scoresFile.getParentFile().mkdirs();
             scoresFile.createNewFile();
         }
 

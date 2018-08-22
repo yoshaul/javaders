@@ -22,7 +22,8 @@ package game.ship;
  * Any movable object in the game should implement the movable
  * interface (the base Sprite class implements this interface).
  */
-interface Movable {
+@FunctionalInterface
+public interface Movable {
 
     /**
      * Update the position of the movable object according to the

@@ -106,6 +106,11 @@ public class HighScore implements Serializable, Comparable<HighScore> {
      */
     @Override
     public int compareTo(HighScore score) {
+        //TODO: [by YS] add test
+        /*Comparator<HighScore> comparator = Comparator.comparing(HighScore::getScore)
+                .thenComparing(HighScore::getLevel)
+                .reversed();
+        return comparator.compare(this, score);*/
         if (this.score < score.score) {
             return -1;
         } else if (this.score > score.score) {

@@ -39,27 +39,25 @@ import java.util.*;
 public class EnemyShipsManager implements Renderable,
         ShipContainer, PacketHandler {
 
-    private final int handlerID = GameConstants.ENEMY_MANAGER_ID;
-
     private GameLoop gameLoop;
 
     /**
      * Map of the enemy ships. Object id as key, Ship object as value
      */
-    private Map<Integer, Ship> enemyShips;
+    private Map<Integer, Ship> enemyShips = new HashMap<>();
 
     /**
      * Collection of active shots fired by the ships
      */
-    private Collection<Bullet> shots;
+    private Collection<Bullet> shots = new ArrayList<>();
     /**
      * Collection of active bonuses dropped by the ships
      */
-    private Collection<Bonus> bonuses;
+    private Collection<Bonus> bonuses = new ArrayList<>();
     /**
      * Collection of targets for the enemy ships (i.e., player ship(s))
      */
-    private Collection<Target> targets;
+    private Collection<Target> targets = new ArrayList<>();
 
 
     /**
@@ -67,12 +65,8 @@ public class EnemyShipsManager implements Renderable,
      *
      * @param gameLoop Reference to the game loop
      */
-    public EnemyShipsManager(GameLoop gameLoop) {
+    EnemyShipsManager(GameLoop gameLoop) {
         this.gameLoop = gameLoop;
-        enemyShips = new HashMap<>();
-        shots = new ArrayList<>();
-        bonuses = new ArrayList<>();
-        targets = new ArrayList<>();
     }
 
     /**
@@ -96,15 +90,6 @@ public class EnemyShipsManager implements Renderable,
      */
     public void addTarget(Target target) {
         targets.add(target);
-    }
-
-    /**
-     * Adds a collection of targets.
-     *
-     * @param targets Collection of Target objects.
-     */
-    public void addTarget(Collection<Target> targets) {
-        targets.addAll(targets);
     }
 
     /**
@@ -145,9 +130,7 @@ public class EnemyShipsManager implements Renderable,
      * @param enemyShips New map of ships.
      */
     private void setEnemyShips(Map<Integer, Ship> enemyShips) {
-        for (Ship ship : enemyShips.values()) {
-            ship.setShipContainer(this);
-        }
+        enemyShips.values().forEach(ship -> ship.setShipContainer(this));
         this.enemyShips = enemyShips;
     }
 
@@ -260,20 +243,9 @@ public class EnemyShipsManager implements Renderable,
      */
     @Override
     public void render(Graphics g) {
-        // Render ships
-        for (Ship ship : enemyShips.values()) {
-            ship.render(g);
-        }
-
-        // Render shots
-        for (Bullet shot : shots) {
-            shot.render(g);
-        }
-
-        for (Bonus bonus : bonuses) {
-            bonus.render(g);
-        }
-
+        enemyShips.values().forEach(s -> s.render(g));
+        shots.forEach(s -> s.render(g));
+        bonuses.forEach(b -> b.render(g));
     }
 
     /**
@@ -393,7 +365,7 @@ public class EnemyShipsManager implements Renderable,
      */
     @Override
     public int getHandlerId() {
-        return this.handlerID;
+        return GameConstants.ENEMY_MANAGER_ID;
     }
 
 }
