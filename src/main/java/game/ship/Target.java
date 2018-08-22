@@ -33,8 +33,8 @@ public interface Target {
      *
      * @param x0 Top left x position
      * @param y0 Top left y position
-     * @param x1 Botom right x position
-     * @param y1 Botom right y position
+     * @param x1 Bottom right x position
+     * @param y1 Bottom right y position
      * @return True if this objects collides with the rectangle
      * represented by the point
      */

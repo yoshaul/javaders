@@ -191,7 +191,7 @@ public abstract class Sprite implements Movable, Renderable {
     /**
      * @param spriteImage The spriteImage to set.
      */
-    public void setSpriteImage(Image spriteImage) {
+    protected void setSpriteImage(Image spriteImage) {
         this.spriteImage = spriteImage;
     }
 }

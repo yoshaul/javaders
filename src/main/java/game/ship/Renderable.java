@@ -27,7 +27,7 @@ import java.awt.*;
 public interface Renderable {
 
     /**
-     * Render the object givet the graphics context.
+     * Render the object given the graphics context.
      *
      * @param g A <code>Graphics</code> object.
      */

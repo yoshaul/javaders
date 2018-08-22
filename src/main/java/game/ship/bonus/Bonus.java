@@ -33,12 +33,11 @@ import java.util.Iterator;
 public abstract class Bonus extends Sprite implements PacketHandler {
 
     private boolean hit = false;    // Is this bonus hit a ship
-    private static final float dx = 0.0f;    // Vertical velocity
-    private static final float dy = 0.2f;    // Hotizontal velocity
+    private static final float DEFAULT_VERTICAL_VELOCITY = 0.0f;
+    private static final float DEFAULT_HORIZONTAL_VELOCITY = 0.2f;
 
     Bonus(float x, float y) {
-
-        super(x, y, dx, dy);
+        super(x, y, DEFAULT_VERTICAL_VELOCITY, DEFAULT_HORIZONTAL_VELOCITY);
     }
 
     // Implement some of the PacketHandler methods

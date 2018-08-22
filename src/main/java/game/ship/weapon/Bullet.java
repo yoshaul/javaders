@@ -67,28 +67,6 @@ public abstract class Bullet extends Sprite implements PacketHandler {
 
     }
 
-
-//    public Bullet(Ship owner, float x, float y, float dx, float dy, 
-//            long damage) {
-//        
-//        super(x, y, dx, dy);
-//        this.damage = damage;
-//        this.owner = owner;
-//        
-//    }
-
-
-//    public Bullet(BulletModel model, Ship owner) {
-//        
-//        this(owner, model.x, model.y, model.dx, model.dy, model.imageName, model.damage);
-//        
-////        super(model.x, model.y, model.dx, model.dy);
-////        this.damage = model.damage;
-////        this.owner = owner;
-//        
-//    }
-
-
     /**
      * Check if the bullet collides with any of the targets.
      * If it is hit the target and deliver the damage.
