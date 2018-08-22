@@ -67,7 +67,7 @@ public class ShipProperties {
     private static final int BOSS_SHIP_TYPE_4 = 204;
     private static final int BOSS_SHIP_TYPE_5 = 205;
 
-    private final static Map<Integer, ShipProperties> shipsProperties = initShipsProperties();
+    private static final Map<Integer, ShipProperties> shipsProperties = initShipsProperties();
 
     private final float maxDX;
     private final float maxDY;

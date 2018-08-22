@@ -39,7 +39,7 @@ public class DBHelper {
     public static Connection getConnection() {
         try {
             InitialContext ic = new InitialContext();
-            DataSource ds = (DataSource) ic.lookup(JNDINames.DBName);
+            DataSource ds = (DataSource) ic.lookup(JNDINames.DB_NAME);
 
             return ds.getConnection();
 

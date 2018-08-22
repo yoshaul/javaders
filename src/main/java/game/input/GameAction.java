@@ -25,8 +25,8 @@ package game.input;
  */
 public class GameAction {
 
-    private final static int STATE_RELEASED = 0;
-    private final static int STATE_PRESSED = 1;
+    private static final int STATE_RELEASED = 0;
+    private static final int STATE_PRESSED = 1;
 
     private int state;    // The game action state
 

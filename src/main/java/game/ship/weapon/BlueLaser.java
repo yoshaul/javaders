@@ -25,8 +25,8 @@ import game.ship.Ship;
  */
 class BlueLaser extends Bullet {
 
-    private final static String imageName = "bluelaser.png";
-    private final static long damage = 10;
+    private static final String imageName = "bluelaser.png";
+    private static final long damage = 10;
 
     /**
      * @see Bullet#Bullet(Ship, float, float, float, float, String, long)

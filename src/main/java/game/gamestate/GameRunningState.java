@@ -32,8 +32,8 @@ import java.awt.*;
  */
 public class GameRunningState implements GameState {
 
-    private final static int INTERNAL_STATE_NORMAL = 1;
-    private final static int INTERNAL_STATE_LEVEL_CLEARED = 2;
+    private static final int INTERNAL_STATE_NORMAL = 1;
+    private static final int INTERNAL_STATE_LEVEL_CLEARED = 2;
 
     private int nextGameState;
     private ScreenManager screenManager;

@@ -25,8 +25,8 @@ import game.ship.Ship;
  */
 class FireBullet extends Bullet {
 
-    private final static String imageName = "fireshot.gif";
-    private final static long damage = 7;
+    private static final String imageName = "fireshot.gif";
+    private static final long damage = 7;
 
     /**
      * @see Bullet#Bullet(Ship, float, float, float, float, String, long)

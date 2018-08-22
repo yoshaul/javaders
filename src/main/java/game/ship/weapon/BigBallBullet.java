@@ -25,8 +25,8 @@ import game.ship.Ship;
  */
 class BigBallBullet extends Bullet {
 
-    private final static String imageName = "red_ball.png";
-    private final static long damage = 20;
+    private static final String imageName = "red_ball.png";
+    private static final long damage = 20;
 
     /**
      * @see Bullet#Bullet(Ship, float, float, float, float, String, long)

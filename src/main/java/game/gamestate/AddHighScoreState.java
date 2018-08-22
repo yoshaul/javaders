@@ -35,8 +35,8 @@ import java.awt.*;
  */
 public class AddHighScoreState implements GameState {
 
-    private final static int INTERNAL_STATE_ADD_HIGH_SCORE = 1;
-    private final static int INTERNAL_STATE_POST_SCORE = 2;
+    private static final int INTERNAL_STATE_ADD_HIGH_SCORE = 1;
+    private static final int INTERNAL_STATE_POST_SCORE = 2;
 
     private GameLoop gameLoop;
     private AddHighScoreDialog addHighScoreDialog;

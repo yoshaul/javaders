@@ -24,7 +24,7 @@ package game.network.server.ejb;
  */
 public interface JNDINames {
 
-    String DBName =
+    String DB_NAME =
             "java:comp/env/jdbc/gameDB";
 
     String PLAYER_BEAN =

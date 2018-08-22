@@ -36,8 +36,8 @@ import java.util.Collection;
  */
 public abstract class Ship extends Sprite implements Target, PacketHandler {
 
-    private final static int STATE_NORMAL = 0;
-    private final static int STATE_DESTROYED = 2;
+    private static final int STATE_NORMAL = 0;
+    private static final int STATE_DESTROYED = 2;
 
     ShipContainer shipContainer;
 

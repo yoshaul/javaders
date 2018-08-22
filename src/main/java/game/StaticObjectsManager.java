@@ -33,7 +33,7 @@ public class StaticObjectsManager {
     private GameLoop gameLoop;
 
     private Image bgImage;    // Background image
-    private final static String defBGImageName = "bg2_1024.jpg";
+    private static final String defBGImageName = "bg2_1024.jpg";
 
     /**
      * Construct new StaticObjectsManager and load the
