@@ -42,9 +42,6 @@ import java.util.Iterator;
  * the ships to communicate with it.
  */
 public class PlayerManager implements ShipContainer, PacketHandler {
-
-    private final int handlerID = GameConstants.PLAYER_MANAGER_ID;
-
     private GameLoop gameLoop;
     private InputManager inputManager;
 
@@ -57,7 +54,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
     /**
      * Collection of targets for the ships (i.e., enemy ships)
      */
-    private Collection targets;
+    private Collection<Target> targets;
     /**
      * True if the player ship (and network ship) are destroyed
      */
@@ -68,12 +65,12 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      *
      * @param gameLoop Reference to the game loop
      */
-    public PlayerManager(GameLoop gameLoop) {
+    PlayerManager(GameLoop gameLoop) {
 
         this.gameLoop = gameLoop;
         this.inputManager = gameLoop.getInputManager();
         this.shots = new ArrayList<>();
-        this.targets = new ArrayList();
+        this.targets = new ArrayList<>();
         this.gameOver = false;
 
         Dimension screen = gameLoop.getScreenManager().getScreenDimension();
@@ -122,19 +119,10 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      *
      * @param enemyShips Collection of enemy ships to be used as targets
      */
-    public void newLevel(Collection enemyShips) {
+    public void newLevel(Collection<Ship> enemyShips) {
         targets.clear();
         shots.clear();
         addTarget(enemyShips);
-    }
-
-    /**
-     * Adds a new target to the targets collection.
-     *
-     * @param target New target to add.
-     */
-    public void addTarget(Target target) {
-        this.targets.add(target);
     }
 
     /**
@@ -142,7 +130,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      *
      * @param targets Collection of Target objects.
      */
-    private void addTarget(Collection targets) {
+    private void addTarget(Collection<Ship> targets) {
         this.targets.addAll(targets);
     }
 
@@ -160,7 +148,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      *
      * @return Network player ship
      */
-    public PlayerShip getNetworkPlayerShip() {
+    PlayerShip getNetworkPlayerShip() {
         return networkPlayer;
     }
 
@@ -169,7 +157,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      *
      * @return Player 1 ship
      */
-    public PlayerShip getPlayer1Ship() {
+    PlayerShip getPlayer1Ship() {
         return player1Ship;
     }
 
@@ -178,7 +166,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      *
      * @return Player 2 ship.
      */
-    public PlayerShip getPlayer2Ship() {
+    PlayerShip getPlayer2Ship() {
         return player2Ship;
     }
 
@@ -228,20 +216,23 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      *                    in milliseconds.
      */
     public void update(long elapsedTime) {
+        updatePlayer(elapsedTime, player1Ship);
+        if (player2Ship != null) {
+            updatePlayer(elapsedTime, player2Ship);
+        }
+        updateShots(elapsedTime);
+        processCollisions();
+        checkIfGameOver();
+    }
 
+    private void updatePlayer(long elapsedTime, PlayerShip player1Ship) {
         player1Ship.update(elapsedTime);
         if (player1Ship.isActive()) {
             fixPlace(player1Ship);
         }
+    }
 
-        if (player2Ship != null) {
-            player2Ship.update(elapsedTime);
-            if (player2Ship.isActive()) {
-                fixPlace(player2Ship);
-            }
-        }
-
-        // Update shots
+    private void updateShots(long elapsedTime) {
         Iterator shotsItr = shots.iterator();
         while (shotsItr.hasNext()) {
             Sprite shot = (Sprite) shotsItr.next();
@@ -250,12 +241,9 @@ public class PlayerManager implements ShipContainer, PacketHandler {
                 shotsItr.remove();
             }
         }
+    }
 
-        ////////////////////////
-        // Process Collisions //
-        ////////////////////////
-
-
+    private void processCollisions() {
         // Process ship-to-ship collisions
         player1Ship.processCollisions(targets);
         if (player2Ship != null) {
@@ -263,7 +251,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
         }
 
         // Process shots to enemy ship collisions
-        shotsItr = shots.iterator();
+        Iterator shotsItr = shots.iterator();
         while (shotsItr.hasNext()) {
             Bullet shot = (Bullet) shotsItr.next();
             shot.processCollisions(targets);
@@ -271,8 +259,9 @@ public class PlayerManager implements ShipContainer, PacketHandler {
                 shotsItr.remove();
             }
         }
+    }
 
-        // Check if the game is over
+    private void checkIfGameOver() {
         if (gameLoop.isNetworkGame()) {
             // Check if game over
             if (getLocalPlayerShip().isDestroyed() &&
@@ -283,7 +272,6 @@ public class PlayerManager implements ShipContainer, PacketHandler {
         } else if (getLocalPlayerShip().isDestroyed()) {
             gameOver = true;
         }
-
     }
 
     /**
@@ -363,6 +351,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      */
     @Override
     public void addShip(Ship ship) {
+        // nope
     }
 
     /**
@@ -405,7 +394,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      */
     @Override
     public int getHandlerId() {
-        return this.handlerID;
+        return GameConstants.PLAYER_MANAGER_ID;
     }
 
     /**
@@ -458,7 +447,7 @@ public class PlayerManager implements ShipContainer, PacketHandler {
      */
     @Override
     public void createPacket(GameNetworkManager netManager) {
-
+        // Currently this object doesn't creates it's own packets
     }
 
     /**

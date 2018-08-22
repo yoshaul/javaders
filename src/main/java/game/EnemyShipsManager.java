@@ -88,7 +88,7 @@ public class EnemyShipsManager implements Renderable,
      *
      * @param target New target to add.
      */
-    public void addTarget(Target target) {
+    void addTarget(Target target) {
         targets.add(target);
     }
 
@@ -157,11 +157,7 @@ public class EnemyShipsManager implements Renderable,
         ////////////////////////
 
         // Process ship-to-ship collisions 
-        Iterator<Ship> shipsItr = enemyShips.values().iterator();
-        while (shipsItr.hasNext()) {
-            Ship ship = shipsItr.next();
-            ship.processCollisions(targets);
-        }
+        enemyShips.values().forEach(s -> s.processCollisions(targets));
 
         // Process shots to player ship(s) collisions
         Iterator<Bullet> shotsItr = shots.iterator();
@@ -211,30 +207,33 @@ public class EnemyShipsManager implements Renderable,
         while (shipsItr.hasNext()) {
             Ship ship = shipsItr.next();
             if (ship.isDestroyed()) {
-                // Remove the destroyed ship
                 shipsItr.remove();
             } else {
                 ship.update(elapsedTime);
+                changeDirectionIfShipExistsScreen(screenDimension, insets, ship);
 
-                // If the ship exits the screen and still in the wrong
-                // direction, change its velocity so it will get back
-                if (ship.getX() < insets.left && ship.getDx() < 0) {
-                    ship.setDx(-ship.getDx());
-                }
-                if (ship.getX() + ship.getWidth() >
-                        screenDimension.width - insets.right
-                        && ship.getDx() > 0) {
-                    ship.setDx(-ship.getDx());
-                }
-                if (ship.getY() < insets.top && ship.getDy() < 0) {
-                    ship.setDy(-ship.getDy());
-                }
-                if (ship.getY() + ship.getHeight() >
-                        screenDimension.height - insets.bottom
-                        && ship.getDy() > 0) {
-                    ship.setDy(-ship.getDy());
-                }
             }
+        }
+    }
+
+    private void changeDirectionIfShipExistsScreen(Dimension screenDimension, Insets insets, Ship ship) {
+        // If the ship exits the screen and still in the wrong
+        // direction, change its velocity so it will get back
+        if (ship.getX() < insets.left && ship.getDx() < 0) {
+            ship.setDx(-ship.getDx());
+        }
+        if (ship.getX() + ship.getWidth() >
+                screenDimension.width - insets.right
+                && ship.getDx() > 0) {
+            ship.setDx(-ship.getDx());
+        }
+        if (ship.getY() < insets.top && ship.getDy() < 0) {
+            ship.setDy(-ship.getDy());
+        }
+        if (ship.getY() + ship.getHeight() >
+                screenDimension.height - insets.bottom
+                && ship.getDy() > 0) {
+            ship.setDy(-ship.getDy());
         }
     }
 
